@@ -164,6 +164,21 @@ def test_search_db_first_pass_as_sent_to_aging_in_005():
     assert s["xref_not_in_source_but_xml_resolves"] == 16, "005 §1: UniProt 2026_09 / Ensembl 116 drift"
 
 
+def test_human_gene_table_as_corrected_in_012():
+    """011-logs §4 said 563 KB, measured on an awk prototype. The table mzLib's writer builds is
+    523,218 bytes; 012-logs corrected it. 78,941 genes was sent in 011 and did not move."""
+    import gzip
+    import hashlib
+    path = RESULTS / "gene_sets" / "Homo_sapiens.GRCh38.116.genes.tsv.gz"
+    assert path.stat().st_size == 523218, "sent to dataRepo in 012-logs"
+    assert hashlib.sha256(path.read_bytes()).hexdigest() ==         "e72d3b85328a572a7de92581297268ec50e97dd4cd4123c1358a7dc6c931d65f", "sent in 012-logs"
+    lines = gzip.decompress(path.read_bytes()).decode("utf-8").splitlines()
+    header = [l for l in lines if l.startswith("#!")]
+    assert "#!source-file Homo_sapiens.GRCh38.116.gtf.gz" in header
+    assert any(l.startswith("#!source-sha256 ed992f0eac7197d9") for l in header)
+    assert len(lines) - len(header) - 1 == 78941, "sent in 011-logs §4"
+
+
 def test_file_partition_as_sent_in_006():
     """Every human<->mouse orthology lives in the mouse dump; the human dump has none."""
     attrib = _cardinality()["orthology_by_source_file"]
