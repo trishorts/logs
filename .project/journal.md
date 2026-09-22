@@ -35,3 +35,12 @@ Append-only. One line per phase change, locked decision, or consciously-skipped 
   two of the four refusal classes we had promised - one underivable from Compara, one empty in
   this release. Found and made reproducible the file-partition trap (all human-mouse orthologies
   live in the MOUSE dump; the human dump has none). 8/8 contract tests green.
+- 2026-09-22 - user: "check your work". Two wrong denominators found, one of which had already
+  been sent. (1) Eligible set was protein_coding alone; Compara also trees IG/TR gene segments,
+  so every cardinality rate was ~1pt off - clean 1:1:1 76.97 -> 75.49. Corrected to dataRepo in
+  007-logs. (2) Multi-gene rate counted raw gene ids including ALT haplotypes: 6.99% vs 0.36%
+  restricted to the primary assembly, a 20x error, and it manufactured a "human much worse than
+  rodents" difference that does not exist. Caught before sending. (3) _dist bucketed zero genes
+  as 4+. All three pinned by regression tests. New file tests/test_reported_claims.py pins every
+  number SENT TO A PARTNER, so a future re-run that moves one fails loudly instead of leaving a
+  wrong number in their schema.
