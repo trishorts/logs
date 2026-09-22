@@ -211,7 +211,9 @@ gaps:
     AWAITING aging (REQ-AGING-5/6, asked in 003-logs). 5: dataRepo measured ZERO isoform-suffixed
     accessions yet aging says they keep suffixes verbatim - our hypothesis is a canonical-only
     search DB. 6: delivery shape - table joined on (accession, db sha256) vs a call; versioned vs
-    stable ENSG.
+    stable ENSG. 7 (004-logs): confirm the FULL sha256 of the search XML. A local copy exists
+    (E:/CodeReview/go/data/raw/, from go; decompressed sha 760984e8d402ade6b110...) and matches
+    dataRepo's 16-hex prefix only. Do not key resolution on it until aging confirms.
   - >-
     DECIDE (orthology source of record). Ensembl Compara primary is the working assumption;
     decide how NCBI Orthologs / Alliance / HCOP support is stored alongside without merging
