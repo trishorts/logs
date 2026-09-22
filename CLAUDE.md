@@ -8,10 +8,11 @@ This folder is a `/project`-managed research project. **You are de facto working
 - **Goal:** A generic, versioned, gene-centric cross-species orthology layer that lets any
   multi-organism proteomics project join protein identifications across species without collapsing
   one-to-many orthology.
-- **Pick up at:** re-check mzLib **#1336** (approved 2026-09-22). If it has merged, rebase
-  `code/mzLib-ensembl-genes` onto master and open the resolution PR. Then the user picks: **(a)**
-  write the resolution into MetaMorpheus output (`/oracle MetaMorpheus` first), or **(b)** open a
-  `go` thread. See `RESUME.md`.
+- **Pick up at:** run the thread inbox. dataRepo owes REQ-DATAREPO-8/9/10 (011), which decides how
+  the resolution reaches them: they run it via pyMzLib, or we deliver the table. aging owes replies to
+  007 and 008. Then re-check mzLib **#1338** (`gh pr view 1338 -R smith-chem-wisc/mzLib`), and start
+  PLAN step 6, the orthology store: the rodent data it waited for is resolved. The resolution is
+  **not** going into MetaMorpheus (user decision). See `RESUME.md`.
 
 **The name:** `logs` = homologs, orthologs, paralogs, and any other -logs. Not log files.
 
@@ -44,6 +45,14 @@ This folder is a `/project`-managed research project. **You are de facto working
    `ensembl_xref_agrees` separates them.
 10. **Long heredocs and backslashes in the Bash tool can break a script.** Write a message body with
     the Write tool, then post it, and use forward-slash Windows paths.
+11. **Pin a number the moment it is sent, and never send a prototype's number.** 007's "20,412" was
+    unpinned and moved silently; "563 KB" came from an awk extract, and the real file is 523 KB.
+12. **UniProt's rat XML links four Ensembl gene-id series.** Only `ENSRNOG00000…` is GRCr8. The
+    resolver is correct to hold them to the gene set, and the `source = ensembl_xref` rows recover
+    Ensembl's answer (rat: 725 entries). Filter on `source` for the XML's view, and on
+    `ensembl_xref_agrees` for Ensembl's.
+13. **mzLib PRs:** open against smith-chem-wisc, start the body with the `<!-- project-of-origin -->`
+    "Project of origin: `logs`" line, and use `type(scope): summary` commits (`commit-style.md`).
 
 ## Running things
 
@@ -56,9 +65,10 @@ python -m logs_orthology.resolve --reference          # -> results/resolution_hu
 python -m logs_orthology.resolve --accessions ids.tsv # accession[<TAB>contaminant] per line
 python tests/test_contracts.py         # 10 contract tests
 python tests/test_resolve.py           # 16 resolver contracts (last one reconciles on real data)
-python tests/test_reported_claims.py   # 16 claims already sent to a partner
-dotnet run --project tools/ResolveSearchDb -c Release -- <xml> <gtf.gz> <uniprot.tsv.gz> <out.tsv>
-python -m logs_orthology.search_db <out.tsv>   # -> results/search_db_resolution.{md,json}
+python tests/test_reported_claims.py   # 19 claims already sent to a partner
+dotnet run --project tools/BuildGeneSet -c Release -- <gtf.gz> results/gene_sets/<Species>.116.genes.tsv.gz
+dotnet run --project tools/ResolveSearchDb -c Release -- <xml> <gtf.gz | genes.tsv.gz> <uniprot.tsv.gz> <out.tsv>
+python -m logs_orthology.search_db <out.tsv> [--species mus_musculus --out results/search_db_resolution_mouse]
 ```
 
 Inputs live in `data/compara/` (gitignored, 673 MB, recorded in `data/PROVENANCE.md`).

@@ -263,12 +263,44 @@ decisions:
       loads as 52,359 proteins from 20,416 entries, variants named "{accession}_{change}". Any count
       over loaded proteins must say whether it counts entries or proteoforms; the resolver resolves a
       variant through Protein.ConsensusVariant and keeps its verbatim accession.
+  - date: 2026-09-22
+    text: >-
+      RESOLUTION WILL NOT GO INTO METAMORPHEUS OUTPUT (user). It depends only on (search database,
+      gene set), never on the search, so it is computed once per (search_database_sha256,
+      gene_set_release), not in every search. SUPERSEDES the MetaMorpheus-output option and our 010 §3
+      to dataRepo (withdrawn in 011). Proposed in 011 that dataRepo run the mzLib resolver via pyMzLib
+      (already their optional dependency) or that we deliver the table; asked REQ-DATAREPO-8/9/10.
+  - date: 2026-09-22
+    text: >-
+      COMPACT GENE TABLE instead of the GTF (human GTF 141 MB / 4.66 GB unzipped for 78,941 gene rows).
+      EnsemblGeneSetReader/Writer in mzLib (#1338 34e20ca6, user asked for a Reader/Writer pair); a table
+      read back carries the GTF's provenance, so resolution rows are keyed identically - byte-identical
+      on aging's human XML. Built for Ensembl 116 human/mouse/rat in results/gene_sets/ (523/592/289 KB).
+  - date: 2026-09-22
+    text: >-
+      XREF-ONLY GENES ARE ROWS, NOT DROPPED (user confirmed, extending the multi-gene decision). The
+      resolver adds a source=ensembl_xref row for each gene Ensembl's xref links and the search XML does
+      not, held to the same gene set and carrying the XML's outcome and n_genes - outcome still reports
+      the XML. Forced by rat: UniProt's rat XML links four Ensembl id series (ENSRNOG00000 = GRCr8, plus
+      00055/00060/00065, none in the set), and the xref resolved 725 rat entries the XML did not. Now
+      source=search_database_dbreference gives the old output exactly, and agrees==true gives Ensembl's
+      view for every entry (human 20,416, mouse 17,277, rat 8,228). #1338 3bb04188.
+  - date: 2026-09-22
+    text: >-
+      PR HOUSE STYLE (user). mzLib PRs from a project go to smith-chem-wisc (head = trishorts fork); the
+      body begins with `<!-- project-of-origin -->` then the "Project of origin" quote line; commits and
+      PR title follow commit-style.md (`type(scope): summary`).
 
 gaps:
   - >-
-    NEXT - MetaMorpheus must write the resolution into its output for dataRepo to ever see it
-    (dataRepo 009 §6). Needs its own PR once the mzLib branch is released; design the output (a
-    long-format AllGeneResolutions.tsv rather than a '|'-joined column) and run /oracle MetaMorpheus.
+    NEXT - how the resolution reaches dataRepo (MetaMorpheus output is SUPERSEDED, see decisions).
+    Waiting on dataRepo's answers to REQ-DATAREPO-8/9/10 (011). If they will run it: a pyMzLib bridge
+    verb after #1338 merges and ships in an mzLib release (/bridge-oracle pyMzLib first). If not: we
+    deliver the table from tools/ResolveSearchDb. dataRepo has NOT yet been told the rat finding.
+  - >-
+    Rat resolves poorly by any source: by Ensembl's xref only 59.6% of reviewed rat entries resolve,
+    against 94.7% of human (008 to aging). Reference-data coverage, not a search problem - but any
+    rat-vs-human comparison must carry it.
   - >-
     OPEN a `go` channel directly (dataRepo 009 §7): our branch is stacked on their #1336 and uses its
     idiom in the same class. Concrete content: the stack, and a request to warn before force-pushing.
@@ -278,7 +310,8 @@ gaps:
     into one unqualified "truth".
   - >-
     UN-DEFERRED (aging 006, 2026-09-22): rodent searches start on the next batch run - 181 mouse +
-    27 rat queued; mouse UP000000589 / rat UP000002494 DBs pinned, decompressed hashes to follow.
+    27 rat queued; mouse UP000000589 (XML fb52debf...) / rat UP000002494 (XML abf612c9...) DBs
+    verified and RESOLVED 2026-09-22 (results/search_db_resolution_{mouse,rat}.md).
     The store (PLAN step 6). Design notes retained: Schema: Gene, ProteinAccession, OrthologyGroup, OrthologyGroupMember,
     OrthologyRelationship. Group id is OURS with Compara's ENSGT preserved beside it, keyed
     (source, release, group_id) and never promised stable across releases. Relationship rows carry
@@ -304,7 +337,7 @@ skip_log:
       Compara, OrthoFinder, Alliance/HCOP and the one-to-many handling literature are the obvious
       starting points.
   - date: 2026-09-22
-    item: mzLib PR #1336 not yet merged
+    item: mzLib PR #1336 not yet merged (RESOLVED 2026-09-22 - #1336 merged; #1338 opened on master)
     reason: >-
       The accession->gene work is deliberately NOT started, pending #1336 (feat/go-terms-accessor)
       merging. It establishes the typed-view-over-DatabaseReferences idiom and writing a second
@@ -316,8 +349,8 @@ repos:
     worktree: code/mzLib-ensembl-genes
     branch: feat/ensembl-gene-resolution
     base_clone: 'E:\GitClones\mzLib'
-    pinned: c1365ade405d4c75e47591312e750c6d1da2ed4a
-    pr: "none yet - stacked on https://github.com/smith-chem-wisc/mzLib/pull/1336 (APPROVED 2026-09-22); retarget to master when it merges"
+    pinned: 3bb041888d90f4bc08edab405ca778979d5cee4a
+    pr: "https://github.com/smith-chem-wisc/mzLib/pull/1338 (on smith/master 588c2249 after #1336 merged 2026-09-22)"
   - name: mzLib
     worktree: code/mzLib-occupancy-nterm
     branch: fix/occupancy-met-cleaved-nterm

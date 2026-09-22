@@ -148,3 +148,60 @@ cites the wrong mzLib version (1.0.586; MetaMorpheus 1.1.9 uses 1.0.588), among 
 errors. The user had the fix opened from `logs` as an isolated TDD PR from their fork: **mzLib #1337**
 (two red tests to green, two guards, full offline suite 6,607/0/32). The manuscript findings have
 not been sent to Peter.
+
+## 2026-09-22 (third session) — #1338 opened, resolution kept out of MetaMorpheus, compact gene tables, and rat's four gene-id series
+
+**#1336 merged, #1338 made presentable.** #1336 was squash-merged at 19:58, which left the resolution
+branch carrying the old GO commit and conflicting. It was rebased onto `smith/master` with that commit
+dropped (the merged GO code was identical), and all commits were reworded to the house commit style
+(`type(scope): summary`, `~/.claude/skills/apply-review-fixes/references/commit-style.md`). The PR had
+been opened against the fork with no description; the user re-opened it on smith-chem-wisc as **#1338**.
+Its description now starts with the `<!-- project-of-origin -->` / `> **Project of origin:** \`logs\``
+marker that #1337 uses. That house style is now a feedback memory.
+
+**Resolution will not go into MetaMorpheus output (user decision).** The earlier plan (option (a), and
+our 010 §3 to dataRepo) was a MetaMorpheus output table. The objection that settled it: the resolution
+depends only on the search database and a release-pinned gene set, never on the search, so putting it
+in MetaMorpheus makes every search carry a GTF to recompute one table. aging's nine datasets share one
+XML, so that is one run, not nine. 011 to dataRepo withdrew 010 §3 and proposed that they run the mzLib
+resolver once per `(search_database_sha256, gene_set_release)` through pyMzLib (already an optional
+dependency of theirs), or that we deliver the table. It named the principle it collides with, their
+009 §6 "we never resolve it ourselves", and asked REQ-DATAREPO-8/9/10: who runs it, whether the table
+shape and key suit them, and whether the XML is reachable at resolution time.
+
+**The GTF is too big to ask anyone to carry, so there is now a compact gene table.** The human GTF is
+141 MB compressed and 4.66 GB unzipped, for 78,941 gene rows. An `/oracle mzLib` pass found no existing
+writer for a table with a metadata header, so, at the user's request, a paired
+`EnsemblGeneSetReader`/`EnsemblGeneSetWriter` was added in the `MslReader`/`MslWriter` idiom (#1338
+`34e20ca6`). A table read back carries the **GTF's** provenance, so resolution rows are keyed
+identically, and on aging's human XML the output is byte-identical to resolving against the GTF. The
+tables are in `results/gene_sets/`: human 523 KB, mouse 592 KB, rat 289 KB. They are built by
+`tools/BuildGeneSet`, and `tools/ResolveSearchDb` accepts either form. We had already told dataRepo
+"563 KB", which came from an awk prototype; 012 corrected it, and the real figure is pinned.
+
+**Rodents resolved, and rat broke a promise we had made.** aging's mouse (`UP000000589`, XML
+`fb52debf…`) and rat (`UP000002494`, XML `abf612c9…`) databases were checked to be byte-for-byte
+decompressions of the `.gz` files whose hashes aging recorded. Mouse is healthy: 15,474 resolved, and
+the XML and xref nearly agree. Rat looked wrong, so the measurement was suspected first. UniProt's rat
+XML links each protein to genes in **four Ensembl id series**. Only `ENSRNOG00000…` is the GRCr8 gene
+set; the `…00055/00060/00065` series (about 4,200 genes each) are other rat annotations, none in the set.
+The gene set was right to refuse them (950 entries are `off_primary_only`). But Ensembl's xref resolved
+725 rat entries whose XML links no gene in the set, and the resolver dropped those genes because it
+took genes only from the XML. That made 007's promise to aging, "neither is dropped", false for rat.
+
+The user thought the project had already answered this, and it had, mostly. Three recorded commitments
+decided it: the multi-gene decision (the XML's links as they are, xref as a column), standing rule 3
+(rows, never a run-time switch), and 007's promise that filtering `ensembl_xref_agrees = true` recovers
+Ensembl's answer. The one open point was the outcome of an entry that gains a gene only from the xref;
+the user confirmed it keeps the XML's. #1338 `3bb04188` adds a `source = ensembl_xref` row per such gene,
+held to the same gene set and carrying the XML's outcome. On all three databases the
+`search_database_dbreference` rows are unchanged row for row, and the agreement filter now matches
+`resolve.py` for every entry (human 20,416, mouse 17,277, rat 8,228).
+
+**A sent number that nothing guarded.** 007 told aging "20,412 of 20,416"; it is now 20,416, and the
+claims test had never pinned it. 008 to aging corrects it and reports both rodent resolutions. Every
+number in 008 was then pinned, including the 521 off-primary rat entries the xref rescues, which had
+come from an ad-hoc script and was moved into `search_db.py` so the pin reads committed code. Two
+drafting errors were caught before sending: "roughly half" of human coverage (it is 59.6% vs 94.7%),
+and a rounding to 59.7%. `search_db.py` gained `--species`, the reverse-drift metric, and a counted,
+no longer asserted, parity explanation.

@@ -87,7 +87,7 @@ Both from pinned Ensembl 116 (`data/PROVENANCE.md`; 16 files, 673 MB, 15 of 16 c
 
 ## Things that will bite you here
 
-Each of these cost real time today.
+Each of these cost real time on 2026-09-22.
 
 1. **Ensembl's genome-specific Compara dumps *partition*, they do not overlap — and each species
    pair lives entirely in one file, not the obvious one.** Every human↔mouse orthology is in the
@@ -104,72 +104,81 @@ Each of these cost real time today.
    category error — it needs `SelectMany(Properties)` and a `Distinct()`.
 5. **Numbers sent to a partner are a contract.** `tests/test_reported_claims.py` pins every one; if
    a re-run moves it, that test fails and we owe a correction.
+6. **Pin a number when you send it, not later.** 007's "20,412 of 20,416" was never pinned, so when
+   it moved nothing failed; it was caught only by reading. And never send a prototype's measurement:
+   "563 KB" came from an awk extract, and the real file is 523 KB (corrected in 012).
+7. **UniProt's rat XML links four Ensembl gene-id series** (`ENSRNOG00000…` is GRCr8; `…00055`,
+   `…00060` and `…00065` are other annotations, none in the gene set). Without the gene set, most rat
+   proteins look multi-gene. With it, 950 look `off_primary_only`, and Ensembl's xref rescues 521 of
+   them.
+8. **mzLib PR house style:** open against smith-chem-wisc, start the body with the
+   `<!-- project-of-origin -->` "Project of origin" line, and use `type(scope): summary` commits.
 
 ## Pick up at
 
-**First, re-check #1336:** `gh pr view 1336 --repo smith-chem-wisc/mzLib --json state,reviewDecision`.
-It was **APPROVED** on 2026-09-22.
+**1. Run the thread inbox** (`python "$env:USERPROFILE/.claude/skills/project/assets/threads.py" inbox`).
+Three replies are owed to us:
 
-- **If it has merged:** in `code/mzLib-ensembl-genes`, rebase `feat/ensembl-gene-resolution` onto
-  `smith/master`. Re-run `dotnet test … --filter "FullyQualifiedName~TestEnsembl|FullyQualifiedName~TestProteinAccession"`,
-  where 62 should pass. Then **open the resolution PR** from `trishorts`.
-- **If it is still open:** the branch stays stacked, and nothing is blocked.
+- **dataRepo → REQ-DATAREPO-8/9/10** (our 011, plus the 012 correction). 8 decides the delivery route.
+  - If they will run the resolution themselves, the route is a **pyMzLib bridge verb**, and it can
+    start only after #1338 merges and ships in an mzLib release. Run `/bridge-oracle pyMzLib` first.
+  - If they want us to deliver the table, produce it with `tools/ResolveSearchDb` (below).
+- **aging → 007 and 008.** 008 corrected 007's "20,412 of 20,416" to 20,416 and reported the rodent
+  resolutions.
 
-**Then the user's choice, left open at close:**
+**2. Re-check #1338:** `gh pr view 1338 -R smith-chem-wisc/mzLib --json state,reviewDecision,mergeable`.
+It has 8 commits, is mergeable, and has no review yet.
 
-- **(a) MetaMorpheus output.** Write the resolution into a long-format table in MetaMorpheus's output
-  (one row per (accession, gene)). dataRepo's 009 §6 says nothing reaches them otherwise. It is a
-  separate MetaMorpheus PR: run `/oracle MetaMorpheus` first.
-- **(b) Open a `go` thread.** `threads.py new --to go`. The content is that our branch is stacked on
-  their #1336 and uses its idiom in `Protein.cs`; ask for a warning before any force-push.
+**3. Next piece of work: PLAN step 6, the orthology store** (`design/PLAN.md`; its design notes are in
+the `state.yaml` gaps). The rodent data it was waiting for now exists: aging's mouse and rat databases
+are resolved (`results/search_db_resolution_{mouse,rat}.md`).
 
-**Where the port stands:** `Protein.EnsemblGeneReferences`, `EnsemblGeneSet.LoadGtf`,
-`ProteinAccession.Parse`, `EnsemblGeneResolver` + `GeneResolutionTsv`, and `EnsemblXrefTable`, which
-feeds a per-gene `ensembl_xref_agrees` column. Pins and context are in `code/PINNED.md`.
+**Decided this session, do not re-open:**
 
-- **On aging's search database:** 20,416 entries (52,359 proteoforms, since variants are applied)
-  resolve to 18,988 `resolved`, 350 `multi_gene`, 62 `off_primary_only` and 1,016 `not_in_source`
-  from the XML's own links.
-- **Filtering `ensembl_xref_agrees = true`** gives Ensembl's view (69 multi-gene) and matches
-  `resolve.py` for 20,412/20,416.
-- **Reproduce with** `dotnet run --project tools/ResolveSearchDb -c Release -- <search.xml> <gtf.gz> <uniprot.tsv.gz> results/search_db_human_e116.tsv`,
-  then `python -m logs_orthology.search_db results/search_db_human_e116.tsv`. The decompressed XML is
-  not in the repo: decompress `E:/CodeReview/go/data/raw/uniprotkb_proteome_UP000005640_AND_revi_2026_09_18.xml.gz`
-  and check its sha256 is `760984e8…a7be8838`.
+- **Resolution does not go into MetaMorpheus output (user).** It depends only on
+  `(search database, gene set)`, so it runs once per database. 011 withdrew our 010 §3.
+- **Genes only Ensembl's xref links are emitted as rows** with `source = ensembl_xref`, carrying the
+  XML's outcome (#1338 `3bb04188`). Filter `source = search_database_dbreference` for the XML's view,
+  and `ensembl_xref_agrees = true` for Ensembl's.
+- **The GTF is replaced by a compact gene table** (`EnsemblGeneSetReader`/`Writer`,
+  `results/gene_sets/`). A table carries the GTF's provenance, so its output is byte-identical to the
+  GTF's.
 
-**Waiting on:**
+**Open, and your call:**
 
-- aging: reply to 007 (the table's two views).
-- dataRepo: reply to 010.
-- mzLib **#1337** (our occupancy N-terminal fix) needs review.
-- The rodent searches (aging 006: about a day). They un-defer the **store** (PLAN step 6), which
-  stays in `logs`.
+- dataRepo has **not** been told the rat finding (four id series; 725 xref-only entries).
+- The `go` thread is still unopened. Its content was the #1336 stack, which has since merged, so it
+  may no longer be needed.
+- The occupancy-manuscript findings have not been sent to Peter. The pass found the Met-removed
+  N-terminal bug (now **#1337**, still needs review), the wrong mzLib version (1.0.586; 1.1.9 uses
+  1.0.588) and wording errors.
 
-**Not yet done on purpose:** the occupancy-manuscript findings have not been sent to Peter; that is
-the user's call. The pass found the Met-removed N-terminal bug (now #1337), the wrong mzLib version
-(1.0.586; 1.1.9 uses 1.0.588) and wording errors. The details are in the journal entry for this
-session.
+**Where the resolution stands.** On aging's three reviewed-proteome search databases, counted in
+entries, not proteoforms:
 
-Sanity-check the inputs still reproduce before changing anything:
+| | entries | resolved | multi-gene | off-primary only | no gene | xref resolves, XML does not |
+|---|---:|---:|---:|---:|---:|---:|
+| human (`760984e8…`), XML view | 20,416 | 18,988 | 350 | 62 | 1,016 | 4 |
+| mouse (`fb52debf…`), XML view | 17,277 | 15,474 | 124 | 0 | 1,679 | 39 |
+| rat (`abf612c9…`), XML view | 8,228 | 4,182 | 45 | 950 | 3,051 | 725 |
+
+- By Ensembl's xref, 59.6% of rat entries resolve against 94.7% of human. That comes from the
+  reference data, not from the searches.
+- **Reproduce with:**
+  `dotnet run --project tools/ResolveSearchDb -c Release -- <search.xml> results/gene_sets/<Species>.116.genes.tsv.gz data/compara/<Species>.116.uniprot.tsv.gz results/search_db_<sp>_e116.tsv`,
+  then `python -m logs_orthology.search_db results/search_db_<sp>_e116.tsv --species <species> --out results/search_db_resolution_<sp>`.
+  Omit `--out` and `--species` for human.
+- **The XMLs:** human is `F:/aging_data/db/uniprotkb_proteome_UP000005640_AND_revi_2026_09_18.xml`.
+  Mouse and rat are beside it, dated `2026-09-22`, and their `.gz` sources are in `F:/aging_data/db/src/`.
+
+Sanity-check before changing anything:
 
 ```powershell
 $env:PYTHONPATH = "E:\CodeReview\logs\src"
-python tests/test_reported_claims.py    # 16 claims already sent to a partner
+python tests/test_reported_claims.py    # 19 claims already sent to a partner
 python tests/test_resolve.py            # 16 resolver contracts
 python tests/test_contracts.py          # 10 contract tests
 ```
-
-**Also waiting** (nothing blocking):
-
-- `dataRepo` **REQ-DATAREPO-7** — the distinct-ENSG distribution over *their* XML. Our prediction is
-  on the record: ~99%. If theirs is materially worse, they likely have our ALT-haplotype trap.
-- `dataRepo` **REQ-DATAREPO-4/5/6** — is the database file retained or only its sha; are we a
-  blocker or an improvement; do they want the mzLib half early. REQ-AGING-4 answered the third from
-  the consumer side: yes, resolution first.
-- `aging` **REQ-AGING-5/6** (003-logs) — do isoform suffixes exist in their data at all (dataRepo
-  counted zero); table vs call, versioned vs stable ENSG. **REQ-AGING-7** (004) — full sha256 of the
-  search XML. **REQ-AGING-8** (005) — UniProt gene name as a label for the ~1,012 with no gene id?
-- **mzLib PR #1336** must merge before any mzLib-side code starts — it sets the pattern.
 
 ## Documents in `design/`
 
@@ -179,6 +188,7 @@ python tests/test_contracts.py          # 10 contract tests
 - `PLAN.md` — ordered steps and the standing rules.
 - `threads/OWNERSHIP.md` — capability ownership; both inception collisions closed.
 - `threads/dataRepo/`, `threads/aging/` — correspondence.
+- Outside `design/`: `results/gene_sets/README.md` records the compact gene tables and how to rebuild them.
 
 <!-- BEGIN GENERATED -- render_resume.py owns this block; edit state.yaml, not here -->
 
@@ -186,17 +196,17 @@ python tests/test_contracts.py          # 10 contract tests
 
 | | |
 |---|---|
-| Commits | 40 |
+| Commits | 46 |
 | Sync | [`trishorts/logs`](https://github.com/trishorts/logs) |
-| Locked decisions | 29 |
-| Open gaps | 5 |
+| Locked decisions | 33 |
+| Open gaps | 6 |
 | Gate items skipped | 2 |
 
 **Worktrees** -- details in `code/PINNED.md`
 
 | Worktree | Branch | HEAD | Pin | Status |
 |---|---|---|---|---|
-| `code/mzLib-ensembl-genes` | feat/ensembl-gene-resolution | `c1365ade` | `c1365ade` | at pin |
+| `code/mzLib-ensembl-genes` | feat/ensembl-gene-resolution | `3bb04188` | `3bb04188` | at pin |
 | `code/mzLib-occupancy-nterm` | fix/occupancy-met-cleaved-nterm | `e3282169` | `e3282169` | at pin |
 
 <!-- END GENERATED -->
