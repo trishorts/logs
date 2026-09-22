@@ -94,7 +94,7 @@ cross-references were present at search time and v1 is mostly reading them back.
 
 | | |
 |---|---|
-| Commits | 15 |
+| Commits | 18 |
 | Sync | [`trishorts/logs`](https://github.com/trishorts/logs) |
 | Locked decisions | 17 |
 | Open gaps | 5 |
