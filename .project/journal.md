@@ -15,3 +15,12 @@ Append-only. One line per phase change, locked decision, or consciously-skipped 
   orthology STORE does not belong in mzLib (it would be its first self-managed on-disk database
   and its first DB dependency outside vendor-file reading). Gaps sharpened accordingly; nothing
   locked yet - the split is the user's call.
+- 2026-09-22 - first thread traffic. dataRepo opened the channel (001-dataRepo) on the day we were
+  created, answering both collisions we had flagged rather than asking about them: accession->gene
+  resolution is ours (their `gene` column is MetaMorpheus`s Gene string stored verbatim - five of
+  20,022 accessions disagree with themselves across datasets), and identifier storage splits from
+  normalization, storage theirs and normalization ours. Replied 002-logs, answering 4 of their 5.
+  Ownership collisions CLOSED; taxa confirmed 9606/10090/10116; two modelling decisions locked
+  (group vs relationship are two objects; group ids are not stable across releases). REQ-LOGS-4
+  left open on cardinality - to be measured, not estimated. Asked REQ-DATAREPO-1..3, of which
+  REQ-DATAREPO-1 (XML- vs FASTA-derived corpus) decides our v1 scope.

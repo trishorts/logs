@@ -17,6 +17,29 @@ decisions:
     text: >-
       Scope is GENERIC engineering, not a single study. It must serve any large
       multi-organism proteomics project; `aging` is the first consumer, not the design driver.
+  - date: 2026-09-22
+    text: >-
+      OWNERSHIP settled with dataRepo (001-dataRepo -> 002-logs). Ours - the orthology store,
+      the analysis views, protein accession -> source gene resolution, and canonical accession
+      normalization. Theirs - verbatim identifier storage (their D9). Both collisions flagged
+      at inception closed in our favour; dataRepo does not want accession resolution.
+  - date: 2026-09-22
+    text: >-
+      MVP taxa CONFIRMED human 9606 / mouse 10090 / rat 10116 (user, relayed in 001-dataRepo).
+      Generic framing is retained; we are not asked to narrow it, only not to need more.
+  - date: 2026-09-22
+    text: >-
+      An orthogroup and a pairwise orthology relationship are TWO objects, not one. A group is
+      a set the source's gene tree asserts; a relationship is an edge carrying relationship_type
+      and confidence. A member's "role" in a group cannot carry relationship_type, because
+      one2one/one2many describe a PAIR - the same gene can be one2many to mouse and one2one to
+      rat in the same group. Stated to dataRepo in 002-logs §2.
+  - date: 2026-09-22
+    text: >-
+      An orthogroup id is NOT promised stable across source releases. The honest key is
+      (source, release, group_id). A release-to-release mapping is a separate, explicitly
+      derived, versioned layer. Told to dataRepo because pooling across a release boundary in
+      their age_effect_meta would otherwise silently mix two memberships (002-logs §3.2).
 
 gaps:
   - >-
@@ -29,14 +52,26 @@ gaps:
     decide how NCBI Orthologs / Alliance / HCOP support is stored alongside without merging
     into one unqualified "truth".
   - >-
-    DECIDE (dataRepo seam). Does dataRepo own protein-accession resolution and identifier
-    storage, or do we? Flagged as an unclaimed possible collision in design/threads/OWNERSHIP.md;
-    not yet raised with dataRepo.
-  - >-
     DECIDE (multi-ENSG semantics). UniProt writes one Ensembl dbReference per transcript with the
     ENSG in a property, so a protein can carry several ENSGs. What does that mean for us? This is
     where the one-to-many principle first bites, and it is a modelling decision, not plumbing.
-  - Confirm species set beyond human/mouse/rat (MVP taxa 9606 / 10090 / 10116).
+  - >-
+    OWED to dataRepo (REQ-LOGS-4, open). Joint cardinality of Compara orthogroups across
+    9606/10090/10116 - how often is a group 1:1:1, and how often not. They will design their
+    cross-species join against the number, so it must be measured, not estimated. Pairwise
+    cardinality is not enough; 1:1 human-mouse plus 1:1 human-rat does not imply a clean triple.
+  - >-
+    AWAITING dataRepo (REQ-DATAREPO-1, the one that decides our v1 scope). Is their corpus
+    UniProt-XML-derived or FASTA-derived? XML means the cross-references were present at search
+    time and accession->gene is mostly reading them back, no network. FASTA means only GN=
+    survived and the UniProt ID Mapping API is on the critical path - a different project.
+    Also REQ-DATAREPO-2 (accession namespace mix, decides whether RefSeq is v1 or v3) and
+    REQ-DATAREPO-3 (does a bundle record which source database an accession came from).
+  - >-
+    A contaminant-panel protein must NEVER be mapped through orthology - bovine albumin in a
+    human sample is a reagent, not evidence about Bos taurus. The mapping would be biologically
+    correct and scientifically a lie. Needs a contaminant flag travelling with the accession;
+    currently unclaimed and producer-side. Raised in 002-logs §0.
   - >-
     If any mzLib work proceeds - wait for mzLib PR #1336 (feat/go-terms-accessor) to merge and
     follow its pattern. It establishes the typed-view-over-DatabaseReferences idiom; writing a

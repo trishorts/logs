@@ -65,10 +65,10 @@ with `dataRepo`.
 
 | | |
 |---|---|
-| Commits | 2 |
+| Commits | 4 |
 | Sync | not synced -- no remote recorded |
-| Locked decisions | 2 |
-| Open gaps | 6 |
+| Locked decisions | 6 |
+| Open gaps | 7 |
 
 > **1 document(s) in `design/` not referenced above** -- `ORACLE.md`. Add a line for each, or say why not.
 
