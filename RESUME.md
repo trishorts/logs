@@ -107,34 +107,54 @@ Each of these cost real time today.
 
 ## Pick up at
 
-**Port accession → gene resolution to mzLib (C#)** — `design/PLAN.md` step 5. The user moved it
-there on 2026-09-22, after an oracle pass over mzLib `smith/master @ 890036fb`.
+**First, re-check #1336:** `gh pr view 1336 --repo smith-chem-wisc/mzLib --json state,reviewDecision`.
+It was **APPROVED** on 2026-09-22.
 
-- **Prototype and test oracle:** `src/logs_orthology/resolve.py` and `tests/test_resolve.py`, 16
-  contracts. It reconciles exactly with `xrefs.py` (reviewed human 19,251 + 70 + 62 = 19,383).
-- **Homes:**
-  - `Protein.EnsemblGenes` in `Proteomics/Protein`, following #1336's idiom. **Stack on or wait
-    for #1336**, which is open and needs review.
-  - Ensembl loader + resolver in `UsefulProteomicsDatabases`, as new files, with reference data kept
-    **outside** the DLL.
-  - Not in Omics.
-  - No group-TSV column until #1286/#1287 land.
-- **Owed first:** the 005-logs numbers (20,416 entries → 19,257 / 69 / 62 / 1,028) came from a
-  scratchpad run. The port must reproduce them, and `test_reported_claims.py` must pin them.
-- **aging 006 answered everything:**
-  - The hash `760984e8…` is confirmed in full, so resolution is re-derivable.
-  - Zero isoform suffixes by construction.
-  - They want a versioned table with both ENSG forms.
-  - Carry UniProt's gene name for the ~1,012 accessions with no gene id.
-  - **Rodents are about a day away, not months**, so the store (step 6) is un-deferred.
-- **Corrections sent today:** 008-logs to dataRepo (`NP_` 99.58%; `NP_` links 76.6% `DIRECT`;
-  isoform accessions 25,177, not 35,202). The `NP_` correction also went to aging in 005.
+- **If it has merged:** in `code/mzLib-ensembl-genes`, rebase `feat/ensembl-gene-resolution` onto
+  `smith/master`. Re-run `dotnet test … --filter "FullyQualifiedName~TestEnsembl|FullyQualifiedName~TestProteinAccession"`,
+  where 62 should pass. Then **open the resolution PR** from `trishorts`.
+- **If it is still open:** the branch stays stacked, and nothing is blocked.
+
+**Then the user's choice, left open at close:**
+
+- **(a) MetaMorpheus output.** Write the resolution into a long-format table in MetaMorpheus's output
+  (one row per (accession, gene)). dataRepo's 009 §6 says nothing reaches them otherwise. It is a
+  separate MetaMorpheus PR: run `/oracle MetaMorpheus` first.
+- **(b) Open a `go` thread.** `threads.py new --to go`. The content is that our branch is stacked on
+  their #1336 and uses its idiom in `Protein.cs`; ask for a warning before any force-push.
+
+**Where the port stands:** `Protein.EnsemblGeneReferences`, `EnsemblGeneSet.LoadGtf`,
+`ProteinAccession.Parse`, `EnsemblGeneResolver` + `GeneResolutionTsv`, and `EnsemblXrefTable`, which
+feeds a per-gene `ensembl_xref_agrees` column. Pins and context are in `code/PINNED.md`.
+
+- **On aging's search database:** 20,416 entries (52,359 proteoforms, since variants are applied)
+  resolve to 18,988 `resolved`, 350 `multi_gene`, 62 `off_primary_only` and 1,016 `not_in_source`
+  from the XML's own links.
+- **Filtering `ensembl_xref_agrees = true`** gives Ensembl's view (69 multi-gene) and matches
+  `resolve.py` for 20,412/20,416.
+- **Reproduce with** `dotnet run --project tools/ResolveSearchDb -c Release -- <search.xml> <gtf.gz> <uniprot.tsv.gz> results/search_db_human_e116.tsv`,
+  then `python -m logs_orthology.search_db results/search_db_human_e116.tsv`. The decompressed XML is
+  not in the repo: decompress `E:/CodeReview/go/data/raw/uniprotkb_proteome_UP000005640_AND_revi_2026_09_18.xml.gz`
+  and check its sha256 is `760984e8…a7be8838`.
+
+**Waiting on:**
+
+- aging: reply to 007 (the table's two views).
+- dataRepo: reply to 010.
+- mzLib **#1337** (our occupancy N-terminal fix) needs review.
+- The rodent searches (aging 006: about a day). They un-defer the **store** (PLAN step 6), which
+  stays in `logs`.
+
+**Not yet done on purpose:** the occupancy-manuscript findings have not been sent to Peter; that is
+the user's call. The pass found the Met-removed N-terminal bug (now #1337), the wrong mzLib version
+(1.0.586; 1.1.9 uses 1.0.588) and wording errors. The details are in the journal entry for this
+session.
 
 Sanity-check the inputs still reproduce before changing anything:
 
 ```powershell
 $env:PYTHONPATH = "E:\CodeReview\logs\src"
-python tests/test_reported_claims.py    # 15 numbers already sent to a partner
+python tests/test_reported_claims.py    # 16 claims already sent to a partner
 python tests/test_resolve.py            # 16 resolver contracts
 python tests/test_contracts.py          # 10 contract tests
 ```
@@ -166,10 +186,17 @@ python tests/test_contracts.py          # 10 contract tests
 
 | | |
 |---|---|
-| Commits | 34 |
+| Commits | 40 |
 | Sync | [`trishorts/logs`](https://github.com/trishorts/logs) |
-| Locked decisions | 25 |
-| Open gaps | 8 |
+| Locked decisions | 29 |
+| Open gaps | 5 |
 | Gate items skipped | 2 |
+
+**Worktrees** -- details in `code/PINNED.md`
+
+| Worktree | Branch | HEAD | Pin | Status |
+|---|---|---|---|---|
+| `code/mzLib-ensembl-genes` | feat/ensembl-gene-resolution | `c1365ade` | `c1365ade` | at pin |
+| `code/mzLib-occupancy-nterm` | fix/occupancy-met-cleaved-nterm | `e3282169` | `e3282169` | at pin |
 
 <!-- END GENERATED -->

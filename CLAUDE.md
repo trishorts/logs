@@ -8,10 +8,10 @@ This folder is a `/project`-managed research project. **You are de facto working
 - **Goal:** A generic, versioned, gene-centric cross-species orthology layer that lets any
   multi-organism proteomics project join protein identifications across species without collapsing
   one-to-many orthology.
-- **Pick up at:** **port accession→gene resolution to mzLib (C#)** — `design/PLAN.md` step 5,
-  moved there by the user on 2026-09-22. `resolve.py` is the prototype and test oracle. Gated on
-  #1336 (stack or wait). Note also aging 006: rodents are ~a day away, so the store is un-deferred.
-  See `RESUME.md`.
+- **Pick up at:** re-check mzLib **#1336** (approved 2026-09-22). If it has merged, rebase
+  `code/mzLib-ensembl-genes` onto master and open the resolution PR. Then the user picks: **(a)**
+  write the resolution into MetaMorpheus output (`/oracle MetaMorpheus` first), or **(b)** open a
+  `go` thread. See `RESUME.md`.
 
 **The name:** `logs` = homologs, orthologs, paralogs, and any other -logs. Not log files.
 
@@ -34,9 +34,16 @@ This folder is a `/project`-managed research project. **You are de facto working
    a category error — it needs `SelectMany(Properties)` and a `Distinct()`.
 6. **A number sent to a partner is a contract.** `tests/test_reported_claims.py` pins every one. If
    a re-run moves it, fix the code or send a correction — never edit the expected value.
-7. **Don't start mzLib-side code that touches `Protein.cs` until PR #1336 merges (or stack on it).** It establishes the
-   typed-view-over-`DatabaseReferences` idiom; a second mechanism written independently is the
-   duplication `/oracle` exists to prevent.
+7. **The mzLib branch is stacked on #1336.** Rebase and retarget when it merges; never force-push
+   `go`'s branch.
+8. **`LoadProteinXML` applies sequence variants by default.** The human reviewed proteome loads as
+   52,359 proteins from 20,416 entries (`P12345_S70N`). Say whether a count is of entries or
+   proteoforms.
+9. **"Multi-gene" depends on the source.** UniProt's XML links readthrough genes, novel genes and
+   paralogs, giving 350 multi-gene entries; Ensembl's xref gives 69. Both are reported;
+   `ensembl_xref_agrees` separates them.
+10. **Long heredocs and backslashes in the Bash tool can break a script.** Write a message body with
+    the Write tool, then post it, and use forward-slash Windows paths.
 
 ## Running things
 
@@ -49,7 +56,9 @@ python -m logs_orthology.resolve --reference          # -> results/resolution_hu
 python -m logs_orthology.resolve --accessions ids.tsv # accession[<TAB>contaminant] per line
 python tests/test_contracts.py         # 10 contract tests
 python tests/test_resolve.py           # 16 resolver contracts (last one reconciles on real data)
-python tests/test_reported_claims.py   # 15 numbers already sent to a partner
+python tests/test_reported_claims.py   # 16 claims already sent to a partner
+dotnet run --project tools/ResolveSearchDb -c Release -- <xml> <gtf.gz> <uniprot.tsv.gz> <out.tsv>
+python -m logs_orthology.search_db <out.tsv>   # -> results/search_db_resolution.{md,json}
 ```
 
 Inputs live in `data/compara/` (gitignored, 673 MB, recorded in `data/PROVENANCE.md`).

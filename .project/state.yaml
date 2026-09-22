@@ -257,6 +257,12 @@ decisions:
       alone. 5: improvement, not blocker; build complete and durable. 6: yes, mzLib half first - but it
       reaches them only if MetaMorpheus WRITES the resolved id. Also: open `go` directly (#1336 seam);
       `ptmQtl` is a second consumer on the corpus.
+  - date: 2026-09-22
+    text: >-
+      TRAP: LoadProteinXML applies UniProt sequence variants by default - the human reviewed proteome
+      loads as 52,359 proteins from 20,416 entries, variants named "{accession}_{change}". Any count
+      over loaded proteins must say whether it counts entries or proteoforms; the resolver resolves a
+      variant through Protein.ConsensusVariant and keeps its verbatim accession.
 
 gaps:
   - >-
@@ -305,7 +311,19 @@ skip_log:
       mechanism independently is the duplication the oracle exists to prevent. Waiting is the
       decision, not an oversight.
 
-repos: []
+repos:
+  - name: mzLib
+    worktree: code/mzLib-ensembl-genes
+    branch: feat/ensembl-gene-resolution
+    base_clone: 'E:\GitClones\mzLib'
+    pinned: c1365ade405d4c75e47591312e750c6d1da2ed4a
+    pr: "none yet - stacked on https://github.com/smith-chem-wisc/mzLib/pull/1336 (APPROVED 2026-09-22); retarget to master when it merges"
+  - name: mzLib
+    worktree: code/mzLib-occupancy-nterm
+    branch: fix/occupancy-met-cleaved-nterm
+    base_clone: 'E:\GitClones\mzLib'
+    pinned: e3282169d4de3a2b2db8dcf7760e2da3597f509f
+    pr: "https://github.com/smith-chem-wisc/mzLib/pull/1337"
 
 github:
   remote: "https://github.com/trishorts/logs"

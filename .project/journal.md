@@ -110,3 +110,41 @@ re-run that moves one fails loudly instead of leaving a wrong number in their sc
 
 **Phase.** Recorded as BUILD. SURVEY was skipped entirely — no literature review was run — logged in
 `skip_log` rather than left implicit.
+
+## 2026-09-22 (second session) — the plan reordered twice, resolution moved into mzLib, and an occupancy bug fixed on the way
+
+**Replies turned the plan over.** aging's 002 said compare, not pool; that rodents were months away;
+and that they wanted accession→gene more than orthology. The store was deferred and resolution
+brought forward (003 to aging). Their 006 corrected the timeline the same day: the user had mixed
+mouse and rat into the batch, so rodents are about a day away and the store is un-deferred. 006 also
+confirmed the full search-database hash (`760984e8…a7be8838`, over the decompressed XML) and answered
+REQ-AGING-5..8. The user then moved accession→gene resolution into **mzLib**. `resolve.py`, written
+this session as a Python prototype, became the test oracle for the C# port.
+
+**Three errors in numbers already sent, all one mistake.** Building the resolver exposed that 007 to
+dataRepo pooled `NP_` with `XP_` and counted xref rows as accessions: curated `NP_` is 99.58%
+single-gene, not 96.9%; `NP_` links are 76.6% `DIRECT`, not "mostly inference"; and isoform-suffixed
+accessions number 25,177, not 35,202. Corrected in 008 to dataRepo, with the `NP_` point repeated to
+aging in 005. The pinned-claims test caught the isoform change as designed.
+
+**The port** (`code/mzLib-ensembl-genes`, stacked on #1336, test-first): `Protein.EnsemblGeneReferences`
+in #1336's idiom, `EnsemblGeneSet.LoadGtf`, `ProteinAccession.Parse`, `EnsemblGeneResolver` with
+`GeneResolutionTsv`, and `EnsemblXrefTable` for a per-gene `ensembl_xref_agrees` column. Running it on
+the real search database turned up two things. First, `LoadProteinXML` expands 20,416 entries into
+52,359 proteins because sequence variants are applied, and 504 of those had been misreported; they
+now resolve through `ConsensusVariant`. Second, the two sources mean different things by
+"multi-gene": UniProt's XML links readthrough genes, novel genes and identical paralogs, giving 350
+multi-gene entries against Ensembl's xref's 69. The user chose to report the XML's links as they are
+and add the agreement column. Filtering `agrees = true` reproduces `resolve.py` for 20,412 of 20,416
+entries. 005's numbers now come from committed code (`tools/ResolveSearchDb` +
+`logs_orthology.search_db`) and are pinned. dataRepo's 009 showed that the XML carries the
+ALT-haplotype trap (87.6% single-ENSG). We reproduced it at 87.11%, and the port's primary-assembly
+gene-set input is exactly their fork's first branch.
+
+**Out of scope, fixed anyway.** The user asked for a review of Peter's occupancy manuscript against
+the code, so both oracles ran on it. The pass found that `ModificationOccupancyCalculator` drops
+protein N-terminal mods on Met-removed N-termini from both sides of the ratio, and that the paper
+cites the wrong mzLib version (1.0.586; MetaMorpheus 1.1.9 uses 1.0.588), among smaller wording
+errors. The user had the fix opened from `logs` as an isolated TDD PR from their fork: **mzLib #1337**
+(two red tests to green, two guards, full offline suite 6,607/0/32). The manuscript findings have
+not been sent to Peter.
