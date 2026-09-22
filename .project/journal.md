@@ -24,3 +24,8 @@ Append-only. One line per phase change, locked decision, or consciously-skipped 
   (group vs relationship are two objects; group ids are not stable across releases). REQ-LOGS-4
   left open on cardinality - to be measured, not estimated. Asked REQ-DATAREPO-1..3, of which
   REQ-DATAREPO-1 (XML- vs FASTA-derived corpus) decides our v1 scope.
+- 2026-09-22 - user: "ask questions. answer questions. express your needs openly" - a lesson about
+  all partners, not just dataRepo. Posted 005-logs stating the three needs we had not stated
+  (blocker vs improvement; do they want the mzLib half early; "generic" is unfalsified), and
+  opened the aging channel (001-logs) - our first consumer, whom we had only heard through
+  dataRepo. Rule added to CLAUDE.md so it governs the next session.

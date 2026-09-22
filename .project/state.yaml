@@ -102,6 +102,22 @@ decisions:
       RELEASE'S GENE SET AT ALL - no call was ever attempted. (1) and (4) both present as "no
       mouse gene" and mean opposite things; collapsing them reproduces the empty-vs-unknown defect
       dataRepo warned us about, in the exact place we would have hit it.
+  - date: 2026-09-22
+    text: >-
+      HOW WE WORK WITH PEERS (user). Ask questions, answer questions, and state our own needs
+      openly - the third is the one that gets skipped. Measured day one: four messages with
+      dataRepo produced ten substantive results and only TWO were reachable by thinking harder.
+      Ask the owner directly, never via a proxy. Record a disproved hypothesis in the thread
+      rather than dropping it quietly. Never open an empty channel. Stated to dataRepo in
+      005-logs and enacted by opening the aging channel we should have opened first.
+  - date: 2026-09-22
+    text: >-
+      "GENERIC" IS CURRENTLY UNFALSIFIED, NOT DEMONSTRATED. Every requirement we hold comes from
+      one conversation, one project, one corpus - 9 datasets, one producer, one search database,
+      human only. A design validated against exactly one consumer is a design fitted to that
+      consumer with a generic label on it. Stated openly to dataRepo (005-logs §2.3). No ask
+      attached yet; the sibling of dataRepo's rule that a requirement written on your behalf goes
+      stale is that a requirement written by a SINGLE CONSUMER looks generic and is not.
 
 gaps:
   - >-

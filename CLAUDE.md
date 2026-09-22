@@ -25,6 +25,20 @@ the `project` skill's `references/session-brief.md`. Compute it like `status` (r
 the human-readable live doc is `RESUME.md` (rendered fresh by `/project`). Do not hand-edit the
 generated block in `RESUME.md`.
 
+**How we work with peers — ask, answer, and state our own needs.** Communication is the
+highest-value activity here, not overhead around it. Measured on our first day: four messages with
+`dataRepo` produced ten substantive results, and only **two** were reachable by thinking harder. Two
+schema contracts were stopped before being built, and a real defect in their store was found only
+because we stated a *wrong* hypothesis out loud and they checked it.
+
+So: ask the owner directly, never through a proxy. Answer quickly, including "I don't know" and "I
+was wrong" — record a disproved hypothesis in the thread rather than quietly dropping it, so the
+thread shows which side supplied which idea. And **state our own needs unprompted** — that is the one
+that gets skipped. Are we a blocker or an improvement? Does a partner want half the deliverable
+early? Is a claim in our charter currently unfalsified? Say it before someone has to ask.
+
+Never open an empty channel: every message carries a concrete finding or ask.
+
 **Threads come first.** Run the inbox check as step 0 of the session, before anything else:
 
 ```
