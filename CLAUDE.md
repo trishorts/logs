@@ -4,14 +4,50 @@
 
 This folder is a `/project`-managed research project. **You are de facto working on it.**
 
-- **Phase:** INCEPTION
+- **Phase:** BUILD
 - **Goal:** A generic, versioned, gene-centric cross-species orthology layer that lets any
   multi-organism proteomics project join protein identifications across species without collapsing
   one-to-many orthology.
-- **Pick up at:** `/grill-me` on `design/problem-statement.md` - settle the implementation home
-  (mzLib vs standalone vs dataRepo), the orthology source of record, and the dataRepo accession seam.
+- **Pick up at:** build the store — `design/PLAN.md` step 5. Both measurements it waited on are
+  done; nothing external blocks it. Read `RESUME.md` for the schema shape and what is owed.
 
 **The name:** `logs` = homologs, orthologs, paralogs, and any other -logs. Not log files.
+
+## Things that will bite you here
+
+1. **Ensembl's genome-specific Compara dumps partition rather than overlap, and each species pair
+   lives entirely in ONE file — not the obvious one.** Every human↔mouse orthology is in the
+   **mouse** dump; the human dump has none. Downloading the file named after your species yields a
+   complete-looking result missing 100% of human↔mouse. Read a provider's README before its data.
+2. **A denominator is a claim — enumerate the set before dividing by it.** Two were wrong in one
+   afternoon: `protein_coding` is not the eligible set (Compara also trees IG/TR gene segments),
+   and counting raw gene ids from the xref dumps includes ALT haplotypes, which inflated the
+   multi-gene rate twentyfold and invented a human-vs-rodent difference that does not exist.
+3. **Never name an entity from memory in a deliverable.** `Q5JQC4` was written up as KIR2DL5A from
+   recall; it is CT47A1. Resolve identifiers against the data, every time.
+4. **When a result is surprising, suspect the measurement first.** "Human is dramatically worse
+   than mouse" was surprising and wrong. The surprise was the signal.
+5. **`Protein.NcbiTaxonomyId`'s projection does not transfer to gene ids.** UniProt writes one
+   `dbReference` per *transcript* with the ENSG in a `<property>`, so `FirstOrDefault(...)?.Id` is
+   a category error — it needs `SelectMany(Properties)` and a `Distinct()`.
+6. **A number sent to a partner is a contract.** `tests/test_reported_claims.py` pins every one. If
+   a re-run moves it, fix the code or send a correction — never edit the expected value.
+7. **Don't start mzLib-side code until PR #1336 merges.** It establishes the
+   typed-view-over-`DatabaseReferences` idiom; a second mechanism written independently is the
+   duplication `/oracle` exists to prevent.
+
+## Running things
+
+```powershell
+$env:PYTHONPATH = "E:\CodeReview\logs\src"
+python -m logs_orthology.fetch          # re-fetch/verify the pinned Ensembl 116 inputs
+python -m logs_orthology.cardinality    # -> results/cardinality.{md,json}
+python -m logs_orthology.xrefs          # -> results/accession_resolution.{md,json}
+python tests/test_contracts.py         # 10 contract tests
+python tests/test_reported_claims.py   # 12 numbers already sent to a partner
+```
+
+Inputs live in `data/compara/` (gitignored, 673 MB, recorded in `data/PROVENANCE.md`).
 
 **Scope discipline:** this is **generic engineering infrastructure**. `aging` is the first consumer,
 not the design driver; `dataRepo` is a generic neighbour. Any requirement arriving from a consuming

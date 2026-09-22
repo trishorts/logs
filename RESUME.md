@@ -46,59 +46,109 @@ Carried from the inception discussion (`design/problem-statement.md`, full sourc
 
 ## What the first day settled
 
-**Ownership (thread `dataRepo` 001 → 002, both closed).** `dataRepo` opened the channel on the day we
-were created and answered both collisions rather than asking about them. Ours: the orthology store,
-the analysis views, **accession → source gene resolution**, and **canonical accession normalization**.
-Theirs: verbatim identifier storage. Their evidence for handing us resolution is the best argument
-for this project we have — over 20,022 distinct accessions in their corpus, **five carry different
-gene spellings in different datasets**, so in their store `gene` is not even a function of `accession`.
+**Ownership** (thread `dataRepo` 001–007, seven messages). Ours: the orthology store, the analysis
+views, **accession → source gene resolution**, and **canonical accession normalization**. Theirs:
+verbatim identifier storage. Their argument for handing us resolution is the best case for this
+project — of 20,022 distinct accessions, five carry different gene spellings in different datasets,
+so `gene` is not a function of `accession` in their store.
 
-**Taxa confirmed:** human 9606, mouse 10090, rat 10116. Generic framing retained.
+**Taxa confirmed:** human 9606, mouse 10090, rat 10116. **Corpus:** 100% UniProt XML, one database,
+one sha256 across all nine datasets — so v1 reads cross-references off the search database with no
+network in the hot path.
 
-**Two modelling decisions locked** before any code exists — see `.project/state.yaml`:
-a group and a pairwise relationship are **two objects** (a member's `role` in a group cannot carry
-`relationship_type`, because one2one/one2many describe a *pair*); and an orthogroup id is **not stable
-across source releases**, so the honest key is `(source, release, group_id)`.
+**Implementation home locked** (`design/ORACLE.md`). The project *splits*: accession→gene **extends
+mzLib** (every UniProt `<dbReference>` is already on `Protein.DatabaseReferences` and never read
+back by type); the ID-mapping client is a natural sibling to `ProteinDbRetriever`; the **relational
+store stays here**, because mzLib has no self-managed on-disk database and
+`ControlledVocabulary.cs:25-27` argues against exactly this.
 
-**mzLib survey done** (`design/ORACLE.md`). The headline: every UniProt `<dbReference>` is already
-parsed and kept on `Protein.DatabaseReferences` — Ensembl, GeneID, RefSeq, HGNC, MGI, RGD — and mzLib
-simply never reads them back by type. Accession→gene is ~70% solved for the XML path and 0% for
-RefSeq protein.
+## What was measured
+
+Both from pinned Ensembl 116 (`data/PROVENANCE.md`; 16 files, 673 MB, 15 of 16 checksum-verified).
+
+**Orthology cardinality** — `results/cardinality.md`:
+
+- **75.49%** of eligible human genes are a clean 1:1:1 across the three taxa. **Design a
+  cross-species join for ~75%, not 95%.**
+- **45 genes** are one2one to *both* rodents while the rodents are **not** one2one with each other —
+  clean from every pairwise angle, not clean as a set. This is the whole reason triples were
+  measured separately; a join built on pairwise evidence treats them as interchangeable.
+- **2,539** human genes have no rodent ortholog at all. Mouse↔rat is the easy join (91.98%);
+  anything crossing to human is not.
+
+**Accession → gene** — `results/accession_resolution.md`:
+
+- Multi-gene accessions are **rare (0.36% of reviewed human) but concentrated**: all four core
+  histones are in the top seven, `P62805` (H4) spanning 14 real loci. A sub-1% rate landing on
+  proteins abundant in every run — a sampled test set will miss it.
+- **RefSeq is not deferred.** 69,569 curated human `NP_` accessions, 96.9% single-gene, from a 4 MB
+  file already on disk. But its links are mostly `SEQUENCE_MATCH`/`INFERRED_PAIR`, not `DIRECT` —
+  carry `info_type` per row or you report an inference as an assertion.
+
+## Things that will bite you here
+
+Each of these cost real time today.
+
+1. **Ensembl's genome-specific Compara dumps *partition*, they do not overlap — and each species
+   pair lives entirely in one file, not the obvious one.** Every human↔mouse orthology is in the
+   **mouse** dump; the human dump has none. Download the file named after your species and you get
+   a complete-looking result missing 100% of human↔mouse.
+2. **A denominator is a claim.** Two were wrong in one afternoon. `protein_coding` is *not* the
+   eligible set — Compara also trees IG/TR gene segments. And counting raw gene ids from the xref
+   dumps includes ALT haplotypes, which inflated the multi-gene rate twentyfold (6.99% vs 0.36%)
+   and manufactured a human-vs-rodent difference that does not exist.
+3. **Never name an entity from memory.** `Q5JQC4` was written up as KIR2DL5A from recall; it is
+   CT47A1. Resolve identifiers against the data every time.
+4. **`Protein.NcbiTaxonomyId`'s shape does not transfer to gene ids.** UniProt writes one
+   `dbReference` per *transcript* with the ENSG in a `<property>`, so `FirstOrDefault(...)?.Id` is a
+   category error — it needs `SelectMany(Properties)` and a `Distinct()`.
+5. **Numbers sent to a partner are a contract.** `tests/test_reported_claims.py` pins every one; if
+   a re-run moves it, that test fails and we owe a correction.
 
 ## Pick up at
 
-**`/grill-me` on `design/problem-statement.md`**, now with two of the original three gating questions
-resolved. What remains:
+**Build the store — `design/PLAN.md` step 5.** Both measurements it was waiting on are done, and
+nothing external blocks it.
 
-1. **Implementation home.** The oracle says the project *splits*: accession→gene EXTENDs mzLib, the
-   ID-mapping client is a natural mzLib sibling, and the versioned relational store does **not**
-   belong in mzLib (it would be its first self-managed on-disk database and its first DB dependency
-   outside vendor-file reading). Confirm or reject that split.
-2. **Orthology source of record** — Compara primary is the working assumption; decide how
-   NCBI/Alliance/HCOP support is stored without merging into one unqualified "truth".
-3. **Multi-ENSG semantics** — UniProt writes one Ensembl reference per *transcript*, ENSG in a
-   property, so a protein can carry several. This is where one-to-many first bites, and it is a
-   modelling decision, not plumbing.
+Schema: `Gene`, `ProteinAccession`, `OrthologyGroup`, `OrthologyGroupMember`,
+`OrthologyRelationship`, in `src/logs_orthology/`. Group id is **ours**, with Compara's `ENSGT…`
+preserved beside it, keyed `(source, release, group_id)` and never promised stable across releases.
+Relationship rows carry `relationship_type`, `is_high_confidence`, `goc_score`, `wga_coverage` and
+both identity percentages verbatim. Every unresolved outcome carries its class — the four refusal
+classes plus *contaminant, not mapped* and *resolves only to ALT/patch*.
 
-**Owed out:** `REQ-LOGS-4` — the joint cardinality of Compara orthogroups across 9606/10090/10116.
-`dataRepo` will design their cross-species join against that number, so it gets **measured, not
-estimated**. Pairwise is not enough: 1:1 human↔mouse plus 1:1 human↔rat does not imply a clean triple.
+Start with: `python -m logs_orthology.cardinality` to confirm the inputs still reproduce, then
+`python tests/test_reported_claims.py` to confirm nothing we told a partner has moved.
 
-**Waiting on:** `REQ-DATAREPO-1` — is their corpus UniProt-XML- or FASTA-derived? XML means the
-cross-references were present at search time and v1 is mostly reading them back. FASTA means only
-`GN=` survived and the UniProt ID Mapping API is on the critical path, which is a different project.
+**Waiting on others** (nothing blocking):
+
+- `dataRepo` **REQ-DATAREPO-7** — the distinct-ENSG distribution over *their* XML. Our prediction is
+  on the record: ~99%. If theirs is materially worse, they likely have our ALT-haplotype trap.
+- `dataRepo` **REQ-DATAREPO-4/5/6** — is the database file retained or only its sha; are we a
+  blocker or an improvement; do they want the mzLib half early.
+- `aging` **REQ-AGING-1..4**, no reply yet. **REQ-AGING-1 shapes everything**: pool, compare, or
+  transfer annotations? We build for *compare* by default.
+- **mzLib PR #1336** must merge before any mzLib-side code starts — it sets the pattern.
+
+## Documents in `design/`
+
+- `problem-statement.md` — the distilled problem and the eight locked constraints.
+- `sources/cross_species_orthology_discussion.md` — the seed discussion, verbatim.
+- `ORACLE.md` — the mzLib survey and the three-way split verdict.
+- `PLAN.md` — ordered steps and the standing rules.
+- `threads/OWNERSHIP.md` — capability ownership; both inception collisions closed.
+- `threads/dataRepo/`, `threads/aging/` — correspondence.
 
 <!-- BEGIN GENERATED -- render_resume.py owns this block; edit state.yaml, not here -->
 
-**logs** &middot; phase **INCEPTION** (1/10) &middot; created 2026-09-22 &middot; rendered 2026-09-22
+**logs** &middot; phase **BUILD** (4/10) &middot; created 2026-09-22 &middot; rendered 2026-09-22
 
 | | |
 |---|---|
-| Commits | 18 |
+| Commits | 21 |
 | Sync | [`trishorts/logs`](https://github.com/trishorts/logs) |
-| Locked decisions | 17 |
-| Open gaps | 5 |
-
-> **1 document(s) in `design/` not referenced above** -- `PLAN.md`. Add a line for each, or say why not.
+| Locked decisions | 21 |
+| Open gaps | 7 |
+| Gate items skipped | 2 |
 
 <!-- END GENERATED -->

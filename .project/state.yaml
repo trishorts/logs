@@ -1,6 +1,10 @@
 name: logs
 created: 2026-09-22
-phase: INCEPTION
+# BUILD, not INCEPTION: design/PLAN.md exists with ordered steps, src/logs_orthology/ has working
+# code with 22 passing tests, and results/ holds two measured deliverables. Disk is clearly ahead
+# of the old value, which is the hybrid-state rule working as intended. SURVEY was skipped - see
+# skip_log.
+phase: BUILD
 
 goal: >
   Build a generic, versioned, gene-centric cross-species orthology layer that lets any
@@ -42,11 +46,14 @@ decisions:
       their age_effect_meta would otherwise silently mix two memberships (002-logs §3.2).
   - date: 2026-09-22
     text: >-
-      MEASURED (Compara 116, results/cardinality.md, posted as 006-logs). 76.97% of human
-      protein-coding genes are a clean 1:1:1 across 9606/10090/10116. 45 more are one2one to both
-      rodents while the rodents are NOT one2one with each other - clean from every pairwise angle,
-      not clean as a set. 2,269 human genes (11.3%) have no ortholog in either rodent. Mouse-rat
-      is the easy join at 92.57%; anything crossing to human is not. Design for 77%, not 95%.
+      SUPERSEDED 2026-09-22 by the corrected measurement below - the numbers here used the wrong
+      eligible set (protein_coding only) and are ~1pt off. Kept because the shape of the finding
+      is unchanged and the correction is part of the record. ORIGINAL TEXT: "MEASURED (Compara
+      116, results/cardinality.md, posted as 006-logs). 76.97% of human protein-coding genes are
+      a clean 1:1:1 across 9606/10090/10116. 45 more are one2one to both rodents while the
+      rodents are NOT one2one with each other - clean from every pairwise angle, not clean as a
+      set. 2,269 human genes (11.3%) have no ortholog in either rodent. Mouse-rat is the easy
+      join at 92.57%; anything crossing to human is not. Design for 77%, not 95%."
   - date: 2026-09-22
     text: >-
       CORRECTION to 004-logs §5. Compara CANNOT separate "no ortholog exists" from "no ortholog in
@@ -65,6 +72,42 @@ decisions:
       file has zero. The rat file has zero in-scope pairs at all. Downloading the file named after
       your species yields a complete-LOOKING result missing 100% of human-mouse. Caught only by
       reading the provider README before the data - now a standing rule (design/PLAN.md).
+  - date: 2026-09-22
+    text: >-
+      CORRECTED 006-logs (sent, then corrected in 007-logs). The eligible set was protein_coding
+      alone; Compara's protein_default trees ALSO contain IG/TR gene segments (279 human, 485
+      mouse, 511 rat), so every cardinality rate was ~1pt off in the flattering direction. Clean
+      1:1:1 76.97% -> 75.49%; human->mouse 87.88% -> 86.77%; no-rodent-ortholog 2,269 -> 2,539.
+      The 45 look-clean-but-arent genes were unchanged - that number never depended on the
+      denominator. Headline advice unchanged: design for ~75%, not 95%.
+  - date: 2026-09-22
+    text: >-
+      MULTI-GENE RATE is 0.36% of reviewed human accessions, NOT the 6.99% our first measurement
+      gave. Ensembl xref dumps reference ALT-haplotype and patch genes, so one locus counted many
+      times; 1,284 of 1,354 apparent multi-gene cases were duplicates. It also manufactured a
+      "human much worse than rodents" difference that does not exist - only the human dump
+      references off-primary genes (3,274). All three species are ~99.2% single-gene. Genuine
+      cases are tandem-duplicated families led by ALL FOUR CORE HISTONES (P62805/H4 spans 14 real
+      loci) - a rare rate concentrated on proteins abundant in every run. Also: 62 reviewed human
+      accessions resolve to NO primary-assembly gene, which is its own outcome, not "unresolved".
+  - date: 2026-09-22
+    text: >-
+      REFSEQ DEFERRAL RETRACTED (007-logs). We deferred RefSeq to v3 because mzLib parses no
+      NP_/XP_ FASTA header - true, and about PARSING A HEADER, not about resolving an accession we
+      already hold. Ensembl ships 69,569 curated human NP_ accessions, 96.9% resolving to exactly
+      one primary gene, in a 4 MB file already on disk. CAVEAT that must travel with it - for
+      human RefSeq proteins the links are mostly NOT assertions - SEQUENCE_MATCH 99,149 / DIRECT
+      85,611 / INFERRED_PAIR 71,549. Carry info_type on every resolved row; UniProt is far cleaner
+      (159,011 DIRECT vs 17,844 SEQUENCE_MATCH).
+  - date: 2026-09-22
+    text: >-
+      METHOD, made permanent after two wrong denominators in one afternoon. A DENOMINATOR IS A
+      CLAIM - enumerate the reference set before dividing by it. NEVER name an entity from memory
+      in a deliverable (Q5JQC4 was written up as KIR2DL5A from recall; it is CT47A1). WHEN A
+      RESULT IS SURPRISING, SUSPECT THE MEASUREMENT FIRST. Read the provider README before the
+      data. Rules live in design/PLAN.md; numbers already sent to a partner are pinned by
+      tests/test_reported_claims.py so a re-run that moves one fails loudly instead of leaving a
+      wrong number in someone else's schema.
   - date: 2026-09-22
     text: >-
       IMPLEMENTATION HOME - LOCKED (user, accepting the oracle's split; evidence design/ORACLE.md).
@@ -150,21 +193,21 @@ gaps:
     decide how NCBI Orthologs / Alliance / HCOP support is stored alongside without merging
     into one unqualified "truth".
   - >-
-    DECIDE (multi-ENSG semantics) - the LAST open modelling question, and it now has a path.
-    UniProt writes one Ensembl dbReference per transcript with the ENSG in a
-    `<property type="gene ID">`, so `Id` is a TRANSCRIPT and reading it is a category error; an
-    accession can carry several distinct ENSGs. dataRepo is measuring the distinct-ENSG-per-
-    accession distribution over their 20,022 accessions against the actual search XML (004-logs
-    §2b). If ~99% give exactly one, multi-ENSG is an explicit `ambiguous` outcome and we move on;
-    if it is ~10%, it is a first-class shape and the store is keyed differently. Do not guess -
-    wait for the number.
+    NEXT ACTION - build the store (design/PLAN.md step 5). Both measurements it was waiting on are
+    done. Schema: Gene, ProteinAccession, OrthologyGroup, OrthologyGroupMember,
+    OrthologyRelationship. Group id is OURS with Compara's ENSGT preserved beside it, keyed
+    (source, release, group_id) and never promised stable across releases. Relationship rows carry
+    relationship_type, is_high_confidence, goc_score, wga_coverage and both identity percentages
+    verbatim. Every unresolved outcome carries its class, including "contaminant, not mapped",
+    "resolves only to ALT/patch" and the four refusal classes. Carry info_type per resolved row -
+    DIRECT is an assertion, SEQUENCE_MATCH and INFERRED_PAIR are not.
   - >-
-    NEXT (accession -> gene). Measure the distinct-ENSG-per-accession distribution against the
-    fetched Ensembl xref dumps, independently of dataRepo's measurement against the search XML.
-    If the two disagree that is a finding about which source to trust. Then re-measure the RefSeq
-    claim: we deferred RefSeq to v3 because mzLib parses no NP_/XP_ FASTA header, but that is
-    about PARSING A HEADER and does not apply to RESOLVING AN ACCESSION WE ALREADY HOLD, which
-    Homo_sapiens.GRCh38.116.refseq.tsv.gz does directly. Correct the deferral if it is wrong.
+    AWAITING dataRepo (REQ-DATAREPO-7). The distinct-ENSG-per-accession distribution over THEIR
+    20,022 accessions as recorded in the search XML. Our prediction is on the record in 007-logs:
+    ~99%, not the 93% we first (wrongly) reported. If their number is materially worse, the most
+    likely cause is that UniProt's XML dbReferences include haplotype-scaffold genes exactly as
+    Ensembl's xref dump does - i.e. THEY HAVE OUR TRAP - and any count over that field needs the
+    same primary-assembly restriction. That is now the specific thing worth checking.
   - >-
     AWAITING dataRepo (REQ-DATAREPO-4). Is the search database FILE retained anywhere durable, or
     is the sha256 the only surviving trace? A sha proves identity but does not let anyone re-read
@@ -173,11 +216,41 @@ gaps:
     RECORD (file gone, our output is the evidence and must stand alone). Different durability
     requirements - settle it before the schema, not after.
   - >-
-    If any mzLib work proceeds - wait for mzLib PR #1336 (feat/go-terms-accessor) to merge and
-    follow its pattern. It establishes the typed-view-over-DatabaseReferences idiom; writing a
-    second mechanism independently is the duplication the oracle exists to prevent.
+    AWAITING aging (REQ-AGING-1..4, no reply yet). REQ-AGING-1 is the one that shapes everything:
+    is the cross-species job to POOL, to COMPARE, or to TRANSFER ANNOTATIONS? We are building for
+    COMPARE by default (retain everything, let pooling be a strict view over it). If pooling into
+    age_effect_meta is the real goal, the conservative path is the primary product and should say
+    so on the tin. Also open: rodent data horizon, whether their analysis can carry a typed
+    refusal, and whether they are working around anything non-orthology we could absorb.
+  - >-
+    AWAITING dataRepo (REQ-DATAREPO-5/6). Are we a blocker or an improvement - what do they do if
+    logs never ships? And do they want the mzLib accession->gene half on its own, ahead of the
+    store? The first decides narrow-and-early vs complete-and-durable and is the single answer
+    that most changes what we build next.
+  - >-
+    "GENERIC" IS STILL UNFALSIFIED. Every requirement we hold comes from one consumer and one
+    corpus. Stated openly to dataRepo in 005-logs §2.3, no ask attached. Either find a second
+    unrelated consumer or say plainly that generic is aspirational. aging's answer may change the
+    picture; a second consumer would settle it.
 
-skip_log: []
+skip_log:
+  - date: 2026-09-22
+    item: SURVEY (literature-review)
+    reason: >-
+      Went inception -> plan -> build in one day on an engineering problem whose requirements came
+      from a peer project's measured corpus rather than from the literature. No literature review
+      was run and none is currently planned. This is defensible for the ETL and the store, but NOT
+      for any claim about orthology method: if this work is ever written up, or if we assert that
+      our grouping/refusal semantics improve on prior art, the survey has to happen first. Ensembl
+      Compara, OrthoFinder, Alliance/HCOP and the one-to-many handling literature are the obvious
+      starting points.
+  - date: 2026-09-22
+    item: mzLib PR #1336 not yet merged
+    reason: >-
+      The accession->gene work is deliberately NOT started, pending #1336 (feat/go-terms-accessor)
+      merging. It establishes the typed-view-over-DatabaseReferences idiom and writing a second
+      mechanism independently is the duplication the oracle exists to prevent. Waiting is the
+      decision, not an oversight.
 
 repos: []
 
