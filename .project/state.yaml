@@ -19,11 +19,28 @@ decisions:
       multi-organism proteomics project; `aging` is the first consumer, not the design driver.
 
 gaps:
-  - Decide the implementation home - mzLib (C# library, reaches MetaMorpheus/FlashLFQ) vs a
-    standalone service/DB vs a dataRepo-owned component. Run /oracle mzLib before writing code.
-  - Decide orthology source of record (Ensembl Compara primary) and how NCBI/HCOP support is stored.
-  - Decide the seam with dataRepo - does dataRepo own accession resolution, or do we?
+  - >-
+    DECIDE (implementation home). Oracle run 2026-09-22 says the project splits, not lands:
+    accession-to-gene belongs in mzLib (EXTEND), the ID-mapping/Ensembl client belongs in mzLib
+    (ADD-NEW), and the versioned relational orthology STORE does not belong in mzLib at all.
+    Confirm or reject that split. Evidence in design/ORACLE.md.
+  - >-
+    DECIDE (orthology source of record). Ensembl Compara primary is the working assumption;
+    decide how NCBI Orthologs / Alliance / HCOP support is stored alongside without merging
+    into one unqualified "truth".
+  - >-
+    DECIDE (dataRepo seam). Does dataRepo own protein-accession resolution and identifier
+    storage, or do we? Flagged as an unclaimed possible collision in design/threads/OWNERSHIP.md;
+    not yet raised with dataRepo.
+  - >-
+    DECIDE (multi-ENSG semantics). UniProt writes one Ensembl dbReference per transcript with the
+    ENSG in a property, so a protein can carry several ENSGs. What does that mean for us? This is
+    where the one-to-many principle first bites, and it is a modelling decision, not plumbing.
   - Confirm species set beyond human/mouse/rat (MVP taxa 9606 / 10090 / 10116).
+  - >-
+    If any mzLib work proceeds - wait for mzLib PR #1336 (feat/go-terms-accessor) to merge and
+    follow its pattern. It establishes the typed-view-over-DatabaseReferences idiom; writing a
+    second mechanism independently is the duplication the oracle exists to prevent.
 
 skip_log: []
 

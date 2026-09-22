@@ -65,9 +65,11 @@ with `dataRepo`.
 
 | | |
 |---|---|
-| Commits | 0 |
+| Commits | 2 |
 | Sync | not synced -- no remote recorded |
 | Locked decisions | 2 |
-| Open gaps | 4 |
+| Open gaps | 6 |
+
+> **1 document(s) in `design/` not referenced above** -- `ORACLE.md`. Add a line for each, or say why not.
 
 <!-- END GENERATED -->
