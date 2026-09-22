@@ -31,3 +31,9 @@ __pycache__/
 
 # Cross-project thread read-state: per-machine, not project truth (see references/threads.md)
 .project/threads.state
+
+# Pinned external reference data (Ensembl / Compara). Large; recorded in data/PROVENANCE.md.
+/data/compara/
+*.tsv.gz
+*.gtf.gz
+*.partial
