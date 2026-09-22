@@ -25,7 +25,8 @@ Generic infrastructure, **not** an analysis for one study.
 
 - `aging` (organelles in aging, large-scale multi-organism proteomics) is the **first consumer**, not
   the design driver.
-- `dataRepo` is the near-term generic neighbour; the accession-resolution seam between us is unsettled.
+- `dataRepo` is the near-term generic neighbour and our first channel; the accession-resolution seam
+  between us is **settled** (see below).
 - A requirement arriving from a consuming project must be **generalized** before it lands in the design.
 
 ## Locked design constraints
