@@ -66,6 +66,42 @@ decisions:
       contamination_psm_share). RULE: a contaminant-panel entry is NEVER mapped through orthology.
       It is not filtered out silently either - it is resolved to the explicit outcome "contaminant,
       not mapped", so "we did not look" stays distinguishable from "no ortholog exists".
+  - date: 2026-09-22
+    text: >-
+      V1 SCOPE SET by measurement (003-dataRepo). Their corpus is 100% UniProt XML - one file,
+      uniprotkb_proteome_UP000005640_AND_revi_2026_09_18.xml, identical sha256 across all 9
+      datasets, MetaMorpheus 1.1.11. Zero RefSeq, zero isoform suffixes, zero _N collision
+      counters, zero entrapment prefixes. So v1 reads cross-references back off the search
+      database - no ID Mapping service on the critical path, no network in the hot path.
+      RefSeq deferred to v3. CAVEAT recorded as an expiring measurement, not a fact: this is one
+      producer running one batch, the rodent half has no data yet, and a future contributed
+      dataset could be FASTA-derived. Plan for FASTA; do not pay for it in v1. A FASTA corpus
+      degrades us to GN= symbols, which is a DIFFERENT QUALITY OF ANSWER, not merely less data,
+      and the output must say so.
+  - date: 2026-09-22
+    text: >-
+      We claim the JOB of accession->gene resolution, not dataRepo's `Protein.gene` COLUMN. Our
+      resolution reads cross-references out of the search database keyed by
+      (accession, search_database_sha256), never a producer's display symbol. Consequence told to
+      them in 004-logs §3: their G48 parse defect cannot propagate into our output, they should
+      not race the fix on our account, and they must NOT back-fill Protein.gene from our output -
+      that would make a verbatim column non-verbatim and destroy its only value. The two columns
+      should be allowed to disagree; the disagreement is a QC signal.
+  - date: 2026-09-22
+    text: >-
+      HERV-K Gag/Pol - P61571, P63128, P63135, Q69384, Q902F8 (ERVK-6/-7/-8/-9/-19/-21/-24/-25,
+      HERVK_113) - adopted as our NAMED REGRESSION CASE for the protein-inference-vs-orthology
+      separation. Near-identical same-species paralogs, split across many accessions, landing in
+      large shared protein groups. The first time our output makes them look resolved, a test
+      must fail. Found by dataRepo (003-dataRepo §4) while disproving our hypothesis.
+  - date: 2026-09-22
+    text: >-
+      REFUSAL CLASSES are FOUR, not three (004-logs §5, answering REQ-LOGS-6). (1) no ortholog
+      exists - the source looked and says none. (2) no ortholog in this release - coverage, not
+      biology. (3) the source declines to type the relationship. (4) THE GENE IS NOT IN THIS
+      RELEASE'S GENE SET AT ALL - no call was ever attempted. (1) and (4) both present as "no
+      mouse gene" and mean opposite things; collapsing them reproduces the empty-vs-unknown defect
+      dataRepo warned us about, in the exact place we would have hit it.
 
 gaps:
   - >-
@@ -73,26 +109,27 @@ gaps:
     decide how NCBI Orthologs / Alliance / HCOP support is stored alongside without merging
     into one unqualified "truth".
   - >-
-    DECIDE (multi-ENSG semantics). UniProt writes one Ensembl dbReference per transcript with the
-    ENSG in a property, so a protein can carry several ENSGs. What does that mean for us? This is
-    where the one-to-many principle first bites, and it is a modelling decision, not plumbing.
+    DECIDE (multi-ENSG semantics) - the LAST open modelling question, and it now has a path.
+    UniProt writes one Ensembl dbReference per transcript with the ENSG in a
+    `<property type="gene ID">`, so `Id` is a TRANSCRIPT and reading it is a category error; an
+    accession can carry several distinct ENSGs. dataRepo is measuring the distinct-ENSG-per-
+    accession distribution over their 20,022 accessions against the actual search XML (004-logs
+    §2b). If ~99% give exactly one, multi-ENSG is an explicit `ambiguous` outcome and we move on;
+    if it is ~10%, it is a first-class shape and the store is keyed differently. Do not guess -
+    wait for the number.
   - >-
-    OWED to dataRepo (REQ-LOGS-4, open). Joint cardinality of Compara orthogroups across
-    9606/10090/10116 - how often is a group 1:1:1, and how often not. They will design their
-    cross-species join against the number, so it must be measured, not estimated. Pairwise
-    cardinality is not enough; 1:1 human-mouse plus 1:1 human-rat does not imply a clean triple.
+    OWED to dataRepo (REQ-LOGS-4 + REQ-LOGS-6, both open). Pull Compara for 9606/10090/10116 and
+    report: the clean joint cardinality classes, pairwise AND as triples (1:1 human-mouse plus 1:1
+    human-rat does not imply a clean triple), PLUS the four refusal classes. dataRepo needs the
+    refusal classes more than the 1:1:1 count - they decide whether age_effect_meta can honestly
+    carry a cross-species row or must refuse it. Measured, never estimated.
   - >-
-    AWAITING dataRepo (REQ-DATAREPO-1, the one that decides our v1 scope). Is their corpus
-    UniProt-XML-derived or FASTA-derived? XML means the cross-references were present at search
-    time and accession->gene is mostly reading them back, no network. FASTA means only GN=
-    survived and the UniProt ID Mapping API is on the critical path - a different project.
-    Also REQ-DATAREPO-2 (accession namespace mix, decides whether RefSeq is v1 or v3) and
-    REQ-DATAREPO-3 (does a bundle record which source database an accession came from).
-  - >-
-    TELL dataRepo (fold into our next message, not a message of its own): the contaminant flag we
-    raised as unclaimed in 002-logs §0 already exists and travels - Protein.IsContaminant, written
-    out in BioPolymerGroupTsvSchema. Our §0 framing was wrong and they should not design around its
-    absence.
+    AWAITING dataRepo (REQ-DATAREPO-4). Is the search database FILE retained anywhere durable, or
+    is the sha256 the only surviving trace? A sha proves identity but does not let anyone re-read
+    the bytes, and a UniProt release is not reconstructible by name. This decides whether our
+    output is RE-DERIVABLE (file available, resolution recomputable and auditable) or IS THE ONLY
+    RECORD (file gone, our output is the evidence and must stand alone). Different durability
+    requirements - settle it before the schema, not after.
   - >-
     If any mzLib work proceeds - wait for mzLib PR #1336 (feat/go-terms-accessor) to merge and
     follow its pattern. It establishes the typed-view-over-DatabaseReferences idiom; writing a
