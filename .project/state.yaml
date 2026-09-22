@@ -231,6 +231,14 @@ decisions:
       search_database_sha256), both versioned and stable ENSG. 8: carry UniProt's primary gene name
       from the pinned DB for the ~1,012 with no gene id; outcome stays not_in_source. Also CORRECTED
       their 002: rodents are a day away, not months - un-defers the store.
+  - date: 2026-09-22
+    text: >-
+      OPENED mzLib #1337 (trishorts, isolated from smith/master, TDD) - ModificationOccupancyCalculator
+      dropped protein N-terminal mods on Met-removed forms from both numerator and denominator, so
+      N-terminal occupancy covered Met-retained N-termini only. Found by the oracle pass verifying the
+      occupancy manuscript (Cruz Parrilla/Shortreed/Smith draft 2026-09-02); the manuscript's 320
+      position-zero observations and its "near-quantitative" argument rest on that subset. User chose
+      to fix it directly rather than route through #1286/#1287. Not logs scope; opened from here.
 
 gaps:
   - >-

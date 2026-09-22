@@ -5,3 +5,4 @@
 | `code/mzLib-ensembl-genes` | mzLib (`E:\GitClones\mzLib`) | `feat/ensembl-gene-resolution` | `trishorts:feat/go-terms-accessor @ 118a2ffd` (PR #1336, OPEN) | Port accession -> gene resolution to C# (PLAN step 5). **Stacked on #1336**: retarget to master and rebase once #1336 merges. Push to `origin` (trishorts fork). |
 
 Test oracle for the port: `src/logs_orthology/resolve.py` + `tests/test_resolve.py`.
+| `code/mzLib-occupancy-nterm` | mzLib | `fix/occupancy-met-cleaved-nterm` (pushed to `origin` = trishorts) | `smith/master @ 890036fb` | **PR #1337**: count protein N-terminal mods on forms after initiator-Met removal in `ModificationOccupancyCalculator`. Isolated, TDD (2 red → green, 2 guards). Found while verifying the occupancy manuscript. |
