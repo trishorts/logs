@@ -40,13 +40,34 @@ decisions:
       (source, release, group_id). A release-to-release mapping is a separate, explicitly
       derived, versioned layer. Told to dataRepo because pooling across a release boundary in
       their age_effect_meta would otherwise silently mix two memberships (002-logs §3.2).
+  - date: 2026-09-22
+    text: >-
+      IMPLEMENTATION HOME - LOCKED (user, accepting the oracle's split; evidence design/ORACLE.md).
+      The project does not land in one place, it splits three ways.
+      (a) Accession -> source gene EXTENDS mzLib: computed views over Protein.DatabaseReferences
+      beside NcbiTaxonomyId (Protein.cs:273), db-type strings as consts beside :266, re-exported
+      from ProteinDbLoader:54. Plus accession-string normalization in MzLibUtil\ClassExtensions.cs
+      beside SplitProteinAccessions:315, and FASTA/RefSeq parity in ProteinDbLoader.
+      (b) The network ID-mapping / Ensembl client is ADD-NEW in UsefulProteomicsDatabases\,
+      sibling to ProteinDbRetriever.cs, following PrideArchiveClient's async + token +
+      ConfigureAwait shape and the binding CI conventions (ExternalService category, 408/429/5xx
+      band, HttpRequestException==skip).
+      (c) The versioned relational orthology STORE stays in `logs`. mzLib has no self-managed
+      on-disk database and no DB dependency outside vendor-file reading, and
+      ControlledVocabulary.cs:25-27 argues against exactly this. Revisit only if the schema
+      stabilizes AND a second native C# consumer appears - with the join-table-not-vocabulary
+      argument in hand.
+  - date: 2026-09-22
+    text: >-
+      CONTAMINANTS ARE LABELLED (user, 2026-09-22) and the label travels end to end.
+      `Protein.IsContaminant` is set at load (ProteinDbLoader.cs:231 for FASTA,
+      ProteinXmlEntry.cs:418 for XML), rides on Protein and BioPolymerGroup, and is written out
+      via BioPolymerGroupTsvSchema; dataRepo already consumes it (contaminant_psms,
+      contamination_psm_share). RULE: a contaminant-panel entry is NEVER mapped through orthology.
+      It is not filtered out silently either - it is resolved to the explicit outcome "contaminant,
+      not mapped", so "we did not look" stays distinguishable from "no ortholog exists".
 
 gaps:
-  - >-
-    DECIDE (implementation home). Oracle run 2026-09-22 says the project splits, not lands:
-    accession-to-gene belongs in mzLib (EXTEND), the ID-mapping/Ensembl client belongs in mzLib
-    (ADD-NEW), and the versioned relational orthology STORE does not belong in mzLib at all.
-    Confirm or reject that split. Evidence in design/ORACLE.md.
   - >-
     DECIDE (orthology source of record). Ensembl Compara primary is the working assumption;
     decide how NCBI Orthologs / Alliance / HCOP support is stored alongside without merging
@@ -68,10 +89,10 @@ gaps:
     Also REQ-DATAREPO-2 (accession namespace mix, decides whether RefSeq is v1 or v3) and
     REQ-DATAREPO-3 (does a bundle record which source database an accession came from).
   - >-
-    A contaminant-panel protein must NEVER be mapped through orthology - bovine albumin in a
-    human sample is a reagent, not evidence about Bos taurus. The mapping would be biologically
-    correct and scientifically a lie. Needs a contaminant flag travelling with the accession;
-    currently unclaimed and producer-side. Raised in 002-logs §0.
+    TELL dataRepo (fold into our next message, not a message of its own): the contaminant flag we
+    raised as unclaimed in 002-logs §0 already exists and travels - Protein.IsContaminant, written
+    out in BioPolymerGroupTsvSchema. Our §0 framing was wrong and they should not design around its
+    absence.
   - >-
     If any mzLib work proceeds - wait for mzLib PR #1336 (feat/go-terms-accessor) to merge and
     follow its pattern. It establishes the typed-view-over-DatabaseReferences idiom; writing a
