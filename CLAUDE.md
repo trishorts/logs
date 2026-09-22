@@ -35,8 +35,9 @@ This folder is a `/project`-managed research project. **You are de facto working
    a category error — it needs `SelectMany(Properties)` and a `Distinct()`.
 6. **A number sent to a partner is a contract.** `tests/test_reported_claims.py` pins every one. If
    a re-run moves it, fix the code or send a correction — never edit the expected value.
-7. **The mzLib branch is stacked on #1336.** Rebase and retarget when it merges; never force-push
-   `go`'s branch.
+7. **The mzLib branch is #1338 on smith/master** (#1336 merged 2026-09-22 and was squashed, so its
+   commit had to be dropped on rebase). Push with `--force-with-lease` pinned to the old head; never
+   force-push anyone else's branch.
 8. **`LoadProteinXML` applies sequence variants by default.** The human reviewed proteome loads as
    52,359 proteins from 20,416 entries (`P12345_S70N`). Say whether a count is of entries or
    proteoforms.
