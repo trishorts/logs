@@ -111,3 +111,22 @@ aspirational. `aging` (`REQ-AGING-1`) may change the picture; a second consumer 
    *contaminant, not mapped* outcome.
 5. **Read the provider's README before trusting a file.** Two of this session's three real traps
    were documented in one and would have been invisible in the data.
+6. **A denominator is a claim, and it must be checked like one.** Twice in one afternoon a
+   plausible-sounding reference set was the wrong one:
+   - *"Count the distinct gene ids an accession maps to."* Ensembl's xref dumps include ALT
+     haplotypes and patches, where one locus is described many times over. That put the
+     multi-gene rate at **6.99%**; restricted to the primary assembly it is **0.36%** — a
+     twentyfold error, in the direction that makes the finding sound more interesting. It also
+     manufactured a species difference (human "much worse than" rodents) that does not exist,
+     because only the human dump references off-primary genes.
+   - *"Compara's `protein_default` collection is protein-coding."* It also contains
+     immunoglobulin and T-cell-receptor gene segments — 279 human, 485 mouse, 511 rat. Excluding
+     them dropped genes the source *had* considered.
+
+   Both were caught by asking *what is actually in this set?* rather than by re-reading the code.
+   Before dividing by anything, enumerate it and look at what is there.
+7. **Never name an entity from memory in a deliverable.** `Q5JQC4` was written up as KIR2DL5A
+   from recall; it is CT47A1. Resolve identifiers against the data, every time — the cost of
+   looking it up is a minute and the cost of not is a wrong claim in someone else's schema.
+8. **When a result is surprising, suspect the measurement first.** "Human is dramatically worse
+   than mouse" was surprising and wrong. The surprise was the signal.

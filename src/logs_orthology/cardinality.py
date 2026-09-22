@@ -32,10 +32,11 @@ from .load import homology_paths, iter_homologies, load_gene_set, load_tree_inde
 SPECIES = list(sources.TAXA)
 SHORT = {"homo_sapiens": "human", "mus_musculus": "mouse", "rattus_norvegicus": "rat"}
 
-#: Compara's protein_default collection is built from protein-coding genes. Measuring refusal
-#: rates over all biotypes would count lncRNAs as "no ortholog found" when they were never
-#: eligible -- inflating the refusal classes with genes the source never considered.
-ELIGIBLE_BIOTYPE = "protein_coding"
+#: The biotypes Compara actually trees -- protein-coding **plus IG/TR gene segments**. Measuring
+#: over all biotypes would count lncRNAs as "no ortholog found" when they were never eligible;
+#: measuring over protein_coding alone silently drops 279 human / 485 mouse / 511 rat genes the
+#: source *did* consider. See sources.ELIGIBLE_BIOTYPES for the measurement behind this.
+ELIGIBLE_BIOTYPES = sources.ELIGIBLE_BIOTYPES
 
 # ---------------------------------------------------------------------------------------------
 # Refusal classes -- what we can actually derive, versus what we promised
@@ -78,8 +79,8 @@ def main(argv: list[str] | None = None) -> int:
         gene_sets[sp] = gs
         for g in gs:
             gene_species[g] = sp
-        coding = sum(1 for b in gs.values() if b == ELIGIBLE_BIOTYPE)
-        print(f"  {SHORT[sp]:6s} {len(gs):7,} genes  ({coding:,} {ELIGIBLE_BIOTYPE})")
+        coding = sum(1 for b in gs.values() if b in ELIGIBLE_BIOTYPES)
+        print(f"  {SHORT[sp]:6s} {len(gs):7,} genes  ({coding:,} eligible)")
 
     # -- gene trees ----------------------------------------------------------------------------
     print("Loading gene-tree membership...")
@@ -153,7 +154,8 @@ def main(argv: list[str] | None = None) -> int:
         "gene_sets": {
             SHORT[s]: {
                 "total": len(gene_sets[s]),
-                ELIGIBLE_BIOTYPE: sum(1 for b in gene_sets[s].values() if b == ELIGIBLE_BIOTYPE),
+                "eligible": sum(1 for b in gene_sets[s].values() if b in ELIGIBLE_BIOTYPES),
+                "protein_coding": sum(1 for b in gene_sets[s].values() if b == "protein_coding"),
                 "in_a_gene_tree": sum(1 for g in gene_sets[s] if g in trees.tree_of_gene),
             } for s in SPECIES
         },
@@ -185,7 +187,7 @@ def classify_pair(src: str, tgt: str, gene_sets, trees, ortho) -> dict:
     conf: Counter[str] = Counter()
 
     for gene, biotype in gene_sets[src].items():
-        if biotype != ELIGIBLE_BIOTYPE:
+        if biotype not in ELIGIBLE_BIOTYPES:
             continue
         hits = edges.get(gene)
         if hits:
@@ -230,7 +232,7 @@ def classify_triples(gene_sets, trees, ortho) -> dict:
     one_to_one_both_but_not_triple = 0
 
     for gene, biotype in gene_sets[hs].items():
-        if biotype != ELIGIBLE_BIOTYPE:
+        if biotype not in ELIGIBLE_BIOTYPES:
             continue
         m = to_mouse.get(gene)
         r = to_rat.get(gene)
@@ -310,14 +312,16 @@ def render(r: dict) -> str:
     a("")
     a("## Gene sets")
     a("")
-    a("| species | genes in release | protein-coding | in a Compara gene tree |")
-    a("|---|---:|---:|---:|")
+    a("| species | genes in release | eligible | of which protein-coding | in a Compara gene tree |")
+    a("|---|---:|---:|---:|---:|")
     for sp, d in r["gene_sets"].items():
-        a(f"| {sp} | {d['total']:,} | {d[ELIGIBLE_BIOTYPE]:,} | {d['in_a_gene_tree']:,} |")
+        a(f"| {sp} | {d['total']:,} | {d['eligible']:,} | {d['protein_coding']:,} | "
+          f"{d['in_a_gene_tree']:,} |")
     a("")
-    a(f"Protein-coding is the eligible set: Compara's `protein_default` collection is built from")
-    a("protein-coding genes, so counting other biotypes as *no ortholog found* would inflate the")
-    a("refusal classes with genes that were never considered.")
+    a("**Eligible is protein-coding *plus* immunoglobulin and T-cell-receptor gene segments.**")
+    a("Compara trees those too, so excluding them would drop genes the source was willing to")
+    a("consider — wrong in the direction that flatters the result. Counting *all* biotypes would")
+    a("be wrong the other way, treating a lncRNA that was never eligible as a failed lookup.")
     a("")
     a("## Homology rows")
     a("")

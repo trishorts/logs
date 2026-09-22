@@ -7,57 +7,74 @@ Two questions: **how often does one accession mean more than one gene** (our las
 modelling question), and **is RefSeq actually expensive** (a claim we made and should
 re-test).
 
+## 0 · A correction, stated before the numbers
+
+An earlier version of this measurement counted **every** gene id in the xref dump. Ensembl
+references genes on ALT haplotypes and patches, where a locus such as KIR appears on many
+alternate haplotypes — so one curated protein looked as though it mapped to two dozen
+genes that are in fact the same gene described repeatedly.
+
+| reviewed human accessions | multi-gene | rate |
+|---|---:|---:|
+| counting every gene id | 1,354 | **6.99%** |
+| counting primary-assembly genes | 70 | **0.36%** |
+
+**1,284 of the 1,354 apparent multi-gene cases were ALT or
+patch duplicates.** Everything below counts primary-assembly genes only. The effect is
+human-specific — the human xref dump references 3,274
+off-primary genes while mouse and rat reference none — so the unrestricted measurement
+also invented a species difference that does not exist.
+
 ## 1 · The multi-gene question
 
-UniProt accession → distinct Ensembl gene ids:
+UniProt accession → distinct **primary-assembly** Ensembl gene ids:
 
-| species | accessions | → 1 gene | → 2 | → 3 | → 4+ | % exactly one |
-|---|---:|---:|---:|---:|---:|---:|
-| human | 111,285 | 105,476 | 4,630 | 302 | 877 | **94.78%** |
-| mouse | 65,181 | 64,780 | 320 | 33 | 48 | **99.39%** |
-| rat | 48,663 | 48,480 | 144 | 23 | 16 | **99.62%** |
+| species | accessions | → 0 | → 1 | → 2 | → 3 | → 4+ | % exactly one |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| human | 111,285 | 2,273 | 108,754 | 225 | 17 | 16 | **97.73%** |
+| mouse | 65,181 | 0 | 64,780 | 320 | 33 | 48 | **99.39%** |
+| rat | 48,663 | 0 | 48,480 | 144 | 23 | 16 | **99.62%** |
 
 Restricted to **reviewed** (SwissProt) accessions, which is what a curated search database
 contains:
 
-| species | reviewed accessions | multi-gene | % exactly one gene |
-|---|---:|---:|---:|
-| human | 19,383 | 1,354 | **93.01%** |
-| mouse | 15,579 | 123 | **99.21%** |
-| rat | 4,896 | 44 | **99.10%** |
+| species | reviewed | multi-gene | resolving to nothing | % exactly one |
+|---|---:|---:|---:|---:|
+| human | 19,383 | 70 | 62 | **99.32%** |
+| mouse | 15,579 | 123 | 0 | **99.21%** |
+| rat | 4,896 | 44 | 0 | **99.10%** |
 
-**Curation does not reduce the ambiguity — in human it slightly increases it.** A reviewed
-entry is one curated protein sequence, and a protein encoded by several near-identical
-loci gets one record spanning all of them. Filtering to SwissProt therefore does not make
-the multi-gene case go away.
+**The multi-gene case is rare — well under 1% — but it is not evenly spread.** The genuine
+cases are almost entirely histone clusters and a few cancer/testis antigen families: one
+protein sequence genuinely encoded by many loci on the primary assembly.
 
-The worst reviewed human cases, which are the shape of the problem rather than outliers:
+The worst genuine reviewed human cases:
 
-| accession | distinct genes |
+| accession | distinct primary genes |
 |---|---:|
-| `P43628` | 24 |
-| `Q99706` | 22 |
-| `P43626` | 21 |
-| `Q5JQC4` | 17 |
-| `P43630` | 14 |
 | `P62805` | 14 |
-| `P43631` | 13 |
-| `P24071` | 12 |
-| `P43632` | 12 |
-| `B6A8C7` | 10 |
-| `O75175` | 10 |
-| `O95167` | 10 |
+| `Q5JQC4` | 12 |
+| `P68431` | 10 |
+| `Q0WX57` | 7 |
+| `Q9ULZ0` | 6 |
+| `P0C0S8` | 5 |
+| `P62807` | 5 |
+| `A1L429` | 3 |
+| `O14599` | 3 |
+| `P0DN86` | 3 |
+| `P23610` | 3 |
+| `Q6IEY1` | 3 |
 
-`P62805` is histone H4 — one protein sequence, 14 loci, and peptides that cannot
-distinguish them. It is abundant in essentially every proteomics experiment. This is the
-protein-inference ambiguity our design keeps separate from orthology ambiguity, and it is
-not a corner case.
+`P62805` is histone H4 — one protein sequence, 14 real loci, peptides that cannot
+distinguish them, and abundant in essentially every proteomics experiment. So although the
+*rate* is below 1%, the affected proteins are not obscure. A rare class with high abundance
+is exactly the one a sampled test set will miss.
 
 ## 2 · RefSeq
 
 | species | RefSeq protein accessions | `NP_` curated | `XP_` predicted | % → exactly one gene |
 |---|---:|---:|---:|---:|
-| human | 161,484 | 69,569 | 91,915 | **97.13%** |
+| human | 161,484 | 69,569 | 91,915 | **96.90%** |
 | mouse | 94,258 | 49,218 | 45,040 | **99.96%** |
 | rat | 78,259 | 24,255 | 54,004 | **99.96%** |
 
@@ -68,7 +85,7 @@ and are counted apart so a resolution rate cannot be inflated by predictions.
 
 | species | distinct GeneIDs | % → exactly one Ensembl gene |
 |---|---:|---:|
-| human | 34,781 | **92.69%** |
+| human | 34,781 | **97.57%** |
 | mouse | 30,096 | **99.50%** |
 | rat | 23,795 | **98.69%** |
 

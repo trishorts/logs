@@ -130,6 +130,13 @@ def gtf_files() -> list[SourceFile]:
       conservation. Reporting the two together would inflate the refusal classes with genes that
       were never eligible.
     """
+    # NOTE: this is the PRIMARY ASSEMBLY GTF, not `chr_patch_hapl_scaff`. That choice is
+    # load-bearing, not incidental. Ensembl's xref dumps reference genes on ALT haplotypes and
+    # patches, where a locus such as KIR or HLA is represented many times over. Counting those
+    # as distinct genes turns one gene into twenty: measured on human, it inflated the
+    # "accession maps to more than one gene" rate from 0.36% to 6.99%. The primary assembly is
+    # the set in which each gene appears exactly once, which is the only set a cardinality
+    # question can be asked against.
     out: list[SourceFile] = []
     for species, assembly in ASSEMBLY.items():
         name = f"{assembly}.{RELEASE}.gtf.gz"
@@ -192,6 +199,19 @@ def all_files() -> list[SourceFile]:
 # ---------------------------------------------------------------------------------------------
 # Relationship vocabulary, kept verbatim from the source.
 # ---------------------------------------------------------------------------------------------
+
+#: Gene biotypes Compara actually places in its ``protein_default`` trees.
+#:
+#: **Not just ``protein_coding``.** Measured on release 116, the trees also contain immunoglobulin
+#: and T-cell-receptor gene *segments* -- 279 genes in human, 485 in mouse, 511 in rat. Excluding
+#: them makes the denominator wrong in the direction that flatters the result: they are genes the
+#: source was willing to consider and we simply did not count. The rationale "the collection is
+#: protein-coding only" is a plausible-sounding claim that the data does not support.
+ELIGIBLE_BIOTYPES = frozenset({
+    "protein_coding",
+    "IG_V_gene", "IG_C_gene", "IG_J_gene", "IG_D_gene", "IG_LV_gene",
+    "TR_V_gene", "TR_C_gene", "TR_J_gene", "TR_D_gene",
+})
 
 #: Compara's ``homology_type`` values that are orthologies (between species).
 ORTHOLOG_TYPES = frozenset(

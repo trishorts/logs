@@ -78,6 +78,38 @@ def test_pair_label_does_not_hide_a_mixture():
 # The source vocabulary
 # ---------------------------------------------------------------------------------------------
 
+def test_dist_gives_zero_its_own_bucket():
+    """Regression: an accession resolving to NO gene must not land in `4+`.
+
+    The original chained conditional had no zero case, so `n == 0` fell through to the final
+    `else` — recording "resolved to nothing" as "maximally ambiguous". That is the worst
+    available direction for the error, because it inflates exactly the class the design treats
+    as a warning sign.
+    """
+    from logs_orthology.xrefs import _dist
+
+    d = _dist({"a": set(), "b": {"G1"}, "c": {"G1", "G2"}})
+    assert d["0"] == 1
+    assert d["1"] == 1
+    assert d["2"] == 1
+    assert d["4+"] == 0
+
+
+def test_eligible_biotypes_are_more_than_protein_coding():
+    """Compara's protein trees also contain IG/TR gene segments.
+
+    Measured on release 116: 279 human, 485 mouse, 511 rat. Restricting the denominator to
+    `protein_coding` drops genes the source was willing to consider, which biases every refusal
+    rate in the flattering direction.
+    """
+    assert "protein_coding" in sources.ELIGIBLE_BIOTYPES
+    assert "IG_V_gene" in sources.ELIGIBLE_BIOTYPES
+    assert "TR_V_gene" in sources.ELIGIBLE_BIOTYPES
+    # but not everything -- a lncRNA was never eligible and must not count as a failed lookup
+    assert "lncRNA" not in sources.ELIGIBLE_BIOTYPES
+    assert "processed_pseudogene" not in sources.ELIGIBLE_BIOTYPES
+
+
 def test_ortholog_and_paralog_vocabularies_are_disjoint():
     """A paralog must never be counted as an ortholog. They answer different questions."""
     assert not (sources.ORTHOLOG_TYPES & sources.PARALOG_TYPES)

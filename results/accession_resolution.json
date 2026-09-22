@@ -7,7 +7,7 @@
       "uniprot": {
         "rows": 176855,
         "distinct_accessions": 111285,
-        "distinct_genes": 23675,
+        "distinct_genes": 20401,
         "reviewed_accessions": 19383,
         "unreviewed_accessions": 91902,
         "isoform_suffixed_accessions": 35202,
@@ -16,78 +16,91 @@
           "SEQUENCE_MATCH": 17844
         },
         "genes_per_accession": {
-          "1": 105476,
-          "2": 4630,
-          "3": 302,
-          "4+": 877
+          "0": 2273,
+          "1": 108754,
+          "2": 225,
+          "3": 17,
+          "4+": 16
         },
         "genes_per_accession_pct": {
-          "1": 94.78,
-          "2": 4.16,
-          "3": 0.271,
-          "4+": 0.788
+          "0": 2.043,
+          "1": 97.726,
+          "2": 0.202,
+          "3": 0.015,
+          "4+": 0.014
         },
         "genes_per_accession_reviewed": {
+          "0": 62,
+          "1": 19251,
+          "2": 57,
+          "3": 6,
+          "4+": 7
+        },
+        "genes_per_accession_reviewed_pct": {
+          "0": 0.32,
+          "1": 99.319,
+          "2": 0.294,
+          "3": 0.031,
+          "4+": 0.036
+        },
+        "reviewed_multi_gene_accessions": 70,
+        "reviewed_resolving_to_nothing": 62,
+        "genes_per_accession_reviewed_unrestricted": {
+          "0": 0,
           "1": 18029,
           "2": 1053,
           "3": 80,
           "4+": 221
         },
-        "genes_per_accession_reviewed_pct": {
-          "1": 93.014,
-          "2": 5.433,
-          "3": 0.413,
-          "4+": 1.14
-        },
-        "reviewed_multi_gene_accessions": 1354,
+        "off_primary_genes_referenced": 3274,
         "reviewed_multi_gene_top": [
-          {
-            "accession": "P43628",
-            "genes": 24
-          },
-          {
-            "accession": "Q99706",
-            "genes": 22
-          },
-          {
-            "accession": "P43626",
-            "genes": 21
-          },
-          {
-            "accession": "Q5JQC4",
-            "genes": 17
-          },
-          {
-            "accession": "P43630",
-            "genes": 14
-          },
           {
             "accession": "P62805",
             "genes": 14
           },
           {
-            "accession": "P43631",
-            "genes": 13
-          },
-          {
-            "accession": "P24071",
+            "accession": "Q5JQC4",
             "genes": 12
           },
           {
-            "accession": "P43632",
-            "genes": 12
-          },
-          {
-            "accession": "B6A8C7",
+            "accession": "P68431",
             "genes": 10
           },
           {
-            "accession": "O75175",
-            "genes": 10
+            "accession": "Q0WX57",
+            "genes": 7
           },
           {
-            "accession": "O95167",
-            "genes": 10
+            "accession": "Q9ULZ0",
+            "genes": 6
+          },
+          {
+            "accession": "P0C0S8",
+            "genes": 5
+          },
+          {
+            "accession": "P62807",
+            "genes": 5
+          },
+          {
+            "accession": "A1L429",
+            "genes": 3
+          },
+          {
+            "accession": "O14599",
+            "genes": 3
+          },
+          {
+            "accession": "P0DN86",
+            "genes": 3
+          },
+          {
+            "accession": "P23610",
+            "genes": 3
+          },
+          {
+            "accession": "Q6IEY1",
+            "genes": 3
           }
         ]
       },
@@ -100,7 +113,7 @@
           "RefSeq_ncRNA": 22607,
           "RefSeq_ncRNA_predicted": 15124
         },
-        "distinct_accessions_all": 345604,
+        "distinct_accessions_all": 335798,
         "protein_accessions": 161484,
         "np_curated": 69569,
         "xp_predicted": 91915,
@@ -110,31 +123,35 @@
           "INFERRED_PAIR": 71549
         },
         "genes_per_protein_accession": {
-          "1": 156848,
-          "2": 3617,
-          "3": 268,
-          "4+": 751
+          "0": 4758,
+          "1": 156473,
+          "2": 223,
+          "3": 9,
+          "4+": 21
         },
         "genes_per_protein_accession_pct": {
-          "1": 97.129,
-          "2": 2.24,
-          "3": 0.166,
-          "4+": 0.465
+          "0": 2.946,
+          "1": 96.897,
+          "2": 0.138,
+          "3": 0.006,
+          "4+": 0.013
         }
       },
       "entrez": {
         "distinct_gene_ids": 34781,
         "genes_per_gene_id": {
-          "1": 32238,
-          "2": 1631,
-          "3": 191,
-          "4+": 721
+          "0": 176,
+          "1": 33937,
+          "2": 296,
+          "3": 42,
+          "4+": 330
         },
         "genes_per_gene_id_pct": {
-          "1": 92.689,
-          "2": 4.689,
-          "3": 0.549,
-          "4+": 2.073
+          "0": 0.506,
+          "1": 97.573,
+          "2": 0.851,
+          "3": 0.121,
+          "4+": 0.949
         }
       }
     },
@@ -151,30 +168,43 @@
           "SEQUENCE_MATCH": 10936
         },
         "genes_per_accession": {
+          "0": 0,
           "1": 64780,
           "2": 320,
           "3": 33,
           "4+": 48
         },
         "genes_per_accession_pct": {
+          "0": 0.0,
           "1": 99.385,
           "2": 0.491,
           "3": 0.051,
           "4+": 0.074
         },
         "genes_per_accession_reviewed": {
+          "0": 0,
           "1": 15456,
           "2": 92,
           "3": 10,
           "4+": 21
         },
         "genes_per_accession_reviewed_pct": {
+          "0": 0.0,
           "1": 99.21,
           "2": 0.591,
           "3": 0.064,
           "4+": 0.135
         },
         "reviewed_multi_gene_accessions": 123,
+        "reviewed_resolving_to_nothing": 0,
+        "genes_per_accession_reviewed_unrestricted": {
+          "0": 0,
+          "1": 15456,
+          "2": 92,
+          "3": 10,
+          "4+": 21
+        },
+        "off_primary_genes_referenced": 0,
         "reviewed_multi_gene_top": [
           {
             "accession": "P62806",
@@ -245,12 +275,14 @@
           "SEQUENCE_MATCH": 2791
         },
         "genes_per_protein_accession": {
+          "0": 0,
           "1": 94220,
           "2": 30,
           "3": 3,
           "4+": 5
         },
         "genes_per_protein_accession_pct": {
+          "0": 0.0,
           "1": 99.96,
           "2": 0.032,
           "3": 0.003,
@@ -260,12 +292,14 @@
       "entrez": {
         "distinct_gene_ids": 30096,
         "genes_per_gene_id": {
+          "0": 0,
           "1": 29945,
           "2": 122,
           "3": 16,
           "4+": 13
         },
         "genes_per_gene_id_pct": {
+          "0": 0.0,
           "1": 99.498,
           "2": 0.405,
           "3": 0.053,
@@ -286,30 +320,43 @@
           "SEQUENCE_MATCH": 13688
         },
         "genes_per_accession": {
+          "0": 0,
           "1": 48480,
           "2": 144,
           "3": 23,
           "4+": 16
         },
         "genes_per_accession_pct": {
+          "0": 0.0,
           "1": 99.624,
           "2": 0.296,
           "3": 0.047,
           "4+": 0.033
         },
         "genes_per_accession_reviewed": {
+          "0": 0,
           "1": 4852,
           "2": 35,
           "3": 5,
           "4+": 4
         },
         "genes_per_accession_reviewed_pct": {
+          "0": 0.0,
           "1": 99.101,
           "2": 0.715,
           "3": 0.102,
           "4+": 0.082
         },
         "reviewed_multi_gene_accessions": 44,
+        "reviewed_resolving_to_nothing": 0,
+        "genes_per_accession_reviewed_unrestricted": {
+          "0": 0,
+          "1": 4852,
+          "2": 35,
+          "3": 5,
+          "4+": 4
+        },
+        "off_primary_genes_referenced": 0,
         "reviewed_multi_gene_top": [
           {
             "accession": "P62804",
@@ -380,12 +427,14 @@
           "SEQUENCE_MATCH": 4030
         },
         "genes_per_protein_accession": {
+          "0": 0,
           "1": 78228,
           "2": 15,
           "3": 8,
           "4+": 8
         },
         "genes_per_protein_accession_pct": {
+          "0": 0.0,
           "1": 99.96,
           "2": 0.019,
           "3": 0.01,
@@ -395,12 +444,14 @@
       "entrez": {
         "distinct_gene_ids": 23795,
         "genes_per_gene_id": {
+          "0": 0,
           "1": 23483,
           "2": 69,
           "3": 22,
           "4+": 221
         },
         "genes_per_gene_id_pct": {
+          "0": 0.0,
           "1": 98.689,
           "2": 0.29,
           "3": 0.092,

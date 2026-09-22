@@ -29,6 +29,7 @@ from pathlib import Path
 
 from . import sources
 from .fetch import data_dir, project_root
+from .load import load_gene_set
 
 SHORT = {"homo_sapiens": "human", "mus_musculus": "mouse", "rattus_norvegicus": "rat"}
 
@@ -69,33 +70,65 @@ def iter_xref(species: str, kind: str):
 
 
 def _dist(counts: dict[str, set[str]]) -> dict[str, int]:
-    """Bucket a key -> set-of-genes map into 1 / 2 / 3 / 4+ distinct genes."""
+    """Bucket a key -> set-of-genes map into 0 / 1 / 2 / 3 / 4+ distinct genes.
+
+    **The zero bucket is not decoration.** An accession that resolves to no gene in the set we
+    are measuring against is a real outcome, and an earlier version of this function let ``n=0``
+    fall through the chain into ``4+`` — turning "resolved to nothing" into "maximally
+    ambiguous", which is the worst possible direction for that error to go.
+    """
     out: Counter[str] = Counter()
     for genes in counts.values():
         n = len(genes)
-        out["1" if n == 1 else "2" if n == 2 else "3" if n == 3 else "4+"] += 1
-    return {k: out.get(k, 0) for k in ("1", "2", "3", "4+")}
+        out["0" if n == 0 else "1" if n == 1 else "2" if n == 2 else "3" if n == 3 else "4+"] += 1
+    return {k: out.get(k, 0) for k in ("0", "1", "2", "3", "4+")}
 
 
-def measure_uniprot(species: str) -> dict:
+def measure_uniprot(species: str, primary: set[str]) -> dict:
+    """Accession → gene, counted against the **primary assembly** gene set.
+
+    ``primary`` is the set of gene ids in the primary-assembly GTF. Restricting to it is not a
+    detail — it is the difference between a real answer and a wrong one.
+
+    Ensembl's xref dumps reference genes on ALT haplotypes and patches. A locus such as KIR is
+    represented on many alternate haplotypes, so one curated protein appears to map to two dozen
+    "genes" that are the same gene described repeatedly. Measured on human release 116, counting
+    raw gene ids puts the multi-gene rate at **6.99%**; counting primary-assembly genes puts it
+    at **0.36%** — a twentyfold difference, and the unrestricted number is the wrong one.
+
+    The effect is human-only here (mouse and rat xrefs reference no off-primary genes at all), so
+    an unrestricted measurement also invents a species difference that does not exist.
+    """
     genes_by_acc: dict[str, set[str]] = defaultdict(set)
+    raw_by_acc: dict[str, set[str]] = defaultdict(set)
     db_of_acc: dict[str, set[str]] = defaultdict(set)
     info_types: Counter[str] = Counter()
     isoforms = 0
     rows = 0
+    off_primary_genes: set[str] = set()
 
     for r in iter_xref(species, "uniprot"):
         rows += 1
-        acc = r["xref"]
-        genes_by_acc[acc].add(r["gene_stable_id"])
+        acc, gene = r["xref"], r["gene_stable_id"]
+        raw_by_acc[acc].add(gene)
+        if gene in primary:
+            genes_by_acc[acc].add(gene)
+        else:
+            off_primary_genes.add(gene)
         db_of_acc[acc].add(r["db_name"])
         info_types[r["info_type"]] += 1
         if RE_ISOFORM.match(acc):
             isoforms += 1
 
+    # Accessions that exist only off the primary assembly resolve to nothing here. That is a real
+    # outcome and gets its own count rather than quietly becoming a "1".
+    for acc in raw_by_acc:
+        genes_by_acc.setdefault(acc, set())
+
     reviewed = {a for a, dbs in db_of_acc.items() if "Uniprot/SWISSPROT" in dbs}
     dist_all = _dist(genes_by_acc)
     dist_rev = _dist({a: g for a, g in genes_by_acc.items() if a in reviewed})
+    dist_rev_raw = _dist({a: g for a, g in raw_by_acc.items() if a in reviewed})
     total = len(genes_by_acc)
 
     return {
@@ -116,6 +149,11 @@ def measure_uniprot(species: str) -> dict:
         "reviewed_multi_gene_accessions": sum(
             1 for a in reviewed if len(genes_by_acc[a]) > 1
         ),
+        "reviewed_resolving_to_nothing": sum(1 for a in reviewed if not genes_by_acc[a]),
+        # The same distribution computed WITHOUT the primary-assembly restriction, kept so the
+        # size of the ALT/patch artifact is visible rather than merely corrected away.
+        "genes_per_accession_reviewed_unrestricted": dist_rev_raw,
+        "off_primary_genes_referenced": len(off_primary_genes),
         #: The worst reviewed cases, by how many distinct genes one curated protein spans.
         #: These are the shape of the problem, not outliers to be trimmed: a single reviewed
         #: sequence encoded by many near-identical loci is precisely where proteomics cannot
@@ -128,7 +166,7 @@ def measure_uniprot(species: str) -> dict:
     }
 
 
-def measure_refseq(species: str) -> dict:
+def measure_refseq(species: str, primary: set[str]) -> dict:
     genes_by_acc: dict[str, set[str]] = defaultdict(set)
     db_names: Counter[str] = Counter()
     protein_acc: dict[str, set[str]] = defaultdict(set)
@@ -139,9 +177,13 @@ def measure_refseq(species: str) -> dict:
     for r in iter_xref(species, "refseq"):
         acc = r["xref"]
         db_names[r["db_name"]] += 1
-        genes_by_acc[acc].add(r["gene_stable_id"])
+        gene = r["gene_stable_id"]
+        if gene in primary:
+            genes_by_acc[acc].add(gene)
         if RE_NP.match(acc) or RE_XP.match(acc):
-            protein_acc[acc].add(r["gene_stable_id"])
+            protein_acc.setdefault(acc, set())
+            if gene in primary:
+                protein_acc[acc].add(gene)
             info_types[r["info_type"]] += 1
             (np_acc if RE_NP.match(acc) else xp_acc).add(acc)
 
@@ -160,10 +202,12 @@ def measure_refseq(species: str) -> dict:
     }
 
 
-def measure_entrez(species: str) -> dict:
+def measure_entrez(species: str, primary: set[str]) -> dict:
     genes_by_id: dict[str, set[str]] = defaultdict(set)
     for r in iter_xref(species, "entrez"):
-        genes_by_id[r["xref"]].add(r["gene_stable_id"])
+        genes_by_id.setdefault(r["xref"], set())
+        if r["gene_stable_id"] in primary:
+            genes_by_id[r["xref"]].add(r["gene_stable_id"])
     dist = _dist(genes_by_id)
     return {
         "distinct_gene_ids": len(genes_by_id),
@@ -188,9 +232,11 @@ def main(argv: list[str] | None = None) -> int:
 
     for species in sources.TAXA:
         print(f"{SHORT[species]}...")
-        print("  uniprot"); u = measure_uniprot(species)
-        print("  refseq");  r = measure_refseq(species)
-        print("  entrez");  e = measure_entrez(species)
+        print("  gene set (primary assembly)")
+        primary = set(load_gene_set(species))
+        print("  uniprot"); u = measure_uniprot(species, primary)
+        print("  refseq");  r = measure_refseq(species, primary)
+        print("  entrez");  e = measure_entrez(species, primary)
         report["species"][SHORT[species]] = {"uniprot": u, "refseq": r, "entrez": e}
         print(f"    uniprot accessions {u['distinct_accessions']:,} "
               f"({u['genes_per_accession_pct'].get('1', 0):.2f}% map to exactly one gene)")
@@ -218,47 +264,72 @@ def render(r: dict) -> str:
     a("re-test).")
     a("")
 
+    a("## 0 · A correction, stated before the numbers")
+    a("")
+    a("An earlier version of this measurement counted **every** gene id in the xref dump. Ensembl")
+    a("references genes on ALT haplotypes and patches, where a locus such as KIR appears on many")
+    a("alternate haplotypes — so one curated protein looked as though it mapped to two dozen")
+    a("genes that are in fact the same gene described repeatedly.")
+    a("")
+    h = r["species"].get("human", {}).get("uniprot", {})
+    if h:
+        raw = h.get("genes_per_accession_reviewed_unrestricted", {})
+        rev = h.get("genes_per_accession_reviewed", {})
+        nrev = h.get("reviewed_accessions", 0)
+        multi_raw = sum(v for k, v in raw.items() if k not in ("0", "1"))
+        multi_pri = sum(v for k, v in rev.items() if k not in ("0", "1"))
+        a("| reviewed human accessions | multi-gene | rate |")
+        a("|---|---:|---:|")
+        a(f"| counting every gene id | {multi_raw:,} | **{100*multi_raw/nrev:.2f}%** |")
+        a(f"| counting primary-assembly genes | {multi_pri:,} | **{100*multi_pri/nrev:.2f}%** |")
+        a("")
+        a(f"**{multi_raw - multi_pri:,} of the {multi_raw:,} apparent multi-gene cases were ALT or")
+        a("patch duplicates.** Everything below counts primary-assembly genes only. The effect is")
+        a(f"human-specific — the human xref dump references {h.get('off_primary_genes_referenced', 0):,}")
+        a("off-primary genes while mouse and rat reference none — so the unrestricted measurement")
+        a("also invented a species difference that does not exist.")
+        a("")
+
     a("## 1 · The multi-gene question")
     a("")
-    a("UniProt accession → distinct Ensembl gene ids:")
+    a("UniProt accession → distinct **primary-assembly** Ensembl gene ids:")
     a("")
-    a("| species | accessions | → 1 gene | → 2 | → 3 | → 4+ | % exactly one |")
-    a("|---|---:|---:|---:|---:|---:|---:|")
+    a("| species | accessions | → 0 | → 1 | → 2 | → 3 | → 4+ | % exactly one |")
+    a("|---|---:|---:|---:|---:|---:|---:|---:|")
     for sp, d in r["species"].items():
         u = d["uniprot"]
         g = u["genes_per_accession"]
-        a(f"| {sp} | {u['distinct_accessions']:,} | {g['1']:,} | {g['2']:,} | {g['3']:,} | "
-          f"{g['4+']:,} | **{u['genes_per_accession_pct']['1']:.2f}%** |")
+        a(f"| {sp} | {u['distinct_accessions']:,} | {g['0']:,} | {g['1']:,} | {g['2']:,} | "
+          f"{g['3']:,} | {g['4+']:,} | **{u['genes_per_accession_pct']['1']:.2f}%** |")
     a("")
     a("Restricted to **reviewed** (SwissProt) accessions, which is what a curated search database")
     a("contains:")
     a("")
-    a("| species | reviewed accessions | multi-gene | % exactly one gene |")
-    a("|---|---:|---:|---:|")
+    a("| species | reviewed | multi-gene | resolving to nothing | % exactly one |")
+    a("|---|---:|---:|---:|---:|")
     for sp, d in r["species"].items():
         u = d["uniprot"]
         a(f"| {sp} | {u['reviewed_accessions']:,} | {u['reviewed_multi_gene_accessions']:,} | "
+          f"{u['reviewed_resolving_to_nothing']:,} | "
           f"**{u['genes_per_accession_reviewed_pct'].get('1', 0):.2f}%** |")
     a("")
-    a("**Curation does not reduce the ambiguity — in human it slightly increases it.** A reviewed")
-    a("entry is one curated protein sequence, and a protein encoded by several near-identical")
-    a("loci gets one record spanning all of them. Filtering to SwissProt therefore does not make")
-    a("the multi-gene case go away.")
+    a("**The multi-gene case is rare — well under 1% — but it is not evenly spread.** The genuine")
+    a("cases are almost entirely histone clusters and a few cancer/testis antigen families: one")
+    a("protein sequence genuinely encoded by many loci on the primary assembly.")
     a("")
-    a("The worst reviewed human cases, which are the shape of the problem rather than outliers:")
+    a("The worst genuine reviewed human cases:")
     a("")
-    a("| accession | distinct genes |")
+    a("| accession | distinct primary genes |")
     a("|---|---:|")
     for row in r["species"].get("human", {}).get("uniprot", {}).get(
             "reviewed_multi_gene_top", []):
         a(f"| `{row['accession']}` | {row['genes']} |")
     a("")
-    a("`P62805` is histone H4 — one protein sequence, 14 loci, and peptides that cannot")
-    a("distinguish them. It is abundant in essentially every proteomics experiment. This is the")
-    a("protein-inference ambiguity our design keeps separate from orthology ambiguity, and it is")
-    a("not a corner case.")
+    a("`P62805` is histone H4 — one protein sequence, 14 real loci, peptides that cannot")
+    a("distinguish them, and abundant in essentially every proteomics experiment. So although the")
+    a("*rate* is below 1%, the affected proteins are not obscure. A rare class with high abundance")
+    a("is exactly the one a sampled test set will miss.")
     a("")
-
     a("## 2 · RefSeq")
     a("")
     a("| species | RefSeq protein accessions | `NP_` curated | `XP_` predicted | % → exactly one gene |")

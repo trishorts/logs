@@ -26,15 +26,16 @@ question: whether a cross-species row can be stated, or must refuse itself.
 
 ## Gene sets
 
-| species | genes in release | protein-coding | in a Compara gene tree |
-|---|---:|---:|---:|
-| human | 78,941 | 20,131 | 19,690 |
-| mouse | 78,348 | 21,818 | 22,045 |
-| rat | 43,360 | 22,016 | 22,379 |
+| species | genes in release | eligible | of which protein-coding | in a Compara gene tree |
+|---|---:|---:|---:|---:|
+| human | 78,941 | 20,543 | 20,131 | 19,690 |
+| mouse | 78,348 | 22,311 | 21,818 | 22,045 |
+| rat | 43,360 | 22,548 | 22,016 | 22,379 |
 
-Protein-coding is the eligible set: Compara's `protein_default` collection is built from
-protein-coding genes, so counting other biotypes as *no ortholog found* would inflate the
-refusal classes with genes that were never considered.
+**Eligible is protein-coding *plus* immunoglobulin and T-cell-receptor gene segments.**
+Compara trees those too, so excluding them would drop genes the source was willing to
+consider — wrong in the direction that flatters the result. Counting *all* biotypes would
+be wrong the other way, treating a lncRNA that was never eligible as a failed lookup.
 
 ## Homology rows
 
@@ -80,123 +81,123 @@ which is not the same statement as low confidence and must not collapse into it.
 
 ### human->mouse
 
-20,131 eligible (protein-coding) source genes.
+20,543 eligible (protein-coding) source genes.
 
 | outcome | genes | % |
 |---|---:|---:|
-| `has_ortholog` | 17,691 | 87.88% |
-| `no_edge_in_shared_tree` | 448 | 2.23% |
-| `tree_lacks_target_species` | 1,272 | 6.32% |
-| `not_in_any_tree` | 720 | 3.58% |
+| `has_ortholog` | 17,826 | 86.77% |
+| `no_edge_in_shared_tree` | 531 | 2.58% |
+| `tree_lacks_target_species` | 1,333 | 6.49% |
+| `not_in_any_tree` | 853 | 4.15% |
 
 | relationship type | genes |
 |---|---:|
-| `ortholog_one2one` | 16,314 |
-| `ortholog_one2many` | 931 |
-| `ortholog_many2many` | 446 |
+| `ortholog_one2one` | 16,335 |
+| `ortholog_one2many` | 999 |
+| `ortholog_many2many` | 492 |
 
-Distinct partners per gene: `{'1': 16855, '2': 416, '3': 122, '4': 70, '5': 42, '6': 21, '7': 22, '8': 19, '9': 10, '10': 14, '11': 4, '12': 4, '13': 10, '14': 15, '15': 1, '16': 2, '17': 3, '18': 4, '19': 2, '22': 1, '23': 17, '25': 1, '26': 1, '27': 3, '28': 6, '35': 2, '54': 1, '87': 22, '105': 1}`
+Distinct partners per gene: `{'1': 16931, '2': 422, '3': 128, '4': 77, '5': 46, '6': 22, '7': 24, '8': 19, '9': 18, '10': 16, '11': 4, '12': 12, '13': 10, '14': 18, '15': 1, '16': 2, '17': 3, '18': 4, '19': 2, '21': 1, '22': 1, '23': 17, '25': 1, '26': 1, '27': 3, '28': 6, '35': 2, '54': 1, '58': 11, '87': 22, '105': 1}`
 
 ### human->rat
 
-20,131 eligible (protein-coding) source genes.
+20,543 eligible (protein-coding) source genes.
 
 | outcome | genes | % |
 |---|---:|---:|
-| `has_ortholog` | 17,390 | 86.38% |
-| `no_edge_in_shared_tree` | 529 | 2.63% |
-| `tree_lacks_target_species` | 1,492 | 7.41% |
-| `not_in_any_tree` | 720 | 3.58% |
+| `has_ortholog` | 17,519 | 85.28% |
+| `no_edge_in_shared_tree` | 613 | 2.98% |
+| `tree_lacks_target_species` | 1,558 | 7.58% |
+| `not_in_any_tree` | 853 | 4.15% |
 
 | relationship type | genes |
 |---|---:|
-| `ortholog_one2one` | 15,832 |
-| `ortholog_one2many` | 1,183 |
-| `ortholog_many2many` | 375 |
+| `ortholog_one2one` | 15,847 |
+| `ortholog_one2many` | 1,218 |
+| `ortholog_many2many` | 454 |
 
-Distinct partners per gene: `{'1': 16389, '2': 563, '3': 167, '4': 80, '5': 39, '6': 19, '7': 19, '8': 13, '9': 8, '10': 9, '11': 5, '12': 8, '13': 23, '15': 2, '16': 2, '18': 14, '19': 1, '21': 1, '22': 1, '23': 3, '28': 1, '36': 1, '37': 22}`
+Distinct partners per gene: `{'1': 16424, '2': 577, '3': 188, '4': 87, '5': 49, '6': 20, '7': 23, '8': 13, '9': 8, '10': 11, '11': 5, '12': 13, '13': 23, '14': 1, '15': 3, '16': 3, '18': 14, '19': 4, '20': 1, '21': 1, '22': 1, '23': 4, '26': 5, '28': 1, '33': 2, '35': 3, '36': 1, '37': 22, '43': 11, '51': 1}`
 
 ### mouse->human
 
-21,818 eligible (protein-coding) source genes.
+22,311 eligible (protein-coding) source genes.
 
 | outcome | genes | % |
 |---|---:|---:|
-| `has_ortholog` | 18,646 | 85.46% |
-| `no_edge_in_shared_tree` | 1,227 | 5.62% |
-| `tree_lacks_target_species` | 1,687 | 7.73% |
-| `not_in_any_tree` | 258 | 1.18% |
+| `has_ortholog` | 18,908 | 84.75% |
+| `no_edge_in_shared_tree` | 1,268 | 5.68% |
+| `tree_lacks_target_species` | 1,869 | 8.38% |
+| `not_in_any_tree` | 266 | 1.19% |
 
 | relationship type | genes |
 |---|---:|
-| `ortholog_one2one` | 16,314 |
-| `ortholog_one2many` | 1,708 |
-| `ortholog_many2many` | 624 |
+| `ortholog_one2one` | 16,335 |
+| `ortholog_one2many` | 1,806 |
+| `ortholog_many2many` | 767 |
 
-Distinct partners per gene: `{'1': 17825, '2': 391, '3': 124, '4': 64, '5': 8, '6': 47, '7': 6, '8': 14, '9': 24, '10': 7, '13': 14, '16': 23, '17': 4, '19': 3, '21': 4, '22': 88}`
+Distinct partners per gene: `{'1': 17932, '2': 436, '3': 147, '4': 64, '5': 29, '6': 53, '7': 6, '8': 14, '9': 25, '10': 7, '11': 58, '13': 14, '16': 23, '17': 4, '18': 1, '19': 3, '21': 4, '22': 88}`
 
 ### mouse->rat
 
-21,818 eligible (protein-coding) source genes.
+22,311 eligible (protein-coding) source genes.
 
 | outcome | genes | % |
 |---|---:|---:|
-| `has_ortholog` | 20,198 | 92.57% |
-| `no_edge_in_shared_tree` | 748 | 3.43% |
-| `tree_lacks_target_species` | 614 | 2.81% |
-| `not_in_any_tree` | 258 | 1.18% |
+| `has_ortholog` | 20,521 | 91.98% |
+| `no_edge_in_shared_tree` | 796 | 3.57% |
+| `tree_lacks_target_species` | 728 | 3.26% |
+| `not_in_any_tree` | 266 | 1.19% |
 
 | relationship type | genes |
 |---|---:|
-| `ortholog_one2one` | 17,340 |
-| `ortholog_one2many` | 1,583 |
-| `ortholog_many2many` | 1,275 |
+| `ortholog_one2one` | 17,385 |
+| `ortholog_one2many` | 1,640 |
+| `ortholog_many2many` | 1,496 |
 
-Distinct partners per gene: `{'1': 18397, '2': 859, '3': 233, '4': 201, '5': 76, '6': 59, '7': 48, '8': 23, '9': 8, '10': 16, '11': 52, '17': 14, '18': 1, '19': 5, '20': 10, '23': 2, '26': 8, '28': 2, '41': 91, '57': 53, '156': 40}`
+Distinct partners per gene: `{'1': 18480, '2': 902, '3': 260, '4': 205, '5': 81, '6': 64, '7': 61, '8': 33, '9': 39, '10': 38, '11': 53, '12': 6, '14': 36, '15': 8, '16': 13, '17': 14, '18': 1, '19': 5, '20': 10, '23': 2, '26': 16, '28': 2, '41': 91, '48': 8, '57': 53, '156': 40}`
 
 ### rat->human
 
-22,016 eligible (protein-coding) source genes.
+22,548 eligible (protein-coding) source genes.
 
 | outcome | genes | % |
 |---|---:|---:|
-| `has_ortholog` | 18,553 | 84.27% |
-| `no_edge_in_shared_tree` | 1,580 | 7.18% |
-| `tree_lacks_target_species` | 1,735 | 7.88% |
-| `not_in_any_tree` | 148 | 0.67% |
+| `has_ortholog` | 18,874 | 83.71% |
+| `no_edge_in_shared_tree` | 1,647 | 7.30% |
+| `tree_lacks_target_species` | 1,858 | 8.24% |
+| `not_in_any_tree` | 169 | 0.75% |
 
 | relationship type | genes |
 |---|---:|
-| `ortholog_one2one` | 15,841 |
-| `ortholog_one2many` | 2,217 |
-| `ortholog_many2many` | 495 |
+| `ortholog_one2one` | 15,847 |
+| `ortholog_one2many` | 2,355 |
+| `ortholog_many2many` | 672 |
 
-Distinct partners per gene: `{'1': 17869, '2': 359, '3': 135, '4': 54, '5': 10, '6': 29, '7': 5, '8': 3, '9': 11, '11': 2, '13': 18, '16': 13, '17': 2, '19': 3, '21': 2, '22': 38}`
+Distinct partners per gene: `{'1': 18010, '2': 418, '3': 170, '4': 59, '5': 42, '6': 33, '7': 5, '8': 3, '9': 12, '11': 43, '13': 18, '16': 13, '17': 2, '18': 3, '19': 3, '21': 2, '22': 38}`
 
 ### rat->mouse
 
-22,016 eligible (protein-coding) source genes.
+22,548 eligible (protein-coding) source genes.
 
 | outcome | genes | % |
 |---|---:|---:|
-| `has_ortholog` | 20,339 | 92.38% |
-| `no_edge_in_shared_tree` | 1,089 | 4.95% |
-| `tree_lacks_target_species` | 440 | 2.00% |
-| `not_in_any_tree` | 148 | 0.67% |
+| `has_ortholog` | 20,733 | 91.95% |
+| `no_edge_in_shared_tree` | 1,188 | 5.27% |
+| `tree_lacks_target_species` | 458 | 2.03% |
+| `not_in_any_tree` | 169 | 0.75% |
 
 | relationship type | genes |
 |---|---:|
-| `ortholog_one2one` | 17,362 |
-| `ortholog_one2many` | 1,689 |
-| `ortholog_many2many` | 1,288 |
+| `ortholog_one2one` | 17,385 |
+| `ortholog_one2many` | 1,757 |
+| `ortholog_many2many` | 1,591 |
 
-Distinct partners per gene: `{'1': 18732, '2': 684, '3': 245, '4': 78, '5': 76, '6': 49, '7': 17, '8': 41, '9': 17, '10': 34, '11': 4, '12': 19, '13': 2, '14': 34, '16': 2, '17': 2, '22': 13, '23': 1, '24': 21, '28': 7, '29': 2, '40': 156, '53': 57, '79': 4, '91': 41, '102': 1}`
+Distinct partners per gene: `{'1': 18813, '2': 746, '3': 332, '4': 94, '5': 87, '6': 67, '7': 19, '8': 110, '9': 34, '10': 34, '11': 4, '12': 29, '13': 5, '14': 34, '16': 2, '17': 2, '18': 9, '22': 13, '23': 1, '24': 30, '28': 7, '29': 2, '40': 156, '53': 57, '79': 4, '91': 41, '102': 1}`
 
 ## Triples — the number that does not follow from the pairs
 
-- human protein-coding genes: **20,131**
-- one2one to **both** rodents: **15,539**
-- **clean 1:1:1** (and the mouse and rat partners are also one2one with each other): **15,494** (76.97%)
+- human protein-coding genes: **20,543**
+- one2one to **both** rodents: **15,553**
+- **clean 1:1:1** (and the mouse and rat partners are also one2one with each other): **15,508** (75.49%)
 - one2one to both rodents but the rodent pair is **not** one2one: **45**
 
 That last row is the whole reason to measure triples separately: those genes look clean
@@ -207,17 +208,17 @@ alone would treat them as interchangeable.
 
 | human → mouse | human → rat | genes |
 |---|---|---:|
-| `one2one` | `one2one` | 15,539 |
-| `none` | `none` | 2,269 |
-| `one2many` | `one2many` | 649 |
-| `one2one` | `one2many` | 389 |
-| `one2one` | `none` | 386 |
-| `many2many` | `many2many` | 302 |
-| `one2many` | `one2one` | 156 |
+| `one2one` | `one2one` | 15,553 |
+| `none` | `none` | 2,539 |
+| `one2many` | `one2many` | 681 |
+| `one2one` | `one2many` | 391 |
+| `one2one` | `none` | 391 |
+| `many2many` | `many2many` | 348 |
+| `one2many` | `one2one` | 157 |
 | `none` | `one2one` | 137 |
 | `many2many` | `one2many` | 116 |
-| `one2many` | `many2many` | 68 |
-| `one2many` | `none` | 58 |
-| `none` | `one2many` | 29 |
+| `one2many` | `many2many` | 95 |
+| `one2many` | `none` | 66 |
+| `none` | `one2many` | 30 |
 | `many2many` | `none` | 28 |
-| `none` | `many2many` | 5 |
+| `none` | `many2many` | 11 |
