@@ -50,6 +50,45 @@ def load_gene_set(species: str) -> dict[str, str]:
     return genes
 
 
+_GENE_NAME = re.compile(rb'gene_name "([^"]+)"')
+
+
+@dataclass(frozen=True)
+class GeneInfo:
+    biotype: str
+    #: Display label only -- never a key. ``None`` when the GTF carries no ``gene_name``, which
+    #: is common for novel lncRNAs and is not the same as an empty string.
+    symbol: str | None
+
+
+def load_genes(species: str) -> dict[str, GeneInfo]:
+    """``ENSG -> GeneInfo`` for the primary-assembly gene set: :func:`load_gene_set` plus symbols.
+
+    Kept separate so the denominator used by every measurement already sent to a partner is
+    produced by exactly the code that produced it.
+    """
+    assembly = sources.ASSEMBLY[species]
+    path = data_dir() / f"{species.capitalize()}.{assembly}.{sources.RELEASE}.gtf.gz"
+    genes: dict[str, GeneInfo] = {}
+    with gzip.open(path, "rb") as fh:
+        for line in fh:
+            if line.startswith(b"#"):
+                continue
+            parts = line.split(b"\t", 3)
+            if len(parts) < 3 or parts[2] != b"gene":
+                continue
+            m = _GENE_ID.search(line)
+            if not m:
+                continue
+            b = _BIOTYPE.search(line)
+            n = _GENE_NAME.search(line)
+            genes[m.group(1).decode()] = GeneInfo(
+                biotype=b.group(1).decode() if b else "unknown",
+                symbol=n.group(1).decode() if n else None,
+            )
+    return genes
+
+
 # ---------------------------------------------------------------------------------------------
 # Gene trees
 # ---------------------------------------------------------------------------------------------

@@ -1,0 +1,72 @@
+{
+  "source": "ensembl_xref",
+  "release": "116",
+  "species": "homo_sapiens",
+  "generated": "2026-09-22",
+  "accessions": 272782,
+  "rows": 273481,
+  "outcomes": {
+    "resolved": 265240,
+    "off_primary_only": 7031,
+    "multi_gene": 511
+  },
+  "outcomes_by_class": {
+    "refseq_NP": {
+      "resolved": 69276,
+      "off_primary_only": 153,
+      "multi_gene": 140
+    },
+    "refseq_XP": {
+      "off_primary_only": 4605,
+      "resolved": 87197,
+      "multi_gene": 113
+    },
+    "refseq_other": {
+      "resolved": 13
+    },
+    "uniprot_isoform": {
+      "resolved": 25061,
+      "off_primary_only": 74,
+      "multi_gene": 42
+    },
+    "uniprot_reviewed": {
+      "resolved": 19251,
+      "off_primary_only": 62,
+      "multi_gene": 70
+    },
+    "uniprot_unreviewed": {
+      "resolved": 64442,
+      "off_primary_only": 2137,
+      "multi_gene": 146
+    }
+  },
+  "matched_on": {
+    "exact": 272782
+  },
+  "info_type_by_class": {
+    "refseq_NP": {
+      "DIRECT": 55335,
+      "INFERRED_PAIR": 14242,
+      "SEQUENCE_MATCH": 191
+    },
+    "refseq_XP": {
+      "INFERRED_PAIR": 49190,
+      "DIRECT": 24884,
+      "SEQUENCE_MATCH": 17988
+    },
+    "refseq_other": {
+      "SEQUENCE_MATCH": 13
+    },
+    "uniprot_isoform": {
+      "DIRECT": 25229
+    },
+    "uniprot_reviewed": {
+      "DIRECT": 19446,
+      "SEQUENCE_MATCH": 58
+    },
+    "uniprot_unreviewed": {
+      "SEQUENCE_MATCH": 3714,
+      "DIRECT": 63191
+    }
+  }
+}

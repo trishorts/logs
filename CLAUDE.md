@@ -45,8 +45,11 @@ $env:PYTHONPATH = "E:\CodeReview\logs\src"
 python -m logs_orthology.fetch          # re-fetch/verify the pinned Ensembl 116 inputs
 python -m logs_orthology.cardinality    # -> results/cardinality.{md,json}
 python -m logs_orthology.xrefs          # -> results/accession_resolution.{md,json}
+python -m logs_orthology.resolve --reference          # -> results/resolution_human_e116.{tsv.gz,json}
+python -m logs_orthology.resolve --accessions ids.tsv # accession[<TAB>contaminant] per line
 python tests/test_contracts.py         # 10 contract tests
-python tests/test_reported_claims.py   # 12 numbers already sent to a partner
+python tests/test_resolve.py           # 16 resolver contracts (last one reconciles on real data)
+python tests/test_reported_claims.py   # 15 numbers already sent to a partner
 ```
 
 Inputs live in `data/compara/` (gitignored, 673 MB, recorded in `data/PROVENANCE.md`).
