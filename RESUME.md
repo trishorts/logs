@@ -118,8 +118,7 @@ and `entry_accession`/`isoform` beside the verbatim accession. Today it resolves
 Next: read the ENSGs out of the search XML's `<dbReference type="Ensembl">` (in
 `<property type="gene ID">`, **versioned**). Key rows on `(accession, search_database_sha256)`, set
 `source` per row, and cross-check against the xref. Do not key on the hash until **REQ-AGING-7**
-confirms it. The local copy is `E:\CodeReview\go\data
-aw\…2026_09_18.xml.gz` (decompressed
+confirms it. The local copy is `E:\CodeReview\go\data\raw\…2026_09_18.xml.gz` (decompressed
 sha `760984e8d402ade6b110…`; dataRepo only ever quoted the first 16 characters).
 
 **Owed first:** the numbers in 005-logs (20,416 entries → 19,257 / 69 / 62 / 1,028 not in source,
