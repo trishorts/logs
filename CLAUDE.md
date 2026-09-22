@@ -8,10 +8,9 @@ This folder is a `/project`-managed research project. **You are de facto working
 - **Goal:** A generic, versioned, gene-centric cross-species orthology layer that lets any
   multi-organism proteomics project join protein identifications across species without collapsing
   one-to-many orthology.
-- **Pick up at:** **human accession→gene resolution in `logs`** (`design/PLAN.md` step 5). Plan
-  reordered 2026-09-22 after `aging` 002 (reply 003-logs): compare not pool, rodents months away so
-  the store is deferred, and they want resolution more than orthology. First decision: search-XML
-  `dbReference`s vs the on-disk Ensembl 116 xref (ideally both, cross-checked). See `RESUME.md`.
+- **Pick up at:** **the search-XML source for the resolver** (`design/PLAN.md` step 5, second
+  half). `resolve.py` works against the Ensembl 116 xref. First reproduce and pin the 005-logs numbers,
+  which came from a scratchpad run; key on the hash only after REQ-AGING-7. See `RESUME.md`.
 
 **The name:** `logs` = homologs, orthologs, paralogs, and any other -logs. Not log files.
 

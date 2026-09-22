@@ -210,14 +210,21 @@ decisions:
 
 gaps:
   - >-
-    NEXT ACTION - human accession->gene resolution in logs (design/PLAN.md step 5). One row per
-    (accession, gene), keyed (accession, search_database_sha256), primary-assembly restricted
-    against Ensembl 116, every outcome typed, info_type per row, normalized accession as a column
-    beside the verbatim one. First decision: read the search XML's dbReferences (needs the file -
-    REQ-DATAREPO-4) or the Ensembl 116 uniprot xref (on disk) - ideally both, cross-checked.
+    NEXT ACTION - the search-XML source for the resolver (PLAN step 5, second half). resolve.py
+    exists and resolves against Ensembl 116 xrefs (reconciles exactly with xrefs.py: 19,251 + 70 +
+    62 = 19,383 reviewed human). Add a reader for the XML's Ensembl dbReferences (ENSG is in a
+    <property type="gene ID">, VERSIONED), key rows on (accession, search_database_sha256), set
+    source per row, and cross-check against the xref source. Gated on REQ-AGING-7 for the hash.
   - >-
-    OWE aging a correction to 003-logs: "for RefSeq most links are inferences" is true only of XP_;
-    curated NP_ is 76.6% DIRECT (see 008-logs to dataRepo). Fold into the next aging message.
+    UNPINNED NUMBERS SENT IN 005-logs to aging - the first pass over their search DB (20,416
+    entries: 19,257 resolved / 69 multi / 62 off-primary / 1,028 not_in_source, of which 1,012 have
+    no Ensembl dbReference in the XML and 16 do - UniProt/Ensembl drift). Produced by an ad-hoc
+    scratchpad run, NOT committed code. The XML reader must reproduce them and
+    tests/test_reported_claims.py must pin them.
+  - >-
+    AWAITING aging (REQ-AGING-8, 005-logs). For the ~1,012 entries with no gene id in any source,
+    carry UniProt's primary gene name from the pinned search DB as a label (outcome still
+    not_in_source), or nothing? Includes the HERV-K named regression case.
   - >-
     AWAITING aging (REQ-AGING-5/6, asked in 003-logs). 5: dataRepo measured ZERO isoform-suffixed
     accessions yet aging says they keep suffixes verbatim - our hypothesis is a canonical-only
