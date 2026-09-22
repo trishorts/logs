@@ -107,30 +107,25 @@ Each of these cost real time today.
 
 ## Pick up at
 
-**FIRST: read `design/threads/aging/002_aging_2026-09-22.md` — it is unread and it reorders this
-plan.** `aging` answered all four questions on 2026-09-22, after the rest of this file was written.
-The headlines, from a partial read during close-out (the full message has not been processed and no
-reply has been sent):
+**Human accession → gene resolution, in `logs`** — `design/PLAN.md` step 5. The plan was reordered
+on 2026-09-22 after `aging` 002 (replied in 003-logs):
 
-- **REQ-AGING-1 — compare, not pool.** Our default was right. Pooling across species is forbidden by
-  their own `DEF-AGE-EFFECT-META`; `organism` was missing from their stratification rules only
-  because every dataset they hold is human, and it is being added. Transfer/annotate: they have no
-  use for it.
-- **REQ-AGING-2 — rodents are *months* away, not weeks.**
-- **REQ-AGING-3 — yes**, they will carry all four refusal outcomes.
-- **REQ-AGING-4 — they want accession→gene resolution *more than the orthology*.**
+- **Compare, not pool** — our default was right; the conservative filter is theirs, not a product.
+- **Rodents are months away** (0 rodent deposits queued) → the store (now step 6) is **deferred**
+  until a rodent corpus exists, so it is designed against data rather than guesses.
+- **They want accession → gene more than orthology** — it replaces the producer `Gene Name` column
+  behind dataRepo's 182 ragged rows. Isoform normalization stays in scope, as a column beside the
+  verbatim accession.
 
-**That last point probably inverts `design/PLAN.md` steps 5 and 6**, and combined with rodents being
-months out, the store may not be the right next thing. Read the message, reply, then decide the
-order — do not just start building the store because this file used to say so.
+Resolution lives **here**, not in mzLib: the primary-assembly restriction and outcome classes need the
+pinned Ensembl gene set. mzLib's part (step 7) is only the typed `dbReference` view, still gated on
+#1336 (OPEN, review required as of 2026-09-22). Shape: one row per `(accession, gene)`, keyed
+`(accession, search_database_sha256)`, `info_type` on every row, every outcome typed (single,
+multi-gene, ALT/patch only, no primary gene, contaminant not mapped, not in source).
 
-**The step that was queued before that message arrived** was the store (`design/PLAN.md` step 5):
-`Gene`, `ProteinAccession`, `OrthologyGroup`, `OrthologyGroupMember`, `OrthologyRelationship` in
-`src/logs_orthology/`. Group id is **ours**, with Compara's `ENSGT…` beside it, keyed
-`(source, release, group_id)` and never promised stable across releases. Relationship rows carry
-`relationship_type`, `is_high_confidence`, `goc_score`, `wga_coverage` and both identity percentages
-verbatim. Every unresolved outcome carries its class — the four refusal classes plus *contaminant,
-not mapped* and *resolves only to ALT/patch*.
+**First decision on picking up:** which source — the search XML's `dbReference`s (needs the file:
+REQ-DATAREPO-4) or the Ensembl 116 `uniprot` xref already on disk. Ideally both, cross-checked;
+they should agree, and REQ-DATAREPO-7 is the same comparison from their side.
 
 Sanity-check the inputs still reproduce before changing anything:
 
@@ -145,8 +140,10 @@ python tests/test_contracts.py          # 10 contract tests
 - `dataRepo` **REQ-DATAREPO-7** — the distinct-ENSG distribution over *their* XML. Our prediction is
   on the record: ~99%. If theirs is materially worse, they likely have our ALT-haplotype trap.
 - `dataRepo` **REQ-DATAREPO-4/5/6** — is the database file retained or only its sha; are we a
-  blocker or an improvement; do they want the mzLib half early. **REQ-AGING-4 partly answers the
-  third of those from the other side.**
+  blocker or an improvement; do they want the mzLib half early. REQ-AGING-4 answered the third from
+  the consumer side: yes, resolution first.
+- `aging` **REQ-AGING-5/6** (003-logs) — do isoform suffixes exist in their data at all (dataRepo
+  counted zero); table vs call, versioned vs stable ENSG.
 - **mzLib PR #1336** must merge before any mzLib-side code starts — it sets the pattern.
 
 ## Documents in `design/`
@@ -164,9 +161,9 @@ python tests/test_contracts.py          # 10 contract tests
 
 | | |
 |---|---|
-| Commits | 22 |
+| Commits | 24 |
 | Sync | [`trishorts/logs`](https://github.com/trishorts/logs) |
-| Locked decisions | 21 |
+| Locked decisions | 22 |
 | Open gaps | 8 |
 | Gate items skipped | 2 |
 

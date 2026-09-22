@@ -187,23 +187,37 @@ decisions:
       attached yet; the sibling of dataRepo's rule that a requirement written on your behalf goes
       stale is that a requirement written by a SINGLE CONSUMER looks generic and is not.
 
+  - date: 2026-09-22
+    text: >-
+      PLAN REORDERED (user, after 002-aging; posted as 003-logs). Next is HUMAN-ONLY accession ->
+      gene resolution in `logs` (PLAN step 5); the cross-species store is DEFERRED until a rodent
+      corpus exists (REQ-AGING-2: 0 rodent deposits queued, months away). aging wants resolution
+      more than orthology (REQ-AGING-4) because it replaces the producer Gene Name column behind
+      the 182 ragged rows. Resolution lives HERE, not in mzLib: primary-assembly restriction and
+      outcome classes need the pinned Ensembl gene set, which mzLib cannot hold. mzLib's part is
+      only the typed dbReference view (still gated on #1336); any XML reader written here is a
+      stopgap it replaces. Also confirmed by aging: COMPARE not pool, no conservative-by-default
+      product (they own that filter), four refusal outcomes carried. Isoform normalization stays
+      in scope as a column beside the verbatim accession, never a rewrite.
+
 gaps:
   - >-
-    UNREAD AND REORDERS THE PLAN - design/threads/aging/002_aging_2026-09-22.md, arrived during
-    close-out on 2026-09-22, read only partially, NOT replied to. aging answered all four:
-    REQ-AGING-1 COMPARE not pool (our default was right; pooling across species is forbidden by
-    their own DEF-AGE-EFFECT-META and `organism` is being added to its stratification rules);
-    REQ-AGING-2 rodents are MONTHS away not weeks; REQ-AGING-3 yes they will carry all four
-    refusal outcomes; REQ-AGING-4 THEY WANT ACCESSION->GENE RESOLUTION MORE THAN THE ORTHOLOGY.
-    That last point plus the rodent timeline probably INVERTS design/PLAN.md steps 5 and 6. Read
-    it in full and reply before building anything.
+    NEXT ACTION - human accession->gene resolution in logs (design/PLAN.md step 5). One row per
+    (accession, gene), keyed (accession, search_database_sha256), primary-assembly restricted
+    against Ensembl 116, every outcome typed, info_type per row, normalized accession as a column
+    beside the verbatim one. First decision: read the search XML's dbReferences (needs the file -
+    REQ-DATAREPO-4) or the Ensembl 116 uniprot xref (on disk) - ideally both, cross-checked.
+  - >-
+    AWAITING aging (REQ-AGING-5/6, asked in 003-logs). 5: dataRepo measured ZERO isoform-suffixed
+    accessions yet aging says they keep suffixes verbatim - our hypothesis is a canonical-only
+    search DB. 6: delivery shape - table joined on (accession, db sha256) vs a call; versioned vs
+    stable ENSG.
   - >-
     DECIDE (orthology source of record). Ensembl Compara primary is the working assumption;
     decide how NCBI Orthologs / Alliance / HCOP support is stored alongside without merging
     into one unqualified "truth".
   - >-
-    NEXT ACTION - build the store (design/PLAN.md step 5). Both measurements it was waiting on are
-    done. Schema: Gene, ProteinAccession, OrthologyGroup, OrthologyGroupMember,
+    DEFERRED until a rodent corpus exists (PLAN step 6) - the store. Design notes retained: Schema: Gene, ProteinAccession, OrthologyGroup, OrthologyGroupMember,
     OrthologyRelationship. Group id is OURS with Compara's ENSGT preserved beside it, keyed
     (source, release, group_id) and never promised stable across releases. Relationship rows carry
     relationship_type, is_high_confidence, goc_score, wga_coverage and both identity percentages
@@ -224,13 +238,6 @@ gaps:
     output is RE-DERIVABLE (file available, resolution recomputable and auditable) or IS THE ONLY
     RECORD (file gone, our output is the evidence and must stand alone). Different durability
     requirements - settle it before the schema, not after.
-  - >-
-    AWAITING aging (REQ-AGING-1..4, no reply yet). REQ-AGING-1 is the one that shapes everything:
-    is the cross-species job to POOL, to COMPARE, or to TRANSFER ANNOTATIONS? We are building for
-    COMPARE by default (retain everything, let pooling be a strict view over it). If pooling into
-    age_effect_meta is the real goal, the conservative path is the primary product and should say
-    so on the tin. Also open: rodent data horizon, whether their analysis can carry a typed
-    refusal, and whether they are working around anything non-orthology we could absorb.
   - >-
     AWAITING dataRepo (REQ-DATAREPO-5/6). Are we a blocker or an improvement - what do they do if
     logs never ships? And do they want the mzLib accession->gene half on its own, ahead of the

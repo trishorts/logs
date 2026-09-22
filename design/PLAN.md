@@ -42,7 +42,7 @@ Two things this step already caught, both of which would have produced a confide
   MD5 finds nothing and reports "unverified" — which is safe — but the files *are* verifiable, and
   leaving them unchecked would have been a choice, not a limitation.
 
-### ✅ 2. The cardinality measurement owed to `dataRepo` — *running*
+### ✅ 2. The cardinality measurement owed to `dataRepo` — *done*
 
 `src/logs_orthology/cardinality.py` → `results/cardinality.{md,json}`.
 
@@ -52,12 +52,12 @@ Carries one correction we owe them: **Compara does not support the "no ortholog 
 far the inference got — shared tree with no edge, tree lacking the target species, no tree at all,
 not in the gene set — which is derivable and answers the same question.
 
-### 3. Report back, including the correction
+### ✅ 3. Report back, including the correction — *done (006-logs, corrected in 007-logs)*
 
 Post the numbers to `dataRepo` with the underivable-distinction correction stated plainly, not
 buried. They are designing `age_effect_meta`'s cross-species join against these numbers.
 
-### 4. Accession → gene, measured before it is built
+### ✅ 4. Accession → gene, measured before it is built — *done (`results/accession_resolution.md`)*
 
 The xref dumps (`uniprot`, `refseq`, `entrez` per species) are already fetched. Before writing any
 mzLib code:
@@ -71,9 +71,31 @@ mzLib code:
   *resolving an accession we already hold* — which `Homo_sapiens.GRCh38.116.refseq.tsv.gz` does
   directly. If RefSeq turns out to be cheap, say so and correct the deferral.
 
-### 5. The store
+### 5. Human accession → gene resolution, in `logs` — *NEXT (reordered 2026-09-22, 002-aging → 003-logs)*
 
-Only after step 4's numbers exist, because they decide the keying:
+`aging` wants this **more than the orthology** (REQ-AGING-4): it replaces the producer's `Gene Name`
+column, the source of dataRepo's 182 ragged rows. It also needs no rodent data, so it can ship while
+the corpus is human-only.
+
+- One row per `(accession, gene)`, keyed `(accession, search_database_sha256)`, never a display
+  symbol. The symbol travels as a label beside the ENSG.
+- Restricted to the **primary assembly** against the pinned Ensembl 116 gene set. That restriction
+  needs reference data mzLib cannot hold, so **resolution lives here**; mzLib's job (step 7) is only
+  to expose the typed `dbReference`s. Any XML reader written here is a stopgap the mzLib view replaces.
+- Every outcome typed: resolved (single / multi-gene), *resolves only to ALT/patch*, *no
+  primary-assembly gene*, *contaminant, not mapped*, not in source. `info_type` on every row.
+- Canonical accession normalization as a **column beside** the verbatim accession, never a rewrite
+  (REQ-AGING-4; isoform identity is how `aging` infers proteoforms).
+- Open with `aging`: REQ-AGING-5 (do isoform suffixes exist in their data at all?) and REQ-AGING-6
+  (table vs call; versioned vs stable ENSG). Open with `dataRepo`: REQ-DATAREPO-4 (is the search
+  XML retained?) decides re-derivable vs only-record.
+
+### 6. The store — *DEFERRED until a rodent corpus exists*
+
+Rodent data is **months** away (REQ-AGING-2: 0 rodent deposits queued). Designing the store after
+seeing a rodent corpus beats guessing at one. The design notes below stand.
+
+Keying, when it is built:
 
 - `Gene`, `ProteinAccession`, `OrthologyGroup`, `OrthologyGroupMember`, `OrthologyRelationship`
 - Group id is **ours**, with the source's `ENSGT…` preserved beside it. Keyed
@@ -82,7 +104,7 @@ Only after step 4's numbers exist, because they decide the keying:
   identity percentages, verbatim.
 - Every unresolved outcome carries its class, including *contaminant, not mapped*.
 
-### 6. The mzLib contribution
+### 7. The mzLib contribution
 
 Follows PR #1336's merged pattern — a computed view over `DatabaseReferences`, a `const` type
 string, no parser change, no constructor parameter. **Wait for #1336 to merge first**; two
@@ -93,11 +115,11 @@ Note the projection differs from `NcbiTaxonomyId`: Ensembl writes one `dbReferen
 *transcript* with the ENSG in a `<property>`, so `FirstOrDefault(...)?.Id` is a category error
 here. It needs `SelectMany(Properties)` and a `Distinct()`.
 
-### 7. Validate the "generic" claim
+### 8. Validate the "generic" claim
 
 Currently unfalsified rather than demonstrated — every requirement we hold comes from one
 consumer and one corpus. Either find a second, unrelated consumer, or say plainly that generic is
-aspirational. `aging` (`REQ-AGING-1`) may change the picture; a second consumer would settle it.
+aspirational. `aging` answered REQ-AGING-1 (compare, not pool) without changing the picture; a second consumer would settle it.
 
 ## Standing rules for this work
 

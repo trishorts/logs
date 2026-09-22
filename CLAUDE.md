@@ -8,10 +8,10 @@ This folder is a `/project`-managed research project. **You are de facto working
 - **Goal:** A generic, versioned, gene-centric cross-species orthology layer that lets any
   multi-organism proteomics project join protein identifications across species without collapsing
   one-to-many orthology.
-- **Pick up at:** **read `design/threads/aging/002_aging_2026-09-22.md` first — unread, and it
-  reorders the plan.** `aging` says *compare, not pool*; rodents are **months** away; and they want
-  **accession→gene resolution more than the orthology**, which probably inverts `design/PLAN.md`
-  steps 5 and 6. Reply, then decide the order. See `RESUME.md`.
+- **Pick up at:** **human accession→gene resolution in `logs`** (`design/PLAN.md` step 5). Plan
+  reordered 2026-09-22 after `aging` 002 (reply 003-logs): compare not pool, rodents months away so
+  the store is deferred, and they want resolution more than orthology. First decision: search-XML
+  `dbReference`s vs the on-disk Ensembl 116 xref (ideally both, cross-checked). See `RESUME.md`.
 
 **The name:** `logs` = homologs, orthologs, paralogs, and any other -logs. Not log files.
 
