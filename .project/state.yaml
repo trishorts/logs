@@ -189,6 +189,15 @@ decisions:
 
 gaps:
   - >-
+    UNREAD AND REORDERS THE PLAN - design/threads/aging/002_aging_2026-09-22.md, arrived during
+    close-out on 2026-09-22, read only partially, NOT replied to. aging answered all four:
+    REQ-AGING-1 COMPARE not pool (our default was right; pooling across species is forbidden by
+    their own DEF-AGE-EFFECT-META and `organism` is being added to its stratification rules);
+    REQ-AGING-2 rodents are MONTHS away not weeks; REQ-AGING-3 yes they will carry all four
+    refusal outcomes; REQ-AGING-4 THEY WANT ACCESSION->GENE RESOLUTION MORE THAN THE ORTHOLOGY.
+    That last point plus the rodent timeline probably INVERTS design/PLAN.md steps 5 and 6. Read
+    it in full and reply before building anything.
+  - >-
     DECIDE (orthology source of record). Ensembl Compara primary is the working assumption;
     decide how NCBI Orthologs / Alliance / HCOP support is stored alongside without merging
     into one unqualified "truth".

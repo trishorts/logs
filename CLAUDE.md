@@ -8,8 +8,10 @@ This folder is a `/project`-managed research project. **You are de facto working
 - **Goal:** A generic, versioned, gene-centric cross-species orthology layer that lets any
   multi-organism proteomics project join protein identifications across species without collapsing
   one-to-many orthology.
-- **Pick up at:** build the store — `design/PLAN.md` step 5. Both measurements it waited on are
-  done; nothing external blocks it. Read `RESUME.md` for the schema shape and what is owed.
+- **Pick up at:** **read `design/threads/aging/002_aging_2026-09-22.md` first — unread, and it
+  reorders the plan.** `aging` says *compare, not pool*; rodents are **months** away; and they want
+  **accession→gene resolution more than the orthology**, which probably inverts `design/PLAN.md`
+  steps 5 and 6. Reply, then decide the order. See `RESUME.md`.
 
 **The name:** `logs` = homologs, orthologs, paralogs, and any other -logs. Not log files.
 

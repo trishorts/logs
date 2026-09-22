@@ -107,27 +107,46 @@ Each of these cost real time today.
 
 ## Pick up at
 
-**Build the store — `design/PLAN.md` step 5.** Both measurements it was waiting on are done, and
-nothing external blocks it.
+**FIRST: read `design/threads/aging/002_aging_2026-09-22.md` — it is unread and it reorders this
+plan.** `aging` answered all four questions on 2026-09-22, after the rest of this file was written.
+The headlines, from a partial read during close-out (the full message has not been processed and no
+reply has been sent):
 
-Schema: `Gene`, `ProteinAccession`, `OrthologyGroup`, `OrthologyGroupMember`,
-`OrthologyRelationship`, in `src/logs_orthology/`. Group id is **ours**, with Compara's `ENSGT…`
-preserved beside it, keyed `(source, release, group_id)` and never promised stable across releases.
-Relationship rows carry `relationship_type`, `is_high_confidence`, `goc_score`, `wga_coverage` and
-both identity percentages verbatim. Every unresolved outcome carries its class — the four refusal
-classes plus *contaminant, not mapped* and *resolves only to ALT/patch*.
+- **REQ-AGING-1 — compare, not pool.** Our default was right. Pooling across species is forbidden by
+  their own `DEF-AGE-EFFECT-META`; `organism` was missing from their stratification rules only
+  because every dataset they hold is human, and it is being added. Transfer/annotate: they have no
+  use for it.
+- **REQ-AGING-2 — rodents are *months* away, not weeks.**
+- **REQ-AGING-3 — yes**, they will carry all four refusal outcomes.
+- **REQ-AGING-4 — they want accession→gene resolution *more than the orthology*.**
 
-Start with: `python -m logs_orthology.cardinality` to confirm the inputs still reproduce, then
-`python tests/test_reported_claims.py` to confirm nothing we told a partner has moved.
+**That last point probably inverts `design/PLAN.md` steps 5 and 6**, and combined with rodents being
+months out, the store may not be the right next thing. Read the message, reply, then decide the
+order — do not just start building the store because this file used to say so.
 
-**Waiting on others** (nothing blocking):
+**The step that was queued before that message arrived** was the store (`design/PLAN.md` step 5):
+`Gene`, `ProteinAccession`, `OrthologyGroup`, `OrthologyGroupMember`, `OrthologyRelationship` in
+`src/logs_orthology/`. Group id is **ours**, with Compara's `ENSGT…` beside it, keyed
+`(source, release, group_id)` and never promised stable across releases. Relationship rows carry
+`relationship_type`, `is_high_confidence`, `goc_score`, `wga_coverage` and both identity percentages
+verbatim. Every unresolved outcome carries its class — the four refusal classes plus *contaminant,
+not mapped* and *resolves only to ALT/patch*.
+
+Sanity-check the inputs still reproduce before changing anything:
+
+```powershell
+$env:PYTHONPATH = "E:\CodeReview\logs\src"
+python tests/test_reported_claims.py    # 12 numbers already sent to a partner
+python tests/test_contracts.py          # 10 contract tests
+```
+
+**Also waiting** (nothing blocking):
 
 - `dataRepo` **REQ-DATAREPO-7** — the distinct-ENSG distribution over *their* XML. Our prediction is
   on the record: ~99%. If theirs is materially worse, they likely have our ALT-haplotype trap.
 - `dataRepo` **REQ-DATAREPO-4/5/6** — is the database file retained or only its sha; are we a
-  blocker or an improvement; do they want the mzLib half early.
-- `aging` **REQ-AGING-1..4**, no reply yet. **REQ-AGING-1 shapes everything**: pool, compare, or
-  transfer annotations? We build for *compare* by default.
+  blocker or an improvement; do they want the mzLib half early. **REQ-AGING-4 partly answers the
+  third of those from the other side.**
 - **mzLib PR #1336** must merge before any mzLib-side code starts — it sets the pattern.
 
 ## Documents in `design/`
@@ -145,10 +164,10 @@ Start with: `python -m logs_orthology.cardinality` to confirm the inputs still r
 
 | | |
 |---|---|
-| Commits | 21 |
+| Commits | 22 |
 | Sync | [`trishorts/logs`](https://github.com/trishorts/logs) |
 | Locked decisions | 21 |
-| Open gaps | 7 |
+| Open gaps | 8 |
 | Gate items skipped | 2 |
 
 <!-- END GENERATED -->
