@@ -239,30 +239,33 @@ decisions:
       occupancy manuscript (Cruz Parrilla/Shortreed/Smith draft 2026-09-02); the manuscript's 320
       position-zero observations and its "near-quantitative" argument rest on that subset. User chose
       to fix it directly rather than route through #1286/#1287. Not logs scope; opened from here.
+  - date: 2026-09-22
+    text: >-
+      MULTI-GENE SEMANTICS DECIDED (user, option 1): report the search XML's Ensembl links as they are
+      and add ensembl_xref_agrees / ensembl_xref_info_type / ensembl_xref_sha256 to every gene row
+      (EnsemblXrefTable in mzLib). On the human search DB: XML multi_gene 350, of which 281 have exactly
+      one xref-agreeing gene (readthrough / novel / paralog links) and 69 are genuinely multi-gene -
+      filtering agrees==true reproduces the xref view. Parity with resolve.py: 20,412/20,416 identical;
+      the 4 others have no Ensembl link in the XML. 005's numbers now re-derived from committed code
+      (tools/ResolveSearchDb + logs_orthology.search_db) and pinned.
+  - date: 2026-09-22
+    text: >-
+      dataRepo 009 answered REQ-DATAREPO-4..7. 7: the XML carries the ALT trap (87.59% single-ENSG over
+      their 19,879; reproduced 87.11% over all 20,416; P43628 24 ENSG / 1 GeneID); GeneID gives 0.47%
+      multi. mzLib cannot filter from the XML alone - our EnsemblGeneSet input is exactly the fork's
+      first branch. 4: DB retained on ONE machine only, aging's to archive - build output to stand
+      alone. 5: improvement, not blocker; build complete and durable. 6: yes, mzLib half first - but it
+      reaches them only if MetaMorpheus WRITES the resolved id. Also: open `go` directly (#1336 seam);
+      `ptmQtl` is a second consumer on the corpus.
 
 gaps:
   - >-
-    DECIDE (multi-gene semantics, blocks pinning and the aging table). The C# port runs on the real
-    search DB (branch feat/ensembl-gene-resolution, stacked on #1336, pushed to trishorts). Base
-    entries 20,416: the two sources AGREE on 1,012 not_in_source, 62 off_primary_only, 69 core
-    multi_gene, and the 16 UniProt/Ensembl drift cases. They DISAGREE on 281 accessions (+4 reverse):
-    UniProt's XML links an accession to every Ensembl transcript encoding it - readthrough genes
-    (MSH5 + MSH5-SAPCD1, TNFSF12 + TNFSF12-TNFSF13), unnamed novel protein-coding genes, identical
-    paralogs (GPR89A/B) - so XML-source multi_gene = 350 vs xref-source 69. 005-logs told aging 69
-    (provisional). Options: report the XML's links as-is; mark readthrough/secondary genes per row;
-    or intersect with the Ensembl xref. Decide, then tell aging, then pin.
+    NEXT - MetaMorpheus must write the resolution into its output for dataRepo to ever see it
+    (dataRepo 009 §6). Needs its own PR once the mzLib branch is released; design the output (a
+    long-format AllGeneResolutions.tsv rather than a '|'-joined column) and run /oracle MetaMorpheus.
   - >-
-    NEXT (after the multi-gene decision) - finish the port: xref-table source for parity with
-    resolve.py, then pin the search-DB numbers. Slices done (TDD, 54 tests): Protein.EnsemblGeneReferences
-    (#1336 idiom), EnsemblGeneSet.LoadGtf, ProteinAccession.Parse, EnsemblGeneResolver + GeneResolutionTsv,
-    sequence-variant fix (LoadProteinXML yields 52,359 proteins from 20,416 entries; variants resolve
-    through ConsensusVariant).
-  - >-
-    UNPINNED NUMBERS SENT IN 005-logs to aging - the first pass over their search DB (20,416
-    entries: 19,257 resolved / 69 multi / 62 off-primary / 1,028 not_in_source, of which 1,012 have
-    no Ensembl dbReference in the XML and 16 do - UniProt/Ensembl drift). Produced by an ad-hoc
-    scratchpad run, NOT committed code. The XML reader must reproduce them and
-    tests/test_reported_claims.py must pin them.
+    OPEN a `go` channel directly (dataRepo 009 §7): our branch is stacked on their #1336 and uses its
+    idiom in the same class. Concrete content: the stack, and a request to warn before force-pushing.
   - >-
     DECIDE (orthology source of record). Ensembl Compara primary is the working assumption;
     decide how NCBI Orthologs / Alliance / HCOP support is stored alongside without merging
@@ -277,25 +280,6 @@ gaps:
     verbatim. Every unresolved outcome carries its class, including "contaminant, not mapped",
     "resolves only to ALT/patch" and the four refusal classes. Carry info_type per resolved row -
     DIRECT is an assertion, SEQUENCE_MATCH and INFERRED_PAIR are not.
-  - >-
-    AWAITING dataRepo (REQ-DATAREPO-7). The distinct-ENSG-per-accession distribution over THEIR
-    20,022 accessions as recorded in the search XML. Our prediction is on the record in 007-logs:
-    ~99%, not the 93% we first (wrongly) reported. If their number is materially worse, the most
-    likely cause is that UniProt's XML dbReferences include haplotype-scaffold genes exactly as
-    Ensembl's xref dump does - i.e. THEY HAVE OUR TRAP - and any count over that field needs the
-    same primary-assembly restriction. That is now the specific thing worth checking.
-  - >-
-    AWAITING dataRepo (REQ-DATAREPO-4). Is the search database FILE retained anywhere durable, or
-    is the sha256 the only surviving trace? A sha proves identity but does not let anyone re-read
-    the bytes, and a UniProt release is not reconstructible by name. This decides whether our
-    output is RE-DERIVABLE (file available, resolution recomputable and auditable) or IS THE ONLY
-    RECORD (file gone, our output is the evidence and must stand alone). Different durability
-    requirements - settle it before the schema, not after.
-  - >-
-    AWAITING dataRepo (REQ-DATAREPO-5/6). Are we a blocker or an improvement - what do they do if
-    logs never ships? And do they want the mzLib accession->gene half on its own, ahead of the
-    store? The first decides narrow-and-early vs complete-and-durable and is the single answer
-    that most changes what we build next.
   - >-
     "GENERIC" IS STILL UNFALSIFIED. Every requirement we hold comes from one consumer and one
     corpus. Stated openly to dataRepo in 005-logs §2.3, no ask attached. Either find a second

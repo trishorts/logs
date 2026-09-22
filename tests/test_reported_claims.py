@@ -146,6 +146,24 @@ def test_histones_are_the_multi_gene_story():
     assert by_acc.get("P62807") == 5, "histone H2B"
 
 
+def _search_db() -> dict:
+    return json.loads((RESULTS / "search_db_resolution.json").read_text(encoding="utf-8"))
+
+
+def test_search_db_first_pass_as_sent_to_aging_in_005():
+    """005-logs §1: every entry of the human search database, resolved against Ensembl 116's xref.
+
+    Produced by an ad-hoc run when sent; now re-derived from committed code (tools/ResolveSearchDb +
+    logs_orthology.search_db).
+    """
+    s = _search_db()
+    assert s["search_database_sha256"] == "760984e8d402ade6b1105b811532bdd4041e33e66bb5dc204402d4d6a7be8838"
+    assert s["base_entries"] == 20416
+    assert s["xref_view"] == {"resolved": 19257, "multi_gene": 69, "off_primary_only": 62, "not_in_source": 1028}
+    assert s["not_in_source_in_both"] == 1012, "005 §1: no Ensembl link in UniProt's own entry either"
+    assert s["xref_not_in_source_but_xml_resolves"] == 16, "005 §1: UniProt 2026_09 / Ensembl 116 drift"
+
+
 def test_file_partition_as_sent_in_006():
     """Every human<->mouse orthology lives in the mouse dump; the human dump has none."""
     attrib = _cardinality()["orthology_by_source_file"]

@@ -1,0 +1,35 @@
+{
+  "source_table": "search_db_human_e116.tsv",
+  "search_database_sha256": "760984e8d402ade6b1105b811532bdd4041e33e66bb5dc204402d4d6a7be8838",
+  "gene_set": "Ensembl 116 primary-assembly GTF",
+  "generated": "2026-09-22",
+  "base_entries": 20416,
+  "sequence_variant_rows": 32337,
+  "xref_view": {
+    "not_in_source": 1028,
+    "resolved": 19257,
+    "off_primary_only": 62,
+    "multi_gene": 69
+  },
+  "xml_view": {
+    "not_in_source": 1016,
+    "resolved": 18988,
+    "off_primary_only": 62,
+    "multi_gene": 350
+  },
+  "xml_multi_gene_by_xref_agreeing_genes": {
+    "1": 281,
+    "2": 56,
+    "3": 6,
+    "5": 2,
+    "6": 1,
+    "7": 1,
+    "10": 1,
+    "12": 1,
+    "14": 1
+  },
+  "not_in_source_in_both": 1012,
+  "xref_not_in_source_but_xml_resolves": 16,
+  "parity_identical": 20412,
+  "parity_differ": 4
+}

@@ -40,3 +40,6 @@ __pycache__/
 
 # Scratch from the tests' __main__ runner
 /tests/_tmp/
+
+# Row-level search-DB resolution: regenerable with tools/ResolveSearchDb (~20 MB)
+/results/search_db_*.tsv
