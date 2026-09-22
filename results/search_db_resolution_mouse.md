@@ -15,8 +15,8 @@ The multi-gene difference is not an error in either source. UniProt links an acc
 
 | XML multi-gene accessions, by number of genes the xref agrees with | accessions |
 |---|---:|
-| 1 | 2 |
-| 2 | 91 |
+| 1 | 1 |
+| 2 | 92 |
 | 3 | 10 |
 | 4 | 8 |
 | 6 | 1 |
@@ -27,4 +27,4 @@ The multi-gene difference is not an error in either source. UniProt links an acc
 
 No gene id in either source: **1,640**. No xref gene but the XML links one (UniProt/Ensembl drift): **20**. The reverse, the xref resolves an entry whose XML links no gene in the set: **39**.
 
-**Parity:** for 17,237 of 17,277 base entries, the genes the xref agrees with are exactly the genes `resolve.py` finds; of the 40 others, 39 are entries whose XML carries no Ensembl link at all and the rest disagree on the genes themselves.
+**Parity:** for 17,277 of 17,277 base entries, the genes the xref agrees with are exactly the genes `resolve.py` finds.

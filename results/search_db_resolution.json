@@ -31,8 +31,9 @@
   },
   "not_in_source_in_both": 1012,
   "xref_not_in_source_but_xml_resolves": 16,
+  "xml_off_primary_only_but_xref_resolves": 0,
   "xml_unresolved_but_xref_resolves": 4,
-  "parity_identical": 20412,
-  "parity_differ": 4,
-  "parity_differ_xml_has_no_ensembl_link": 4
+  "parity_identical": 20416,
+  "parity_differ": 0,
+  "parity_differ_xml_has_no_ensembl_link": 0
 }

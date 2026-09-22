@@ -43,7 +43,8 @@ def summarize(cs_table: Path, species: str = "homo_sapiens") -> dict:
         for r in csv.DictReader(fh, delimiter="\t"):
             sha = sha or r["search_database_sha256"]
             if normalize(r["accession"]).namespace == "unrecognized":
-                variants += 1
+                # A proteoform's own rows, not the genes the xref adds to it.
+                variants += r["source"] != "ensembl_xref"
                 continue
             base_rows[r["accession"]].append(r)
 
@@ -77,6 +78,9 @@ def summarize(cs_table: Path, species: str = "homo_sapiens") -> dict:
         "not_in_source_in_both": both_nis,
         "xref_not_in_source_but_xml_resolves": sum(
             1 for a in base_rows if xref_outcome[a] == "not_in_source" and xml_outcome[a] in ("resolved", "multi_gene")),
+        "xml_off_primary_only_but_xref_resolves": sum(
+            1 for a in base_rows
+            if xml_outcome[a] == "off_primary_only" and xref_outcome[a] in ("resolved", "multi_gene")),
         "xml_unresolved_but_xref_resolves": sum(
             1 for a in base_rows
             if xml_outcome[a] in ("not_in_source", "off_primary_only") and xref_outcome[a] in ("resolved", "multi_gene")),
@@ -117,9 +121,10 @@ def render(s: dict) -> str:
         f"**{s['xml_unresolved_but_xref_resolves']:,}**.",
         "",
         f"**Parity:** for {s['parity_identical']:,} of {s['base_entries']:,} base entries, the genes the xref agrees "
-        f"with are exactly the genes `resolve.py` finds; " + (
-            f"the {s['parity_differ']:,} others are entries whose XML carries no Ensembl link at all."
-            if s["parity_differ_xml_has_no_ensembl_link"] == s["parity_differ"] else
+        f"with are exactly the genes `resolve.py` finds" + (
+            "." if s["parity_differ"] == 0 else
+            f"; the {s['parity_differ']:,} others are entries whose XML carries no Ensembl link at all."
+            if s["parity_differ_xml_has_no_ensembl_link"] == s["parity_differ"] else "; " +
             f"of the {s['parity_differ']:,} others, {s['parity_differ_xml_has_no_ensembl_link']:,} are entries whose "
             "XML carries no Ensembl link at all and the rest disagree on the genes themselves."),
         "",

@@ -179,6 +179,31 @@ def test_human_gene_table_as_corrected_in_012():
     assert len(lines) - len(header) - 1 == 78941, "sent in 011-logs §4"
 
 
+def _search_db_species(name: str) -> dict:
+    return json.loads((RESULTS / f"search_db_resolution{name}.json").read_text(encoding="utf-8"))
+
+
+def test_xref_filter_parity_as_corrected_in_008_to_aging():
+    """007-logs told aging the agrees==true filter recovers Ensembl's answer for 20,412 of 20,416. It
+    was unpinned. After #1338 3bb04188 added the xref-only gene rows it is 20,416; 008-logs corrected it."""
+    s = _search_db_species("")
+    assert (s["parity_identical"], s["base_entries"]) == (20416, 20416), "sent to aging in 008-logs §3"
+    assert s["xml_unresolved_but_xref_resolves"] == 4
+
+
+def test_rodent_resolution_as_sent_to_aging_in_008():
+    mouse, rat = _search_db_species("_mouse"), _search_db_species("_rat")
+    assert mouse["search_database_sha256"].startswith("fb52debf")
+    assert rat["search_database_sha256"].startswith("abf612c9")
+    assert mouse["xml_view"] == {"resolved": 15474, "multi_gene": 124, "not_in_source": 1679}
+    assert mouse["xref_view"] == {"resolved": 15494, "multi_gene": 123, "not_in_source": 1660}
+    assert rat["xml_view"] == {"resolved": 4182, "multi_gene": 45, "off_primary_only": 950, "not_in_source": 3051}
+    assert rat["xref_view"] == {"resolved": 4864, "multi_gene": 44, "not_in_source": 3320}
+    assert (mouse["xml_unresolved_but_xref_resolves"], rat["xml_unresolved_but_xref_resolves"]) == (39, 725)
+    assert rat["xml_off_primary_only_but_xref_resolves"] == 521, "008-logs §4"
+    assert (mouse["parity_identical"], rat["parity_identical"]) == (17277, 8228)
+
+
 def test_file_partition_as_sent_in_006():
     """Every human<->mouse orthology lives in the mouse dump; the human dump has none."""
     attrib = _cardinality()["orthology_by_source_file"]
