@@ -1,0 +1,377 @@
+{
+  "source": "ensembl_compara",
+  "release": "116",
+  "generated": "2026-09-22",
+  "taxa": {
+    "human": 9606,
+    "mouse": 10090,
+    "rat": 10116
+  },
+  "assembly": {
+    "human": "GRCh38",
+    "mouse": "GRCm39",
+    "rat": "GRCr8"
+  },
+  "gene_sets": {
+    "human": {
+      "total": 78941,
+      "protein_coding": 20131,
+      "in_a_gene_tree": 19690
+    },
+    "mouse": {
+      "total": 78348,
+      "protein_coding": 21818,
+      "in_a_gene_tree": 22045
+    },
+    "rat": {
+      "total": 43360,
+      "protein_coding": 22016,
+      "in_a_gene_tree": 22379
+    }
+  },
+  "homology_rows_in_scope": 1001934,
+  "distinct_homologies": 1001934,
+  "duplicate_rows_across_files": 0,
+  "homology_type_counts": {
+    "other_paralog": 750996,
+    "within_species_paralog": 164992,
+    "ortholog_one2one": 49567,
+    "ortholog_many2many": 28897,
+    "ortholog_one2many": 7432,
+    "gene_split": 50
+  },
+  "unknown_homology_types": {},
+  "ortholog_confidence": {
+    "high": 47567,
+    "low": 38329
+  },
+  "orthology_by_source_file": {
+    "human <-> rat": {
+      "homo_sapiens": 22105
+    },
+    "human <-> mouse": {
+      "mus_musculus": 23764
+    },
+    "mouse <-> rat": {
+      "mus_musculus": 40027
+    }
+  },
+  "pairwise": {
+    "human->mouse": {
+      "eligible_genes": 20131,
+      "status": {
+        "has_ortholog": 17691,
+        "no_edge_in_shared_tree": 448,
+        "tree_lacks_target_species": 1272,
+        "not_in_any_tree": 720
+      },
+      "status_pct": {
+        "has_ortholog": 87.88,
+        "no_edge_in_shared_tree": 2.23,
+        "tree_lacks_target_species": 6.32,
+        "not_in_any_tree": 3.58
+      },
+      "relationship_type": {
+        "ortholog_one2one": 16314,
+        "ortholog_one2many": 931,
+        "ortholog_many2many": 446
+      },
+      "distinct_partners": {
+        "1": 16855,
+        "2": 416,
+        "3": 122,
+        "4": 70,
+        "5": 42,
+        "6": 21,
+        "7": 22,
+        "8": 19,
+        "9": 10,
+        "10": 14,
+        "11": 4,
+        "12": 4,
+        "13": 10,
+        "14": 15,
+        "15": 1,
+        "16": 2,
+        "17": 3,
+        "18": 4,
+        "19": 2,
+        "22": 1,
+        "23": 17,
+        "25": 1,
+        "26": 1,
+        "27": 3,
+        "28": 6,
+        "35": 2,
+        "54": 1,
+        "87": 22,
+        "105": 1
+      },
+      "confidence": {
+        "high": 16130,
+        "low": 1216,
+        "mixed": 345
+      }
+    },
+    "human->rat": {
+      "eligible_genes": 20131,
+      "status": {
+        "has_ortholog": 17390,
+        "no_edge_in_shared_tree": 529,
+        "tree_lacks_target_species": 1492,
+        "not_in_any_tree": 720
+      },
+      "status_pct": {
+        "has_ortholog": 86.38,
+        "no_edge_in_shared_tree": 2.63,
+        "tree_lacks_target_species": 7.41,
+        "not_in_any_tree": 3.58
+      },
+      "relationship_type": {
+        "ortholog_one2one": 15832,
+        "ortholog_one2many": 1183,
+        "ortholog_many2many": 375
+      },
+      "distinct_partners": {
+        "1": 16389,
+        "2": 563,
+        "3": 167,
+        "4": 80,
+        "5": 39,
+        "6": 19,
+        "7": 19,
+        "8": 13,
+        "9": 8,
+        "10": 9,
+        "11": 5,
+        "12": 8,
+        "13": 23,
+        "15": 2,
+        "16": 2,
+        "18": 14,
+        "19": 1,
+        "21": 1,
+        "22": 1,
+        "23": 3,
+        "28": 1,
+        "36": 1,
+        "37": 22
+      },
+      "confidence": {
+        "high": 13866,
+        "low": 3121,
+        "mixed": 403
+      }
+    },
+    "mouse->human": {
+      "eligible_genes": 21818,
+      "status": {
+        "has_ortholog": 18646,
+        "no_edge_in_shared_tree": 1227,
+        "tree_lacks_target_species": 1687,
+        "not_in_any_tree": 258
+      },
+      "status_pct": {
+        "has_ortholog": 85.46,
+        "no_edge_in_shared_tree": 5.62,
+        "tree_lacks_target_species": 7.73,
+        "not_in_any_tree": 1.18
+      },
+      "relationship_type": {
+        "ortholog_one2one": 16314,
+        "ortholog_one2many": 1708,
+        "ortholog_many2many": 624
+      },
+      "distinct_partners": {
+        "1": 17825,
+        "2": 391,
+        "3": 124,
+        "4": 64,
+        "5": 8,
+        "6": 47,
+        "7": 6,
+        "8": 14,
+        "9": 24,
+        "10": 7,
+        "13": 14,
+        "16": 23,
+        "17": 4,
+        "19": 3,
+        "21": 4,
+        "22": 88
+      },
+      "confidence": {
+        "high": 16400,
+        "low": 2090,
+        "mixed": 156
+      }
+    },
+    "mouse->rat": {
+      "eligible_genes": 21818,
+      "status": {
+        "has_ortholog": 20198,
+        "no_edge_in_shared_tree": 748,
+        "tree_lacks_target_species": 614,
+        "not_in_any_tree": 258
+      },
+      "status_pct": {
+        "has_ortholog": 92.57,
+        "no_edge_in_shared_tree": 3.43,
+        "tree_lacks_target_species": 2.81,
+        "not_in_any_tree": 1.18
+      },
+      "relationship_type": {
+        "ortholog_one2one": 17340,
+        "ortholog_one2many": 1583,
+        "ortholog_many2many": 1275
+      },
+      "distinct_partners": {
+        "1": 18397,
+        "2": 859,
+        "3": 233,
+        "4": 201,
+        "5": 76,
+        "6": 59,
+        "7": 48,
+        "8": 23,
+        "9": 8,
+        "10": 16,
+        "11": 52,
+        "17": 14,
+        "18": 1,
+        "19": 5,
+        "20": 10,
+        "23": 2,
+        "26": 8,
+        "28": 2,
+        "41": 91,
+        "57": 53,
+        "156": 40
+      },
+      "confidence": {
+        "low": 5075,
+        "high": 14593,
+        "mixed": 530
+      }
+    },
+    "rat->human": {
+      "eligible_genes": 22016,
+      "status": {
+        "has_ortholog": 18553,
+        "no_edge_in_shared_tree": 1580,
+        "tree_lacks_target_species": 1735,
+        "not_in_any_tree": 148
+      },
+      "status_pct": {
+        "has_ortholog": 84.27,
+        "no_edge_in_shared_tree": 7.18,
+        "tree_lacks_target_species": 7.88,
+        "not_in_any_tree": 0.67
+      },
+      "relationship_type": {
+        "ortholog_one2one": 15841,
+        "ortholog_one2many": 2217,
+        "ortholog_many2many": 495
+      },
+      "distinct_partners": {
+        "1": 17869,
+        "2": 359,
+        "3": 135,
+        "4": 54,
+        "5": 10,
+        "6": 29,
+        "7": 5,
+        "8": 3,
+        "9": 11,
+        "11": 2,
+        "13": 18,
+        "16": 13,
+        "17": 2,
+        "19": 3,
+        "21": 2,
+        "22": 38
+      },
+      "confidence": {
+        "high": 14314,
+        "low": 4113,
+        "mixed": 126
+      }
+    },
+    "rat->mouse": {
+      "eligible_genes": 22016,
+      "status": {
+        "has_ortholog": 20339,
+        "no_edge_in_shared_tree": 1089,
+        "tree_lacks_target_species": 440,
+        "not_in_any_tree": 148
+      },
+      "status_pct": {
+        "has_ortholog": 92.38,
+        "no_edge_in_shared_tree": 4.95,
+        "tree_lacks_target_species": 2.0,
+        "not_in_any_tree": 0.67
+      },
+      "relationship_type": {
+        "ortholog_one2one": 17362,
+        "ortholog_one2many": 1689,
+        "ortholog_many2many": 1288
+      },
+      "distinct_partners": {
+        "1": 18732,
+        "2": 684,
+        "3": 245,
+        "4": 78,
+        "5": 76,
+        "6": 49,
+        "7": 17,
+        "8": 41,
+        "9": 17,
+        "10": 34,
+        "11": 4,
+        "12": 19,
+        "13": 2,
+        "14": 34,
+        "16": 2,
+        "17": 2,
+        "22": 13,
+        "23": 1,
+        "24": 21,
+        "28": 7,
+        "29": 2,
+        "40": 156,
+        "53": 57,
+        "79": 4,
+        "91": 41,
+        "102": 1
+      },
+      "confidence": {
+        "high": 14751,
+        "low": 5304,
+        "mixed": 284
+      }
+    }
+  },
+  "triples": {
+    "human_eligible_genes": 20131,
+    "clean_1_1_1": 15494,
+    "clean_1_1_1_pct": 76.97,
+    "one2one_to_both_rodents": 15539,
+    "one2one_to_both_but_rodents_not_one2one": 45,
+    "joint_classes": {
+      "mouse=one2one | rat=one2one": 15539,
+      "mouse=none | rat=none": 2269,
+      "mouse=one2many | rat=one2many": 649,
+      "mouse=one2one | rat=one2many": 389,
+      "mouse=one2one | rat=none": 386,
+      "mouse=many2many | rat=many2many": 302,
+      "mouse=one2many | rat=one2one": 156,
+      "mouse=none | rat=one2one": 137,
+      "mouse=many2many | rat=one2many": 116,
+      "mouse=one2many | rat=many2many": 68,
+      "mouse=one2many | rat=none": 58,
+      "mouse=none | rat=one2many": 29,
+      "mouse=many2many | rat=none": 28,
+      "mouse=none | rat=many2many": 5
+    }
+  }
+}
