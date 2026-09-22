@@ -82,7 +82,7 @@ skip_log: []
 repos: []
 
 github:
-  remote: ""
+  remote: "https://github.com/trishorts/logs"
   private: true
 
 dir_map: {}
