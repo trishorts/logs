@@ -15,7 +15,7 @@ sequence-variant proteoforms ``LoadProteinXML`` adds (``P12345_S70N``) are count
 
 Run:
     dotnet run --project tools/ResolveSearchDb -c Release -- <search.xml> <gtf.gz> <uniprot.tsv.gz> <out.tsv>
-    python -m logs_orthology.search_db <out.tsv>
+    python -m logs_orthology.search_db <out.tsv> [--species mus_musculus --out results/search_db_resolution_mouse]
 """
 
 from __future__ import annotations
@@ -35,7 +35,7 @@ from .resolve import XrefIndex, normalize, resolve
 csv.field_size_limit(10_000_000)
 
 
-def summarize(cs_table: Path) -> dict:
+def summarize(cs_table: Path, species: str = "homo_sapiens") -> dict:
     base_rows: dict[str, list[dict]] = collections.defaultdict(list)
     variants = 0
     sha = None
@@ -50,7 +50,7 @@ def summarize(cs_table: Path) -> dict:
     xml_outcome = {a: rows[0]["outcome"] for a, rows in base_rows.items()}
     agreeing = {a: {r["gene_id"] for r in rows if r["ensembl_xref_agrees"] == "true"} for a, rows in base_rows.items()}
 
-    idx = XrefIndex.from_ensembl("homo_sapiens")
+    idx = XrefIndex.from_ensembl(species)
     xref_outcome, xref_genes = {}, {}
     for a in base_rows:
         rows = resolve(idx, a)
@@ -61,8 +61,10 @@ def summarize(cs_table: Path) -> dict:
         len(agreeing[a]) for a, o in xml_outcome.items() if o == "multi_gene")
     identical = sum(1 for a in base_rows if agreeing[a] == xref_genes[a])
     both_nis = sum(1 for a in base_rows if xml_outcome[a] == xref_outcome[a] == "not_in_source")
+    differ = [a for a in base_rows if agreeing[a] != xref_genes[a]]
 
     return {
+        "species": species,
         "source_table": cs_table.name,
         "search_database_sha256": sha,
         "gene_set": f"Ensembl {sources.RELEASE} primary-assembly GTF",
@@ -75,8 +77,12 @@ def summarize(cs_table: Path) -> dict:
         "not_in_source_in_both": both_nis,
         "xref_not_in_source_but_xml_resolves": sum(
             1 for a in base_rows if xref_outcome[a] == "not_in_source" and xml_outcome[a] in ("resolved", "multi_gene")),
+        "xml_unresolved_but_xref_resolves": sum(
+            1 for a in base_rows
+            if xml_outcome[a] in ("not_in_source", "off_primary_only") and xref_outcome[a] in ("resolved", "multi_gene")),
         "parity_identical": identical,
         "parity_differ": len(base_rows) - identical,
+        "parity_differ_xml_has_no_ensembl_link": sum(1 for a in differ if xml_outcome[a] == "not_in_source"),
     }
 
 
@@ -92,7 +98,7 @@ def render(s: dict) -> str:
         f"**{s['base_entries']:,} base entries** ({s['sequence_variant_rows']:,} further rows are sequence-variant "
         "proteoforms, resolved through their entry and not counted here).",
         "",
-        "| outcome | Ensembl xref (sent in 005-logs) | search XML's own links |",
+        f"| outcome | Ensembl xref{' (sent in 005-logs)' if s.get('species', 'homo_sapiens') == 'homo_sapiens' else ''} | search XML's own links |",
         "|---|---:|---:|",
         *[f"| `{o}` | {xv.get(o, 0):,} | {mv.get(o, 0):,} |" for o in order],
         "",
@@ -106,11 +112,16 @@ def render(s: dict) -> str:
         *[f"| {k} | {v:,} |" for k, v in s["xml_multi_gene_by_xref_agreeing_genes"].items()],
         "",
         f"No gene id in either source: **{s['not_in_source_in_both']:,}**. "
-        f"No xref gene but the XML links one (UniProt/Ensembl drift): **{s['xref_not_in_source_but_xml_resolves']:,}**.",
+        f"No xref gene but the XML links one (UniProt/Ensembl drift): **{s['xref_not_in_source_but_xml_resolves']:,}**. "
+        f"The reverse, the xref resolves an entry whose XML links no gene in the set: "
+        f"**{s['xml_unresolved_but_xref_resolves']:,}**.",
         "",
         f"**Parity:** for {s['parity_identical']:,} of {s['base_entries']:,} base entries, the genes the xref agrees "
-        f"with are exactly the genes `resolve.py` finds; the {s['parity_differ']:,} others are entries whose XML "
-        "carries no Ensembl link at all.",
+        f"with are exactly the genes `resolve.py` finds; " + (
+            f"the {s['parity_differ']:,} others are entries whose XML carries no Ensembl link at all."
+            if s["parity_differ_xml_has_no_ensembl_link"] == s["parity_differ"] else
+            f"of the {s['parity_differ']:,} others, {s['parity_differ_xml_has_no_ensembl_link']:,} are entries whose "
+            "XML carries no Ensembl link at all and the rest disagree on the genes themselves."),
         "",
     ]
     return "\n".join(L)
@@ -119,9 +130,10 @@ def render(s: dict) -> str:
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("table", type=Path, help="output of tools/ResolveSearchDb")
+    ap.add_argument("--species", default="homo_sapiens", choices=sorted(sources.TAXA))
     ap.add_argument("--out", default="results/search_db_resolution")
     args = ap.parse_args(argv)
-    s = summarize(args.table)
+    s = summarize(args.table, args.species)
     stem = project_root() / args.out
     stem.with_suffix(".json").write_text(json.dumps(s, indent=2), encoding="utf-8")
     stem.with_suffix(".md").write_text(render(s), encoding="utf-8")

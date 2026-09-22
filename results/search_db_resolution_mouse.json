@@ -1,0 +1,36 @@
+{
+  "species": "mus_musculus",
+  "source_table": "search_db_mouse_e116.tsv",
+  "search_database_sha256": "fb52debf545202553ede1616c3c9f859632abbbf8dd71c2393133ca616813c37",
+  "gene_set": "Ensembl 116 primary-assembly GTF",
+  "generated": "2026-09-22",
+  "base_entries": 17277,
+  "sequence_variant_rows": 722,
+  "xref_view": {
+    "resolved": 15494,
+    "not_in_source": 1660,
+    "multi_gene": 123
+  },
+  "xml_view": {
+    "resolved": 15474,
+    "not_in_source": 1679,
+    "multi_gene": 124
+  },
+  "xml_multi_gene_by_xref_agreeing_genes": {
+    "1": 2,
+    "2": 91,
+    "3": 10,
+    "4": 8,
+    "6": 1,
+    "7": 1,
+    "8": 1,
+    "9": 9,
+    "13": 1
+  },
+  "not_in_source_in_both": 1640,
+  "xref_not_in_source_but_xml_resolves": 20,
+  "xml_unresolved_but_xref_resolves": 39,
+  "parity_identical": 17237,
+  "parity_differ": 40,
+  "parity_differ_xml_has_no_ensembl_link": 39
+}

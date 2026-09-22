@@ -1,0 +1,34 @@
+{
+  "species": "rattus_norvegicus",
+  "source_table": "search_db_rat_e116.tsv",
+  "search_database_sha256": "abf612c90f0a3c202d4e6353c5465bd22a5800990abb947d5ea9b43ad198dd89",
+  "gene_set": "Ensembl 116 primary-assembly GTF",
+  "generated": "2026-09-22",
+  "base_entries": 8228,
+  "sequence_variant_rows": 198,
+  "xref_view": {
+    "resolved": 4864,
+    "not_in_source": 3320,
+    "multi_gene": 44
+  },
+  "xml_view": {
+    "resolved": 4182,
+    "off_primary_only": 950,
+    "not_in_source": 3051,
+    "multi_gene": 45
+  },
+  "xml_multi_gene_by_xref_agreeing_genes": {
+    "0": 1,
+    "1": 9,
+    "2": 27,
+    "3": 6,
+    "4": 1,
+    "5": 1
+  },
+  "not_in_source_in_both": 2847,
+  "xref_not_in_source_but_xml_resolves": 44,
+  "xml_unresolved_but_xref_resolves": 725,
+  "parity_identical": 7479,
+  "parity_differ": 749,
+  "parity_differ_xml_has_no_ensembl_link": 204
+}

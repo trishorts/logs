@@ -25,6 +25,6 @@ The multi-gene difference is not an error in either source. UniProt links an acc
 | 12 | 1 |
 | 14 | 1 |
 
-No gene id in either source: **1,012**. No xref gene but the XML links one (UniProt/Ensembl drift): **16**.
+No gene id in either source: **1,012**. No xref gene but the XML links one (UniProt/Ensembl drift): **16**. The reverse, the xref resolves an entry whose XML links no gene in the set: **4**.
 
 **Parity:** for 20,412 of 20,416 base entries, the genes the xref agrees with are exactly the genes `resolve.py` finds; the 4 others are entries whose XML carries no Ensembl link at all.

@@ -1,4 +1,5 @@
 {
+  "species": "homo_sapiens",
   "source_table": "search_db_human_e116.tsv",
   "search_database_sha256": "760984e8d402ade6b1105b811532bdd4041e33e66bb5dc204402d4d6a7be8838",
   "gene_set": "Ensembl 116 primary-assembly GTF",
@@ -30,6 +31,8 @@
   },
   "not_in_source_in_both": 1012,
   "xref_not_in_source_but_xml_resolves": 16,
+  "xml_unresolved_but_xref_resolves": 4,
   "parity_identical": 20412,
-  "parity_differ": 4
+  "parity_differ": 4,
+  "parity_differ_xml_has_no_ensembl_link": 4
 }
