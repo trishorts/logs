@@ -107,30 +107,28 @@ Each of these cost real time today.
 
 ## Pick up at
 
-**The search-XML source for the resolver** — second half of `design/PLAN.md` step 5.
+**Port accession → gene resolution to mzLib (C#)** — `design/PLAN.md` step 5. The user moved it
+there on 2026-09-22, after an oracle pass over mzLib `smith/master @ 890036fb`.
 
-`src/logs_orthology/resolve.py` exists (2026-09-22). It gives one row per (accession, gene) with six
-typed outcomes, restricted to the primary assembly, and carries the strongest `info_type` per pair
-and `entry_accession`/`isoform` beside the verbatim accession. Today it resolves against the
-**Ensembl 116 xref**, and it reconciles exactly with `xrefs.py` on reviewed human
-(19,251 + 70 + 62 = 19,383). `tests/test_resolve.py` has 16 contracts.
-
-Next: read the ENSGs out of the search XML's `<dbReference type="Ensembl">` (in
-`<property type="gene ID">`, **versioned**). Key rows on `(accession, search_database_sha256)`, set
-`source` per row, and cross-check against the xref. Do not key on the hash until **REQ-AGING-7**
-confirms it. The local copy is `E:\CodeReview\go\data\raw\…2026_09_18.xml.gz` (decompressed
-sha `760984e8d402ade6b110…`; dataRepo only ever quoted the first 16 characters).
-
-**Owed first:** the numbers in 005-logs (20,416 entries → 19,257 / 69 / 62 / 1,028 not in source,
-of which 1,012 have no Ensembl link in UniProt either) came from a scratchpad run. The XML reader
-must reproduce them, and `test_reported_claims.py` must pin them.
-
-**Why the order changed:** `aging` 002 said compare, not pool; rodents are months away (so the
-store, step 6, is deferred); and they want resolution more than orthology.
-
-**Corrections sent today:** 008-logs to dataRepo — `NP_` is 99.58% single-gene (96.90% was
-`NP_`+`XP_` combined); `NP_` links are 76.6% `DIRECT`; isoform-suffixed accessions are 25,177, not
-35,202 (that figure was rows). The `NP_` link-quality correction also went to aging, in 005.
+- **Prototype and test oracle:** `src/logs_orthology/resolve.py` and `tests/test_resolve.py`, 16
+  contracts. It reconciles exactly with `xrefs.py` (reviewed human 19,251 + 70 + 62 = 19,383).
+- **Homes:**
+  - `Protein.EnsemblGenes` in `Proteomics/Protein`, following #1336's idiom. **Stack on or wait
+    for #1336**, which is open and needs review.
+  - Ensembl loader + resolver in `UsefulProteomicsDatabases`, as new files, with reference data kept
+    **outside** the DLL.
+  - Not in Omics.
+  - No group-TSV column until #1286/#1287 land.
+- **Owed first:** the 005-logs numbers (20,416 entries → 19,257 / 69 / 62 / 1,028) came from a
+  scratchpad run. The port must reproduce them, and `test_reported_claims.py` must pin them.
+- **aging 006 answered everything:**
+  - The hash `760984e8…` is confirmed in full, so resolution is re-derivable.
+  - Zero isoform suffixes by construction.
+  - They want a versioned table with both ENSG forms.
+  - Carry UniProt's gene name for the ~1,012 accessions with no gene id.
+  - **Rodents are about a day away, not months**, so the store (step 6) is un-deferred.
+- **Corrections sent today:** 008-logs to dataRepo (`NP_` 99.58%; `NP_` links 76.6% `DIRECT`;
+  isoform accessions 25,177, not 35,202). The `NP_` correction also went to aging in 005.
 
 Sanity-check the inputs still reproduce before changing anything:
 
@@ -168,10 +166,10 @@ python tests/test_contracts.py          # 10 contract tests
 
 | | |
 |---|---|
-| Commits | 30 |
+| Commits | 34 |
 | Sync | [`trishorts/logs`](https://github.com/trishorts/logs) |
-| Locked decisions | 23 |
-| Open gaps | 10 |
+| Locked decisions | 25 |
+| Open gaps | 8 |
 | Gate items skipped | 2 |
 
 <!-- END GENERATED -->

@@ -71,24 +71,38 @@ mzLib code:
   *resolving an accession we already hold* — which `Homo_sapiens.GRCh38.116.refseq.tsv.gz` does
   directly. If RefSeq turns out to be cheap, say so and correct the deferral.
 
-### 5. Human accession → gene resolution, in `logs` — *NEXT (reordered 2026-09-22, 002-aging → 003-logs)*
+### 5. Accession → gene resolution — *NEXT, in mzLib (C#)* (moved 2026-09-22, user)
 
-`aging` wants this **more than the orthology** (REQ-AGING-4): it replaces the producer's `Gene Name`
-column, the source of dataRepo's 182 ragged rows. It also needs no rodent data, so it can ship while
-the corpus is human-only.
+`aging` wants this **more than the orthology** (REQ-AGING-4). It replaces the producer's `Gene Name`
+column behind dataRepo's 182 ragged rows. That column is mzLib's own
+`BioPolymerGroupTsvSchema` `Gene` column: the first name per protein, `|`-joined, an empty segment
+when a protein has none, and a reader that copies `genes[0]` onto every accession when a cell is
+short.
 
-- One row per `(accession, gene)`, keyed `(accession, search_database_sha256)`, never a display
-  symbol. The symbol travels as a label beside the ENSG.
-- Restricted to the **primary assembly** against the pinned Ensembl 116 gene set. That restriction
-  needs reference data mzLib cannot hold, so **resolution lives here**; mzLib's job (step 7) is only
-  to expose the typed `dbReference`s. Any XML reader written here is a stopgap the mzLib view replaces.
-- Every outcome typed: resolved (single / multi-gene), *resolves only to ALT/patch*, *no
-  primary-assembly gene*, *contaminant, not mapped*, not in source. `info_type` on every row.
-- Canonical accession normalization as a **column beside** the verbatim accession, never a rewrite
-  (REQ-AGING-4; isoform identity is how `aging` infers proteoforms).
-- Open with `aging`: REQ-AGING-5 (do isoform suffixes exist in their data at all?) and REQ-AGING-6
-  (table vs call; versioned vs stable ENSG). Open with `dataRepo`: REQ-DATAREPO-4 (is the search
-  XML retained?) decides re-derivable vs only-record.
+**Prototype and test oracle:** `src/logs_orthology/resolve.py` plus `tests/test_resolve.py`. The C#
+must reproduce the reference output (reviewed human 19,251 / 70 / 62) and every contract.
+
+Homes (oracle, `smith/master @ 890036fb`):
+
+- **`Protein.EnsemblGenes`** — a computed view, a `const "Ensembl"` type string and a typed class
+  with `FromDatabaseReferences`, in `Proteomics/Protein`. This is the #1336 idiom exactly.
+  `SelectMany(Properties)` where type is `gene ID`, split the version off, `Distinct`, never
+  `FirstOrDefault`. **Stack on or wait for #1336** (same hunks).
+- **Ensembl gene-set/xref loader** — ADD-NEW in `UsefulProteomicsDatabases`. Files stay
+  **outside** the DLL (`ControlledVocabulary.cs:25-27`) and are pinned by release. mzLib has no
+  reference-data checksum pattern yet, so we set one.
+- **The resolver** (primary-assembly restriction, six outcomes, one row per (accession, gene),
+  `entry_accession`/`isoform` beside the verbatim accession, contaminant read **per protein**)
+  goes beside the loader and writes long-format rows with `TsvColumn<T>`/`TsvWriter`.
+- **Not in Omics** — it cannot see `DatabaseReferences`. Omics receives strings.
+- **No group-TSV column** until #1286/#1287 land. They rewrite every group and schema file.
+- **Known gap:** `<molecule id="P12345-2"/>` under an Ensembl dbReference is not parsed. The link
+  from isoform to transcript needs its own parser PR.
+
+Keyed on `(accession, search_database_sha256)` (REQ-AGING-6: a versioned table, both ENSG forms).
+The human search DB hash is confirmed (REQ-AGING-7). For the ~1,012 accessions with no gene id,
+carry UniProt's primary gene name from the pinned DB as a label; outcome stays `not_in_source`
+(REQ-AGING-8).
 
 ### 6. The store — *DEFERRED until a rodent corpus exists*
 
@@ -104,7 +118,7 @@ Keying, when it is built:
   identity percentages, verbatim.
 - Every unresolved outcome carries its class, including *contaminant, not mapped*.
 
-### 7. The mzLib contribution
+### 7. The mzLib contribution — *folded into step 5 (2026-09-22)*
 
 Follows PR #1336's merged pattern — a computed view over `DatabaseReferences`, a `const` type
 string, no parser change, no constructor parameter. **Wait for #1336 to merge first**; two

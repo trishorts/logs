@@ -8,9 +8,10 @@ This folder is a `/project`-managed research project. **You are de facto working
 - **Goal:** A generic, versioned, gene-centric cross-species orthology layer that lets any
   multi-organism proteomics project join protein identifications across species without collapsing
   one-to-many orthology.
-- **Pick up at:** **the search-XML source for the resolver** (`design/PLAN.md` step 5, second
-  half). `resolve.py` works against the Ensembl 116 xref. First reproduce and pin the 005-logs numbers,
-  which came from a scratchpad run; key on the hash only after REQ-AGING-7. See `RESUME.md`.
+- **Pick up at:** **port accession→gene resolution to mzLib (C#)** — `design/PLAN.md` step 5,
+  moved there by the user on 2026-09-22. `resolve.py` is the prototype and test oracle. Gated on
+  #1336 (stack or wait). Note also aging 006: rodents are ~a day away, so the store is un-deferred.
+  See `RESUME.md`.
 
 **The name:** `logs` = homologs, orthologs, paralogs, and any other -logs. Not log files.
 
@@ -33,7 +34,7 @@ This folder is a `/project`-managed research project. **You are de facto working
    a category error — it needs `SelectMany(Properties)` and a `Distinct()`.
 6. **A number sent to a partner is a contract.** `tests/test_reported_claims.py` pins every one. If
    a re-run moves it, fix the code or send a correction — never edit the expected value.
-7. **Don't start mzLib-side code until PR #1336 merges.** It establishes the
+7. **Don't start mzLib-side code that touches `Protein.cs` until PR #1336 merges (or stack on it).** It establishes the
    typed-view-over-`DatabaseReferences` idiom; a second mechanism written independently is the
    duplication `/oracle` exists to prevent.
 
