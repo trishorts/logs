@@ -37,3 +37,6 @@ __pycache__/
 *.tsv.gz
 *.gtf.gz
 *.partial
+
+# Scratch from the tests' __main__ runner
+/tests/_tmp/
