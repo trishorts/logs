@@ -242,12 +242,21 @@ decisions:
 
 gaps:
   - >-
-    NEXT ACTION - port resolution to mzLib (PLAN step 5, now in C#). Gated on PR #1336 (OPEN,
-    review required): the Protein.EnsemblGenes view lands in the same hunks. Options: stack a
-    branch on feat/go-terms-accessor, or start the UsefulProteomicsDatabases loader (new files, no
-    #1336 overlap) first. Must reproduce resolve.py's reference output and 16 contracts. Known
-    gap: <molecule id="P12345-2"/> under an Ensembl dbReference is not parsed, so isoform-to-transcript
-    needs its own parser PR.
+    DECIDE (multi-gene semantics, blocks pinning and the aging table). The C# port runs on the real
+    search DB (branch feat/ensembl-gene-resolution, stacked on #1336, pushed to trishorts). Base
+    entries 20,416: the two sources AGREE on 1,012 not_in_source, 62 off_primary_only, 69 core
+    multi_gene, and the 16 UniProt/Ensembl drift cases. They DISAGREE on 281 accessions (+4 reverse):
+    UniProt's XML links an accession to every Ensembl transcript encoding it - readthrough genes
+    (MSH5 + MSH5-SAPCD1, TNFSF12 + TNFSF12-TNFSF13), unnamed novel protein-coding genes, identical
+    paralogs (GPR89A/B) - so XML-source multi_gene = 350 vs xref-source 69. 005-logs told aging 69
+    (provisional). Options: report the XML's links as-is; mark readthrough/secondary genes per row;
+    or intersect with the Ensembl xref. Decide, then tell aging, then pin.
+  - >-
+    NEXT (after the multi-gene decision) - finish the port: xref-table source for parity with
+    resolve.py, then pin the search-DB numbers. Slices done (TDD, 54 tests): Protein.EnsemblGeneReferences
+    (#1336 idiom), EnsemblGeneSet.LoadGtf, ProteinAccession.Parse, EnsemblGeneResolver + GeneResolutionTsv,
+    sequence-variant fix (LoadProteinXML yields 52,359 proteins from 20,416 entries; variants resolve
+    through ConsensusVariant).
   - >-
     UNPINNED NUMBERS SENT IN 005-logs to aging - the first pass over their search DB (20,416
     entries: 19,257 resolved / 69 multi / 62 off-primary / 1,028 not_in_source, of which 1,012 have
