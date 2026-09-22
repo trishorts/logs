@@ -37,6 +37,8 @@ __pycache__/
 *.tsv.gz
 *.gtf.gz
 *.partial
+# ...except the compact gene tables derived from those GTFs (~0.5 MB each; results/gene_sets/README.md).
+!/results/gene_sets/*.genes.tsv.gz
 
 # Scratch from the tests' __main__ runner
 /tests/_tmp/

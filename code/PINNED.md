@@ -2,12 +2,13 @@
 
 | worktree | repo | branch | pinned | based on | PR |
 |---|---|---|---|---|---|
-| `code/mzLib-ensembl-genes` | mzLib (`E:\GitClones\mzLib`) | `feat/ensembl-gene-resolution` (pushed to `origin` = trishorts) | `c1365ade405d4c75e47591312e750c6d1da2ed4a` | `trishorts:feat/go-terms-accessor @ 118a2ffd` (**#1336**, approved 2026-09-22) | none yet |
+| `code/mzLib-ensembl-genes` | mzLib (`E:\GitClones\mzLib`) | `feat/ensembl-gene-resolution` (pushed to `origin` = trishorts) | `34e20ca6` (local; `59cb429f` pushed) | `smith/master @ 588c2249` (#1336 merged 2026-09-22) | [#1338](https://github.com/smith-chem-wisc/mzLib/pull/1338) |
 | `code/mzLib-occupancy-nterm` | mzLib | `fix/occupancy-met-cleaved-nterm` (pushed to `origin` = trishorts) | `e3282169d4de3a2b2db8dcf7760e2da3597f509f` | `smith/master @ 890036fb` | [#1337](https://github.com/smith-chem-wisc/mzLib/pull/1337) |
 
 **`mzLib-ensembl-genes`** is the C# port of accession → gene resolution (PLAN step 5). The user moved
-it into mzLib on 2026-09-22. It has six commits on #1336, and 62 tests pass. It is **stacked**: when
-#1336 merges, rebase onto master, retarget, then open the PR. The Python prototype and test oracle
+it into mzLib on 2026-09-22. #1336 merged on 2026-09-22; the branch was rebased onto master (GO commit dropped, commits reworded
+to `type(scope):`) and opened as #1338. A seventh commit, `34e20ca6`, adds `EnsemblGeneSetReader`/
+`EnsemblGeneSetWriter` (the compact gene table, `results/gene_sets/`); 72 Ensembl/accession tests pass. The Python prototype and test oracle
 are `src/logs_orthology/resolve.py` + `tests/test_resolve.py`. `tools/ResolveSearchDb` builds against
 this worktree by relative path.
 

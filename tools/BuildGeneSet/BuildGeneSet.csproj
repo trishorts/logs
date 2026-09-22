@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Writes the compact gene table of an Ensembl GTF with mzLib (code/mzLib-ensembl-genes, see code/PINNED.md). -->
+  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><Nullable>disable</Nullable></PropertyGroup>
+  <ItemGroup><ProjectReference Include="..\..\code\mzLib-ensembl-genes\mzLib\UsefulProteomicsDatabases\UsefulProteomicsDatabases.csproj" /></ItemGroup>
+</Project>
