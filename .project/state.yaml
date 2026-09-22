@@ -1,0 +1,38 @@
+name: logs
+created: 2026-09-22
+phase: INCEPTION
+
+goal: >
+  Build a generic, versioned, gene-centric cross-species orthology layer that lets any
+  multi-organism proteomics project join protein identifications across species (human,
+  mouse, rat, and beyond) without collapsing one-to-many orthology or discarding
+  accession-, gene-, and orthogroup-level resolution.
+
+decisions:
+  - date: 2026-09-22
+    text: >-
+      Name is "logs" - the project covers homologs, orthologs, paralogs and any other
+      -logs. Peers address us as `logs`; question-ID prefix is LOGS-.
+  - date: 2026-09-22
+    text: >-
+      Scope is GENERIC engineering, not a single study. It must serve any large
+      multi-organism proteomics project; `aging` is the first consumer, not the design driver.
+
+gaps:
+  - Decide the implementation home - mzLib (C# library, reaches MetaMorpheus/FlashLFQ) vs a
+    standalone service/DB vs a dataRepo-owned component. Run /oracle mzLib before writing code.
+  - Decide orthology source of record (Ensembl Compara primary) and how NCBI/HCOP support is stored.
+  - Decide the seam with dataRepo - does dataRepo own accession resolution, or do we?
+  - Confirm species set beyond human/mouse/rat (MVP taxa 9606 / 10090 / 10116).
+
+skip_log: []
+
+repos: []
+
+github:
+  remote: ""
+  private: true
+
+dir_map: {}
+
+normalizations: []
