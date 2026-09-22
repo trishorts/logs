@@ -94,9 +94,9 @@ cross-references were present at search time and v1 is mostly reading them back.
 
 | | |
 |---|---|
-| Commits | 14 |
+| Commits | 15 |
 | Sync | [`trishorts/logs`](https://github.com/trishorts/logs) |
-| Locked decisions | 14 |
+| Locked decisions | 17 |
 | Open gaps | 5 |
 
 > **1 document(s) in `design/` not referenced above** -- `PLAN.md`. Add a line for each, or say why not.

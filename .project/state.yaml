@@ -42,6 +42,31 @@ decisions:
       their age_effect_meta would otherwise silently mix two memberships (002-logs §3.2).
   - date: 2026-09-22
     text: >-
+      MEASURED (Compara 116, results/cardinality.md, posted as 006-logs). 76.97% of human
+      protein-coding genes are a clean 1:1:1 across 9606/10090/10116. 45 more are one2one to both
+      rodents while the rodents are NOT one2one with each other - clean from every pairwise angle,
+      not clean as a set. 2,269 human genes (11.3%) have no ortholog in either rodent. Mouse-rat
+      is the easy join at 92.57%; anything crossing to human is not. Design for 77%, not 95%.
+  - date: 2026-09-22
+    text: >-
+      CORRECTION to 004-logs §5. Compara CANNOT separate "no ortholog exists" from "no ortholog in
+      this release" - both are an absent edge and nothing says which. Refusal is decomposed
+      instead by HOW FAR THE INFERENCE GOT: no_edge_in_shared_tree (tree contains target-species
+      genes, no edge called), tree_lacks_target_species (nothing to compare against),
+      not_in_any_tree (no call attempted), not_in_gene_set (zero for us, NON-ZERO FOR dataRepo
+      since they supply external gene ids). Also: the "source declines to type it" class is EMPTY
+      in release 116 - every between-species ortholog is qualified, 55% high / 45% low. Kept the
+      code path and the test, because the guarantee is "empty in this release", not "impossible".
+  - date: 2026-09-22
+    text: >-
+      TRAP, measured and now part of the reproducible pass. Ensembl's genome-specific Compara
+      dumps do not overlap - they PARTITION, and each species pair lives entirely in ONE file,
+      not the obvious one. ALL 23,764 human-mouse orthologies are in the MOUSE file; the human
+      file has zero. The rat file has zero in-scope pairs at all. Downloading the file named after
+      your species yields a complete-LOOKING result missing 100% of human-mouse. Caught only by
+      reading the provider README before the data - now a standing rule (design/PLAN.md).
+  - date: 2026-09-22
+    text: >-
       IMPLEMENTATION HOME - LOCKED (user, accepting the oracle's split; evidence design/ORACLE.md).
       The project does not land in one place, it splits three ways.
       (a) Accession -> source gene EXTENDS mzLib: computed views over Protein.DatabaseReferences
@@ -134,11 +159,12 @@ gaps:
     if it is ~10%, it is a first-class shape and the store is keyed differently. Do not guess -
     wait for the number.
   - >-
-    OWED to dataRepo (REQ-LOGS-4 + REQ-LOGS-6, both open). Pull Compara for 9606/10090/10116 and
-    report: the clean joint cardinality classes, pairwise AND as triples (1:1 human-mouse plus 1:1
-    human-rat does not imply a clean triple), PLUS the four refusal classes. dataRepo needs the
-    refusal classes more than the 1:1:1 count - they decide whether age_effect_meta can honestly
-    carry a cross-species row or must refuse it. Measured, never estimated.
+    NEXT (accession -> gene). Measure the distinct-ENSG-per-accession distribution against the
+    fetched Ensembl xref dumps, independently of dataRepo's measurement against the search XML.
+    If the two disagree that is a finding about which source to trust. Then re-measure the RefSeq
+    claim: we deferred RefSeq to v3 because mzLib parses no NP_/XP_ FASTA header, but that is
+    about PARSING A HEADER and does not apply to RESOLVING AN ACCESSION WE ALREADY HOLD, which
+    Homo_sapiens.GRCh38.116.refseq.tsv.gz does directly. Correct the deferral if it is wrong.
   - >-
     AWAITING dataRepo (REQ-DATAREPO-4). Is the search database FILE retained anywhere durable, or
     is the sha256 the only surviving trace? A sha proves identity but does not let anyone re-read

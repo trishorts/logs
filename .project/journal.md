@@ -29,3 +29,9 @@ Append-only. One line per phase change, locked decision, or consciously-skipped 
   (blocker vs improvement; do they want the mzLib half early; "generic" is unfalsified), and
   opened the aging channel (001-logs) - our first consumer, whom we had only heard through
   dataRepo. Rule added to CLAUDE.md so it governs the next session.
+- 2026-09-22 - BUILD begins. Fetched and verified 16 pinned Ensembl 116 files (673 MB, 15 of 16
+  checksum-verified). Measured REQ-LOGS-4/6 and posted 006-logs: 76.97% clean 1:1:1, 45 genes
+  clean pairwise but not as a triple, 2,269 human genes with no rodent ortholog at all. Corrected
+  two of the four refusal classes we had promised - one underivable from Compara, one empty in
+  this release. Found and made reproducible the file-partition trap (all human-mouse orthologies
+  live in the MOUSE dump; the human dump has none). 8/8 contract tests green.
