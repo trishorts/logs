@@ -107,8 +107,33 @@ def test_refseq_retraction_as_sent_in_007():
     assert hr["genes_per_protein_accession_pct"]["1"] == 96.897
 
 
-def test_isoform_suffix_count_as_sent_in_007():
-    assert _xrefs()["species"]["human"]["uniprot"]["isoform_suffixed_accessions"] == 35202
+def test_isoform_suffix_count_as_corrected_in_008():
+    """007-logs §4 sent 35,202 as ACCESSIONS; it was xref ROWS. Corrected in 008-logs §3."""
+    hu = _xrefs()["species"]["human"]["uniprot"]
+    assert hu["isoform_suffixed_accessions"] == 25177, "008-logs §3"
+    assert hu["isoform_suffixed_rows"] == 35202, "the number 007-logs sent, under its true name"
+
+
+def test_refseq_np_rate_as_corrected_in_008():
+    """007 quoted the NP_+XP_ rate beside the NP_ count. Split in 008-logs §1."""
+    hr = _xrefs()["species"]["human"]["refseq"]
+    assert hr["genes_per_np_accession_pct"]["1"] == 99.579, "008-logs §1: NP_ 99.58%"
+    assert hr["genes_per_np_accession"]["1"] == 69276
+    assert hr["genes_per_xp_accession_pct"]["1"] == 94.867, "008-logs §1: XP_ 94.87%"
+    assert hr["genes_per_protein_accession_pct"]["1"] == 96.897, "007 §3 table, combined"
+
+
+def test_refseq_link_quality_as_corrected_in_008():
+    """Mostly-inferred is true of XP_, false of NP_ (008-logs §2; also said to aging in 003)."""
+    hr = _xrefs()["species"]["human"]["refseq"]
+    assert hr["info_type_np"] == {"DIRECT": 60727, "INFERRED_PAIR": 17987, "SEQUENCE_MATCH": 582}
+    assert hr["info_type_xp"]["DIRECT"] == 24884
+
+
+def test_reviewed_off_primary_only_as_sent_in_007_and_003():
+    """62 reviewed human accessions resolve to no primary-assembly gene (007 §2; aging 003)."""
+    hu = _xrefs()["species"]["human"]["uniprot"]
+    assert hu["reviewed_resolving_to_nothing"] == 62
 
 
 def test_histones_are_the_multi_gene_story():

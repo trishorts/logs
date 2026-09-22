@@ -72,14 +72,27 @@ is exactly the one a sampled test set will miss.
 
 ## 2 · RefSeq
 
-| species | RefSeq protein accessions | `NP_` curated | `XP_` predicted | % → exactly one gene |
-|---|---:|---:|---:|---:|
-| human | 161,484 | 69,569 | 91,915 | **96.90%** |
-| mouse | 94,258 | 49,218 | 45,040 | **99.96%** |
-| rat | 78,259 | 24,255 | 54,004 | **99.96%** |
+| species | RefSeq protein accessions | `NP_` curated | `NP_` → one gene | `XP_` predicted | `XP_` → one gene | combined → one gene |
+|---|---:|---:|---:|---:|---:|---:|
+| human | 161,484 | 69,569 | **99.58%** | 91,915 | 94.87% | 96.90% |
+| mouse | 94,258 | 49,218 | **99.96%** | 45,040 | 99.96% | 99.96% |
+| rat | 78,259 | 24,255 | **99.94%** | 54,004 | 99.97% | 99.96% |
 
 `NP_` is curated and `XP_` is model-predicted. They are not the same quality of evidence
-and are counted apart so a resolution rate cannot be inflated by predictions.
+and are counted apart so a resolution rate cannot be inflated -- or deflated -- by
+predictions. **Correction (008-logs):** 007-logs quoted the combined human rate, 96.90%,
+against the `NP_` count as though it were the curated rate. It is not; see the `NP_` column.
+
+How each link was made, by accession class (xref rows, i.e. per transcript):
+
+| species | class | DIRECT | SEQUENCE_MATCH | INFERRED_PAIR |
+|---|---|---:|---:|---:|
+| human | `NP_` | 60,727 | 582 | 17,987 |
+| human | `XP_` | 24,884 | 98,567 | 53,562 |
+| mouse | `NP_` | 39,176 | 2,569 | 9,225 |
+| mouse | `XP_` | 17,751 | 222 | 27,246 |
+| rat | `NP_` | 14,412 | 3,980 | 7,276 |
+| rat | `XP_` | 21,052 | 50 | 32,937 |
 
 ## 3 · NCBI GeneID
 
@@ -91,11 +104,14 @@ and are counted apart so a resolution rate cannot be inflated by predictions.
 
 ## 4 · Isoform suffixes
 
-| species | accessions with an isoform suffix (`P12345-2`) |
-|---|---:|
-| human | 35,202 |
-| mouse | 10,215 |
-| rat | 794 |
+| species | distinct accessions with an isoform suffix (`P12345-2`) | xref rows |
+|---|---:|---:|
+| human | **25,177** | 35,202 |
+| mouse | **8,667** | 10,215 |
+| rat | **778** | 794 |
+
+**Correction (008-logs):** 007-logs reported the row count (one row per transcript) as
+the accession count.
 
 `dataRepo` measured zero isoform-suffixed accessions in their corpus. Whether this
 reference contains any at all says whether that zero is a property of their corpus or of

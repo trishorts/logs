@@ -10,7 +10,8 @@
         "distinct_genes": 20401,
         "reviewed_accessions": 19383,
         "unreviewed_accessions": 91902,
-        "isoform_suffixed_accessions": 35202,
+        "isoform_suffixed_accessions": 25177,
+        "isoform_suffixed_rows": 35202,
         "info_type": {
           "DIRECT": 159011,
           "SEQUENCE_MATCH": 17844
@@ -135,6 +136,44 @@
           "2": 0.138,
           "3": 0.006,
           "4+": 0.013
+        },
+        "genes_per_np_accession": {
+          "0": 153,
+          "1": 69276,
+          "2": 125,
+          "3": 8,
+          "4+": 7
+        },
+        "genes_per_np_accession_pct": {
+          "0": 0.22,
+          "1": 99.579,
+          "2": 0.18,
+          "3": 0.011,
+          "4+": 0.01
+        },
+        "genes_per_xp_accession": {
+          "0": 4605,
+          "1": 87197,
+          "2": 98,
+          "3": 1,
+          "4+": 14
+        },
+        "genes_per_xp_accession_pct": {
+          "0": 5.01,
+          "1": 94.867,
+          "2": 0.107,
+          "3": 0.001,
+          "4+": 0.015
+        },
+        "info_type_np": {
+          "DIRECT": 60727,
+          "INFERRED_PAIR": 17987,
+          "SEQUENCE_MATCH": 582
+        },
+        "info_type_xp": {
+          "SEQUENCE_MATCH": 98567,
+          "INFERRED_PAIR": 53562,
+          "DIRECT": 24884
         }
       },
       "entrez": {
@@ -162,7 +201,8 @@
         "distinct_genes": 22161,
         "reviewed_accessions": 15579,
         "unreviewed_accessions": 49602,
-        "isoform_suffixed_accessions": 10215,
+        "isoform_suffixed_accessions": 8667,
+        "isoform_suffixed_rows": 10215,
         "info_type": {
           "DIRECT": 76806,
           "SEQUENCE_MATCH": 10936
@@ -287,6 +327,44 @@
           "2": 0.032,
           "3": 0.003,
           "4+": 0.005
+        },
+        "genes_per_np_accession": {
+          "0": 0,
+          "1": 49198,
+          "2": 18,
+          "3": 2,
+          "4+": 0
+        },
+        "genes_per_np_accession_pct": {
+          "0": 0.0,
+          "1": 99.959,
+          "2": 0.037,
+          "3": 0.004,
+          "4+": 0.0
+        },
+        "genes_per_xp_accession": {
+          "0": 0,
+          "1": 45022,
+          "2": 12,
+          "3": 1,
+          "4+": 5
+        },
+        "genes_per_xp_accession_pct": {
+          "0": 0.0,
+          "1": 99.96,
+          "2": 0.027,
+          "3": 0.002,
+          "4+": 0.011
+        },
+        "info_type_np": {
+          "DIRECT": 39176,
+          "INFERRED_PAIR": 9225,
+          "SEQUENCE_MATCH": 2569
+        },
+        "info_type_xp": {
+          "INFERRED_PAIR": 27246,
+          "DIRECT": 17751,
+          "SEQUENCE_MATCH": 222
         }
       },
       "entrez": {
@@ -314,7 +392,8 @@
         "distinct_genes": 21050,
         "reviewed_accessions": 4896,
         "unreviewed_accessions": 43767,
-        "isoform_suffixed_accessions": 794,
+        "isoform_suffixed_accessions": 778,
+        "isoform_suffixed_rows": 794,
         "info_type": {
           "DIRECT": 38263,
           "SEQUENCE_MATCH": 13688
@@ -439,6 +518,44 @@
           "2": 0.019,
           "3": 0.01,
           "4+": 0.01
+        },
+        "genes_per_np_accession": {
+          "0": 0,
+          "1": 24241,
+          "2": 4,
+          "3": 4,
+          "4+": 6
+        },
+        "genes_per_np_accession_pct": {
+          "0": 0.0,
+          "1": 99.942,
+          "2": 0.016,
+          "3": 0.016,
+          "4+": 0.025
+        },
+        "genes_per_xp_accession": {
+          "0": 0,
+          "1": 53987,
+          "2": 11,
+          "3": 4,
+          "4+": 2
+        },
+        "genes_per_xp_accession_pct": {
+          "0": 0.0,
+          "1": 99.969,
+          "2": 0.02,
+          "3": 0.007,
+          "4+": 0.004
+        },
+        "info_type_np": {
+          "DIRECT": 14412,
+          "INFERRED_PAIR": 7276,
+          "SEQUENCE_MATCH": 3980
+        },
+        "info_type_xp": {
+          "INFERRED_PAIR": 32937,
+          "DIRECT": 21052,
+          "SEQUENCE_MATCH": 50
         }
       },
       "entrez": {

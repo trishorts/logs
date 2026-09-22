@@ -199,6 +199,14 @@ decisions:
       stopgap it replaces. Also confirmed by aging: COMPARE not pool, no conservative-by-default
       product (they own that filter), four refusal outcomes carried. Isoform normalization stays
       in scope as a column beside the verbatim accession, never a rewrite.
+  - date: 2026-09-22
+    text: >-
+      CORRECTED 007-logs in 008-logs - three errors, one cause (pooling NP_ with XP_, and counting
+      xref ROWS as accessions; the dumps are per transcript). (1) Curated human NP_ is 99.58%
+      single-gene, not 96.9% - 96.90% is NP_+XP_ combined. (2) "RefSeq links mostly not assertions"
+      holds for XP_ (14.1% DIRECT) but NOT NP_ (76.6% DIRECT). (3) 25,177 isoform-suffixed human
+      accessions, not 35,202 (rows). Found while building the resolver. Claim (2) also reached aging
+      in 003-logs and is owed a correction there. Pinned in tests/test_reported_claims.py.
 
 gaps:
   - >-
@@ -207,6 +215,9 @@ gaps:
     against Ensembl 116, every outcome typed, info_type per row, normalized accession as a column
     beside the verbatim one. First decision: read the search XML's dbReferences (needs the file -
     REQ-DATAREPO-4) or the Ensembl 116 uniprot xref (on disk) - ideally both, cross-checked.
+  - >-
+    OWE aging a correction to 003-logs: "for RefSeq most links are inferences" is true only of XP_;
+    curated NP_ is 76.6% DIRECT (see 008-logs to dataRepo). Fold into the next aging message.
   - >-
     AWAITING aging (REQ-AGING-5/6, asked in 003-logs). 5: dataRepo measured ZERO isoform-suffixed
     accessions yet aging says they keep suffixes verbatim - our hypothesis is a canonical-only

@@ -103,7 +103,8 @@ def measure_uniprot(species: str, primary: set[str]) -> dict:
     raw_by_acc: dict[str, set[str]] = defaultdict(set)
     db_of_acc: dict[str, set[str]] = defaultdict(set)
     info_types: Counter[str] = Counter()
-    isoforms = 0
+    isoform_rows = 0
+    isoform_accs: set[str] = set()
     rows = 0
     off_primary_genes: set[str] = set()
 
@@ -118,7 +119,8 @@ def measure_uniprot(species: str, primary: set[str]) -> dict:
         db_of_acc[acc].add(r["db_name"])
         info_types[r["info_type"]] += 1
         if RE_ISOFORM.match(acc):
-            isoforms += 1
+            isoform_rows += 1
+            isoform_accs.add(acc)
 
     # Accessions that exist only off the primary assembly resolve to nothing here. That is a real
     # outcome and gets its own count rather than quietly becoming a "1".
@@ -137,7 +139,11 @@ def measure_uniprot(species: str, primary: set[str]) -> dict:
         "distinct_genes": len({g for gs in genes_by_acc.values() for g in gs}),
         "reviewed_accessions": len(reviewed),
         "unreviewed_accessions": total - len(reviewed),
-        "isoform_suffixed_accessions": isoforms,
+        # DISTINCT accessions. Until 2026-09-22 this key held the ROW count (one row per
+        # transcript), and 007-logs reported that row count as accessions: 35,202 rows is 25,177
+        # accessions. Corrected in 008-logs; the row count is kept under its own, honest name.
+        "isoform_suffixed_accessions": len(isoform_accs),
+        "isoform_suffixed_rows": isoform_rows,
         "info_type": dict(info_types.most_common()),
         "genes_per_accession": dist_all,
         "genes_per_accession_pct": {k: round(100 * v / total, 3) for k, v in dist_all.items()}
@@ -188,6 +194,18 @@ def measure_refseq(species: str, primary: set[str]) -> dict:
             (np_acc if RE_NP.match(acc) else xp_acc).add(acc)
 
     dist = _dist(protein_acc)
+    # NP_ and XP_ separately. 007-logs quoted the COMBINED single-gene rate (96.90%) against the
+    # NP_ count, as if it were the curated rate; curated NP_ alone is far cleaner. The combined
+    # figure stays because it is what the table in 007 actually showed.
+    dist_np = _dist({a: g for a, g in protein_acc.items() if a in np_acc})
+    dist_xp = _dist({a: g for a, g in protein_acc.items() if a in xp_acc})
+    info_np: Counter[str] = Counter()
+    info_xp: Counter[str] = Counter()
+    for r in iter_xref(species, "refseq"):
+        if RE_NP.match(r["xref"]):
+            info_np[r["info_type"]] += 1
+        elif RE_XP.match(r["xref"]):
+            info_xp[r["info_type"]] += 1
     return {
         "db_name_rows": dict(db_names.most_common()),
         "distinct_accessions_all": len(genes_by_acc),
@@ -199,6 +217,16 @@ def measure_refseq(species: str, primary: set[str]) -> dict:
         "genes_per_protein_accession_pct": {
             k: round(100 * v / len(protein_acc), 3) for k, v in dist.items()
         } if protein_acc else {},
+        "genes_per_np_accession": dist_np,
+        "genes_per_np_accession_pct": {
+            k: round(100 * v / len(np_acc), 3) for k, v in dist_np.items()
+        } if np_acc else {},
+        "genes_per_xp_accession": dist_xp,
+        "genes_per_xp_accession_pct": {
+            k: round(100 * v / len(xp_acc), 3) for k, v in dist_xp.items()
+        } if xp_acc else {},
+        "info_type_np": dict(info_np.most_common()),
+        "info_type_xp": dict(info_xp.most_common()),
     }
 
 
@@ -332,15 +360,31 @@ def render(r: dict) -> str:
     a("")
     a("## 2 · RefSeq")
     a("")
-    a("| species | RefSeq protein accessions | `NP_` curated | `XP_` predicted | % → exactly one gene |")
-    a("|---|---:|---:|---:|---:|")
+    a("| species | RefSeq protein accessions | `NP_` curated | `NP_` → one gene | `XP_` predicted "
+      "| `XP_` → one gene | combined → one gene |")
+    a("|---|---:|---:|---:|---:|---:|---:|")
     for sp, d in r["species"].items():
         f = d["refseq"]
-        a(f"| {sp} | {f['protein_accessions']:,} | {f['np_curated']:,} | {f['xp_predicted']:,} | "
-          f"**{f['genes_per_protein_accession_pct'].get('1', 0):.2f}%** |")
+        a(f"| {sp} | {f['protein_accessions']:,} | {f['np_curated']:,} | "
+          f"**{f['genes_per_np_accession_pct'].get('1', 0):.2f}%** | {f['xp_predicted']:,} | "
+          f"{f['genes_per_xp_accession_pct'].get('1', 0):.2f}% | "
+          f"{f['genes_per_protein_accession_pct'].get('1', 0):.2f}% |")
     a("")
     a("`NP_` is curated and `XP_` is model-predicted. They are not the same quality of evidence")
-    a("and are counted apart so a resolution rate cannot be inflated by predictions.")
+    a("and are counted apart so a resolution rate cannot be inflated -- or deflated -- by")
+    a("predictions. **Correction (008-logs):** 007-logs quoted the combined human rate, 96.90%,")
+    a("against the `NP_` count as though it were the curated rate. It is not; see the `NP_` column.")
+    a("")
+    a("How each link was made, by accession class (xref rows, i.e. per transcript):")
+    a("")
+    a("| species | class | " + " | ".join(("DIRECT", "SEQUENCE_MATCH", "INFERRED_PAIR")) + " |")
+    a("|---|---|---:|---:|---:|")
+    for sp, d in r["species"].items():
+        f = d["refseq"]
+        for cls, key in (("`NP_`", "info_type_np"), ("`XP_`", "info_type_xp")):
+            c = f.get(key, {})
+            a(f"| {sp} | {cls} | " + " | ".join(f"{c.get(t, 0):,}" for t in
+                                              ("DIRECT", "SEQUENCE_MATCH", "INFERRED_PAIR")) + " |")
     a("")
 
     a("## 3 · NCBI GeneID")
@@ -355,10 +399,14 @@ def render(r: dict) -> str:
 
     a("## 4 · Isoform suffixes")
     a("")
-    a("| species | accessions with an isoform suffix (`P12345-2`) |")
-    a("|---|---:|")
+    a("| species | distinct accessions with an isoform suffix (`P12345-2`) | xref rows |")
+    a("|---|---:|---:|")
     for sp, d in r["species"].items():
-        a(f"| {sp} | {d['uniprot']['isoform_suffixed_accessions']:,} |")
+        u = d["uniprot"]
+        a(f"| {sp} | **{u['isoform_suffixed_accessions']:,}** | {u.get('isoform_suffixed_rows', 0):,} |")
+    a("")
+    a("**Correction (008-logs):** 007-logs reported the row count (one row per transcript) as")
+    a("the accession count.")
     a("")
     a("`dataRepo` measured zero isoform-suffixed accessions in their corpus. Whether this")
     a("reference contains any at all says whether that zero is a property of their corpus or of")

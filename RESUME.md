@@ -81,9 +81,9 @@ Both from pinned Ensembl 116 (`data/PROVENANCE.md`; 16 files, 673 MB, 15 of 16 c
 - Multi-gene accessions are **rare (0.36% of reviewed human) but concentrated**: all four core
   histones are in the top seven, `P62805` (H4) spanning 14 real loci. A sub-1% rate landing on
   proteins abundant in every run — a sampled test set will miss it.
-- **RefSeq is not deferred.** 69,569 curated human `NP_` accessions, 96.9% single-gene, from a 4 MB
-  file already on disk. But its links are mostly `SEQUENCE_MATCH`/`INFERRED_PAIR`, not `DIRECT` —
-  carry `info_type` per row or you report an inference as an assertion.
+- **RefSeq is not deferred.** 69,569 curated human `NP_` accessions, **99.58%** single-gene (96.90% is
+  `NP_`+`XP_` combined — corrected in 008-logs). Curated `NP_` links are 76.6% `DIRECT`; predicted
+  `XP_` are only 14.1% — carry `info_type` per row or you report an inference as an assertion.
 
 ## Things that will bite you here
 
