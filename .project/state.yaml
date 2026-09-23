@@ -290,13 +290,40 @@ decisions:
       PR HOUSE STYLE (user). mzLib PRs from a project go to smith-chem-wisc (head = trishorts fork); the
       body begins with `<!-- project-of-origin -->` then the "Project of origin" quote line; commits and
       PR title follow commit-style.md (`type(scope): summary`).
+  - date: 2026-09-23
+    text: >-
+      DELIVERY ROUTE IS (a), under the user's D24 ("dataRepo never DEFINES, but it does RUN"; dataRepo
+      014, accepted in 015-logs). dataRepo runs our RELEASED resolver through pyMzLib once per
+      (search_database_sha256, gene_set_release); we own the logic, the gene-set tables, the xref input
+      and the release choice. SUPERSEDES dataRepo 013's (b) (us delivering per database). The human
+      table stays with us as a REFERENCE OUTPUT their first run is diffed against by rows
+      (results/search_db_human_e116.tsv.gz, pinned).
+  - date: 2026-09-23
+    text: >-
+      TABLE CONTRACT as confirmed to dataRepo (015-logs). Key (search_database_sha256, gene_set_release,
+      accession, gene_id). 011 had wrongly called the column gene_stable_id; corrected. Exactly one
+      empty-gene row per no-gene accession, none otherwise; (accession, gene_id) unique without source.
+      Accessions are PROTEOFORMS (human 52,359 from 20,416 entries). Decoys never appear (the table
+      describes a target database); the contaminant database is not run (every row would be
+      contaminant_not_mapped, which the psmtsv flag already says).
 
 gaps:
   - >-
-    NEXT - how the resolution reaches dataRepo (MetaMorpheus output is SUPERSEDED, see decisions).
-    Waiting on dataRepo's answers to REQ-DATAREPO-8/9/10 (011). If they will run it: a pyMzLib bridge
-    verb after #1338 merges and ships in an mzLib release (/bridge-oracle pyMzLib first). If not: we
-    deliver the table from tools/ResolveSearchDb. dataRepo has NOT yet been told the rat finding.
+    NEXT - the route is settled ((a), see decisions); what remains, in order: (1) #1338 merges and
+    ships in an mzLib release; (2) pyMzLib builds the verb (charter seam S9, pyMzLib owns it, dataRepo
+    writes the verb list); (3) dataRepo runs it and sends its row diff against our reference table
+    (LOGS-DR1, asked in 015). Nothing of ours blocks anyone before (1).
+  - >-
+    OWED to dataRepo (promised in 015-logs §1): a manifest per (species, release) naming BOTH run
+    inputs with path + sha256 - the gene-set table (results/gene_sets/) and Ensembl's
+    <Species>.<Assembly>.116.uniprot.tsv.gz xref dump (data/compara/, gitignored; source URL + sha in
+    data/PROVENANCE.md). Without the xref input ensembl_xref_agrees is empty, and that is aging's
+    default view.
+  - >-
+    OWED (charter seam S4, ours): a definition id for the resolution, registered with QuantProject.
+    015 said we would take it up with QuantProject directly; no channel is open yet. Also: dataRepo's
+    charter §8 sign-off row for logs (CHARTER.md at dataRepo b74cff3) - 015 confirmed our rows; check
+    they recorded it.
   - >-
     Rat resolves poorly by any source: by Ensembl's xref only 59.6% of reviewed rat entries resolve,
     against 94.7% of human (008 to aging). Reference-data coverage, not a search problem - but any
@@ -349,7 +376,7 @@ repos:
     worktree: code/mzLib-ensembl-genes
     branch: feat/ensembl-gene-resolution
     base_clone: 'E:\GitClones\mzLib'
-    pinned: 3bb041888d90f4bc08edab405ca778979d5cee4a
+    pinned: 2f40c40c8b179a2d64a0063ab3a3a37ed410f87b
     pr: "https://github.com/smith-chem-wisc/mzLib/pull/1338 (on smith/master 588c2249 after #1336 merged 2026-09-22)"
   - name: mzLib
     worktree: code/mzLib-occupancy-nterm

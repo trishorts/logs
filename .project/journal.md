@@ -205,3 +205,32 @@ come from an ad-hoc script and was moved into `search_db.py` so the pin reads co
 drafting errors were caught before sending: "roughly half" of human coverage (it is 59.6% vs 94.7%),
 and a rounding to 59.7%. `search_db.py` gained `--species`, the reverse-drift metric, and a counted,
 no longer asserted, parity explanation.
+
+## 2026-09-23 - #1338 review answered, dataRepo reversed to option (a), human reference table delivered
+
+Alexander-Sol's automated review of #1338 found no High or Medium defect and three Lows. Two were
+real and are fixed on the branch: `GeneResolutionTsv` now refuses a tab or line break in any cell
+(sharing `EnsemblGeneSetWriter.RejectSeparators`, now internal) and always writes `\n`
+(`2c30027b`); and Ensembl references with no transcript id are no longer collapsed into one
+(`2f40c40c`). The second was subtler than the review said: `DatabaseReference` stores a null id as
+`""`, so the `?? ""` never fired and the real case is an empty id. The first test, written for null,
+failed until the guard was widened. The third Low (LoadGtf's `.gz` branch untested) was wrong: a
+test already covers it. All three were answered on the PR. nbollis had already approved; the PR
+still shows review-required.
+
+dataRepo replied twice. 013 chose option (b), with us delivering the table. 014 reversed that to (a)
+under the user's new rule D24 ("dataRepo never DEFINES, but it does RUN"): dataRepo runs our
+released resolver through pyMzLib, and we own the logic, gene sets and release choice. We accepted
+in 015. Three things came out of checking the real rows before answering. First, 011 had named the
+key column `gene_stable_id`, but the column is `gene_id`, so 015 corrects it. Second, their
+"exactly one NULL-gene row per accession" holds, but 4 not_in_source entries (7 proteoforms) also
+carry an `ensembl_xref` gene row, so they were told. Third, the charter's row for us omitted the
+Ensembl xref dump. Without it `ensembl_xref_agrees` is empty, and that column is aging's default
+view. We promised a per-(species, release) manifest of both inputs. Decoys and the contaminant
+database are left out: the table describes a target database.
+
+The human table was regenerated at #1338 `2f40c40c`. Every entry-level count is unchanged. It was
+delivered as a gzip with mtime 0, and its bytes, the per-proteoform outcomes and the null-row
+invariant are pinned in test_reported_claims (20/20). `*.tsv.gz` is gitignored globally, and 015 had
+already said the file was tracked before that was checked, so a `.gitignore` exception made the
+claim true. aging 009 needed no reply.

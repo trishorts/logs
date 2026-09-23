@@ -117,41 +117,50 @@ Each of these cost real time on 2026-09-22.
 ## Pick up at
 
 **1. Run the thread inbox** (`python "$env:USERPROFILE/.claude/skills/project/assets/threads.py" inbox`).
-Three replies are owed to us:
+We owe nobody a reply. dataRepo owes an acknowledgement of 015 (it answered L1/L2/L3 and asked
+LOGS-DR1, their row diff once their first pyMzLib run exists). aging 009 needed no reply.
 
-- **dataRepo → REQ-DATAREPO-8/9/10** (our 011, plus the 012 correction). 8 decides the delivery route.
-  - If they will run the resolution themselves, the route is a **pyMzLib bridge verb**, and it can
-    start only after #1338 merges and ships in an mzLib release. Run `/bridge-oracle pyMzLib` first.
-  - If they want us to deliver the table, produce it with `tools/ResolveSearchDb` (below).
-- **aging → 007 and 008.** 008 corrected 007's "20,412 of 20,416" to 20,416 and reported the rodent
-  resolutions.
+**2. Deliver what 015 promised dataRepo.** It is small and it is owed:
+- **A manifest per (species, release)** naming both resolver inputs with path and sha256: the
+  gene-set table (`results/gene_sets/`) and Ensembl's `<Species>.<Assembly>.116.uniprot.tsv.gz` xref
+  dump (source URL and sha in `data/PROVENANCE.md`). Without the xref dump, `ensembl_xref_agrees` is
+  empty, and that column is aging's default view.
+- **Charter seam S4:** a definition id for the resolution, registered with QuantProject. No channel
+  to QuantProject is open yet. Open one (`threads.py new --to QuantProject`) carrying the concrete
+  ask.
 
-**2. Re-check #1338:** `gh pr view 1338 -R smith-chem-wisc/mzLib --json state,reviewDecision,mergeable`.
-It has 8 commits, is mergeable, and has no review yet.
+**3. Re-check #1338:** `gh pr view 1338 -R smith-chem-wisc/mzLib --json state,reviewDecision,mergeable`.
+It has 10 commits and one approval (nbollis), and still shows as review-required. Alexander-Sol's
+automated review is answered on the PR: two fixes (`2c30027b`, `2f40c40c`) and one finding refuted.
+Nothing downstream can start until it merges and ships in an mzLib release. After that comes the
+pyMzLib verb, which pyMzLib owns (charter S9). Run `/bridge-oracle pyMzLib` if we draft it.
 
-**3. Next piece of work: PLAN step 6, the orthology store** (`design/PLAN.md`; its design notes are in
+**4. Next piece of work: PLAN step 6, the orthology store** (`design/PLAN.md`; its design notes are in
 the `state.yaml` gaps). The rodent data it was waiting for now exists: aging's mouse and rat databases
 are resolved (`results/search_db_resolution_{mouse,rat}.md`).
 
-**Decided this session, do not re-open:**
+**Decided, do not re-open:**
 
-- **Resolution does not go into MetaMorpheus output (user).** It depends only on
-  `(search database, gene set)`, so it runs once per database. 011 withdrew our 010 §3.
+- **dataRepo runs the resolution (option (a), user rule D24; accepted in 015).** We define the logic,
+  the inputs and the release; dataRepo runs our released code through pyMzLib. Our human table
+  (`results/search_db_human_e116.tsv.gz`, pinned) is only a **reference output** for their first run.
+- **The table's key is `(search_database_sha256, gene_set_release, accession, gene_id)`.** 011 said
+  `gene_stable_id`, and 015 corrected it. Accessions are proteoforms. Decoys never appear, and the
+  contaminant database is not run.
+- **Resolution does not go into MetaMorpheus output (user).**
 - **Genes only Ensembl's xref links are emitted as rows** with `source = ensembl_xref`, carrying the
-  XML's outcome (#1338 `3bb04188`). Filter `source = search_database_dbreference` for the XML's view,
-  and `ensembl_xref_agrees = true` for Ensembl's.
+  XML's outcome (#1338 `3bb04188`).
 - **The GTF is replaced by a compact gene table** (`EnsemblGeneSetReader`/`Writer`,
-  `results/gene_sets/`). A table carries the GTF's provenance, so its output is byte-identical to the
-  GTF's.
+  `results/gene_sets/`). Its output is byte-identical to the GTF's.
 
 **Open, and your call:**
 
 - dataRepo has **not** been told the rat finding (four id series; 725 xref-only entries).
 - The `go` thread is still unopened. Its content was the #1336 stack, which has since merged, so it
   may no longer be needed.
-- The occupancy-manuscript findings have not been sent to Peter. The pass found the Met-removed
-  N-terminal bug (now **#1337**, still needs review), the wrong mzLib version (1.0.586; 1.1.9 uses
-  1.0.588) and wording errors.
+- The occupancy-manuscript findings have not been sent to Peter (#1337 still needs review). Its
+  worktree `code/mzLib-occupancy-nterm` is **5 commits behind its origin branch**, so someone pushed
+  to it. Pull before touching it.
 
 **Where the resolution stands.** On aging's three reviewed-proteome search databases, counted in
 entries, not proteoforms:
@@ -165,7 +174,7 @@ entries, not proteoforms:
 - By Ensembl's xref, 59.6% of rat entries resolve against 94.7% of human. That comes from the
   reference data, not from the searches.
 - **Reproduce with:**
-  `dotnet run --project tools/ResolveSearchDb -c Release -- <search.xml> results/gene_sets/<Species>.116.genes.tsv.gz data/compara/<Species>.116.uniprot.tsv.gz results/search_db_<sp>_e116.tsv`,
+  `dotnet run --project tools/ResolveSearchDb -c Release -- <search.xml> results/gene_sets/<Species>.<Assembly>.116.genes.tsv.gz data/compara/<Species>.<Assembly>.116.uniprot.tsv.gz results/search_db_<sp>_e116.tsv`,
   then `python -m logs_orthology.search_db results/search_db_<sp>_e116.tsv --species <species> --out results/search_db_resolution_<sp>`.
   Omit `--out` and `--species` for human.
 - **The XMLs:** human is `F:/aging_data/db/uniprotkb_proteome_UP000005640_AND_revi_2026_09_18.xml`.
@@ -175,7 +184,7 @@ Sanity-check before changing anything:
 
 ```powershell
 $env:PYTHONPATH = "E:\CodeReview\logs\src"
-python tests/test_reported_claims.py    # 19 claims already sent to a partner
+python tests/test_reported_claims.py    # 20 claims already sent to a partner
 python tests/test_resolve.py            # 16 resolver contracts
 python tests/test_contracts.py          # 10 contract tests
 ```
@@ -192,21 +201,21 @@ python tests/test_contracts.py          # 10 contract tests
 
 <!-- BEGIN GENERATED -- render_resume.py owns this block; edit state.yaml, not here -->
 
-**logs** &middot; phase **BUILD** (4/10) &middot; created 2026-09-22 &middot; rendered 2026-09-22
+**logs** &middot; phase **BUILD** (4/10) &middot; created 2026-09-22 &middot; rendered 2026-09-23
 
 | | |
 |---|---|
-| Commits | 46 |
+| Commits | 53 |
 | Sync | [`trishorts/logs`](https://github.com/trishorts/logs) |
-| Locked decisions | 33 |
-| Open gaps | 6 |
+| Locked decisions | 35 |
+| Open gaps | 8 |
 | Gate items skipped | 2 |
 
 **Worktrees** -- details in `code/PINNED.md`
 
 | Worktree | Branch | HEAD | Pin | Status |
 |---|---|---|---|---|
-| `code/mzLib-ensembl-genes` | feat/ensembl-gene-resolution | `3bb04188` | `3bb04188` | at pin |
+| `code/mzLib-ensembl-genes` | feat/ensembl-gene-resolution | `2f40c40c` | `2f40c40c` | at pin |
 | `code/mzLib-occupancy-nterm` | fix/occupancy-met-cleaved-nterm | `e3282169` | `e3282169` | at pin |
 
 <!-- END GENERATED -->

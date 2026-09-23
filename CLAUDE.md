@@ -8,13 +8,12 @@ This folder is a `/project`-managed research project. **You are de facto working
 - **Goal:** A generic, versioned, gene-centric cross-species orthology layer that lets any
   multi-organism proteomics project join protein identifications across species without collapsing
   one-to-many orthology.
-- **Pick up at:** run the thread inbox. dataRepo owes REQ-DATAREPO-8/9/10 (011), which decides how
-  the resolution reaches them: they run it via pyMzLib, or we deliver the table. aging owes replies to
-  007 and 008. Then re-check mzLib **#1338** (`gh pr view 1338 -R smith-chem-wisc/mzLib`), and start
-  PLAN step 6, the orthology store: the rodent data it waited for is resolved. The resolution is
-  **not** going into MetaMorpheus (user decision). See `RESUME.md`.
-
-**The name:** `logs` = homologs, orthologs, paralogs, and any other -logs. Not log files.
+- **Pick up at:** run the thread inbox (dataRepo owes an ack of 015 and LOGS-DR1). Then deliver
+  what 015 promised: a manifest per (species, release) of both resolver inputs (gene-set table +
+  Ensembl uniprot xref dump, with sha256s), and a definition id registered with QuantProject (charter
+  S4). Re-check mzLib **#1338** (`gh pr view 1338 -R smith-chem-wisc/mzLib`); dataRepo runs the
+  released resolver via pyMzLib (option (a), user rule D24), so nothing moves until it ships. Then
+  PLAN step 6, the orthology store. See `RESUME.md`.
 
 ## Things that will bite you here
 
@@ -54,6 +53,11 @@ This folder is a `/project`-managed research project. **You are de facto working
     `ensembl_xref_agrees` for Ensembl's.
 13. **mzLib PRs:** open against smith-chem-wisc, start the body with the `<!-- project-of-origin -->`
     "Project of origin: `logs`" line, and use `type(scope): summary` commits (`commit-style.md`).
+14. **`*.tsv.gz` is gitignored globally** (only `results/gene_sets/` and the delivered
+    `results/search_db_human_e116.tsv.gz` are excepted). Run `git check-ignore -v <path>` before a
+    message calls a file "tracked"; 015 said so before checking.
+15. **The table's gene column is `gene_id`**, not `gene_stable_id` (011's error, corrected in 015).
+    Read a column name from `GeneResolutionTsv.Schema`, never from a prose description.
 
 ## Running things
 
@@ -66,7 +70,7 @@ python -m logs_orthology.resolve --reference          # -> results/resolution_hu
 python -m logs_orthology.resolve --accessions ids.tsv # accession[<TAB>contaminant] per line
 python tests/test_contracts.py         # 10 contract tests
 python tests/test_resolve.py           # 16 resolver contracts (last one reconciles on real data)
-python tests/test_reported_claims.py   # 19 claims already sent to a partner
+python tests/test_reported_claims.py   # 20 claims already sent to a partner
 dotnet run --project tools/BuildGeneSet -c Release -- <gtf.gz> results/gene_sets/<Species>.116.genes.tsv.gz
 dotnet run --project tools/ResolveSearchDb -c Release -- <xml> <gtf.gz | genes.tsv.gz> <uniprot.tsv.gz> <out.tsv>
 python -m logs_orthology.search_db <out.tsv> [--species mus_musculus --out results/search_db_resolution_mouse]
