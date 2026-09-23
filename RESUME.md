@@ -117,8 +117,8 @@ Each of these cost real time on 2026-09-22.
 ## Pick up at
 
 **1. Run the thread inbox** (`python "$env:USERPROFILE/.claude/skills/project/assets/threads.py" inbox`).
-We owe nobody a reply. dataRepo owes an acknowledgement of 015 (it answered L1/L2/L3 and asked
-LOGS-DR1, their row diff once their first pyMzLib run exists). aging 009 needed no reply.
+dataRepo owes an acknowledgement of 015 (it answered L1/L2/L3 and asked
+LOGS-DR1, their row diff once their first pyMzLib run exists). aging 009 was judged to need no reply, but the inbox still flags aging as REPLY NEEDED (last=009-aging); read 009 and either reply or record why not.
 
 **2. Deliver what 015 promised dataRepo.** It is small and it is owed:
 - **A manifest per (species, release)** naming both resolver inputs with path and sha256: the
@@ -158,9 +158,10 @@ are resolved (`results/search_db_resolution_{mouse,rat}.md`).
 - dataRepo has **not** been told the rat finding (four id series; 725 xref-only entries).
 - The `go` thread is still unopened. Its content was the #1336 stack, which has since merged, so it
   may no longer be needed.
-- The occupancy-manuscript findings have not been sent to Peter (#1337 still needs review). Its
-  worktree `code/mzLib-occupancy-nterm` is **5 commits behind its origin branch**, so someone pushed
-  to it. Pull before touching it.
+- The occupancy-manuscript findings have not been sent to Peter. mzLib #1337 is **approved** (nbollis),
+  and Alexander-Sol's review is answered: the CNBr limit is documented as a non-goal in `815423f7`,
+  not guarded in code. It waits on a merge; re-check with `gh pr view 1337 -R smith-chem-wisc/mzLib`.
+  The worktree is level with its origin branch at `815423f7`.
 
 **Where the resolution stands.** On aging's three reviewed-proteome search databases, counted in
 entries, not proteoforms:
@@ -205,9 +206,9 @@ python tests/test_contracts.py          # 10 contract tests
 
 | | |
 |---|---|
-| Commits | 53 |
+| Commits | 54 |
 | Sync | [`trishorts/logs`](https://github.com/trishorts/logs) |
-| Locked decisions | 35 |
+| Locked decisions | 36 |
 | Open gaps | 8 |
 | Gate items skipped | 2 |
 
@@ -216,6 +217,6 @@ python tests/test_contracts.py          # 10 contract tests
 | Worktree | Branch | HEAD | Pin | Status |
 |---|---|---|---|---|
 | `code/mzLib-ensembl-genes` | feat/ensembl-gene-resolution | `2f40c40c` | `2f40c40c` | at pin |
-| `code/mzLib-occupancy-nterm` | fix/occupancy-met-cleaved-nterm | `e3282169` | `e3282169` | at pin |
+| `code/mzLib-occupancy-nterm` | fix/occupancy-met-cleaved-nterm | `815423f7` | `815423f7` | at pin |
 
 <!-- END GENERATED -->

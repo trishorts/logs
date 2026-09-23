@@ -8,7 +8,9 @@ This folder is a `/project`-managed research project. **You are de facto working
 - **Goal:** A generic, versioned, gene-centric cross-species orthology layer that lets any
   multi-organism proteomics project join protein identifications across species without collapsing
   one-to-many orthology.
-- **Pick up at:** run the thread inbox (dataRepo owes an ack of 015 and LOGS-DR1). Then deliver
+- **Pick up at:** run the thread inbox (dataRepo owes an ack of 015 and LOGS-DR1; the inbox flags
+  aging 009 as REPLY NEEDED, so read it and reply or record why not). mzLib #1337 is approved and
+  its review answered, waiting on merge. Then deliver
   what 015 promised: a manifest per (species, release) of both resolver inputs (gene-set table +
   Ensembl uniprot xref dump, with sha256s), and a definition id registered with QuantProject (charter
   S4). Re-check mzLib **#1338** (`gh pr view 1338 -R smith-chem-wisc/mzLib`); dataRepo runs the

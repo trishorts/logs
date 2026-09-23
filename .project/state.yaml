@@ -306,6 +306,14 @@ decisions:
       Accessions are PROTEOFORMS (human 52,359 from 20,416 entries). Decoys never appear (the table
       describes a target database); the contaminant database is not run (every row would be
       contaminant_not_mapped, which the psmtsv flag already says).
+  - date: 2026-09-23
+    text: >-
+      mzLib #1337 CNBr / M-cleaving-protease limit DOCUMENTED, NOT GUARDED (Alexander-Sol review, Low).
+      For a protease cutting C-terminal to Met, the residue-2 product of a Met-retained molecule has the
+      same sequence and span as the Met-removed N-terminus; Protease yields one form for both, so no
+      downstream code can separate them. Excluding such proteases would restore the original bug for
+      them. Effect: N-terminal occupancy may be understated for CNBr-type digests. Remarks on
+      StartsAfterInitiatorMethionine (815423f7) plus a non-goal line in the PR body.
 
 gaps:
   - >-
@@ -382,7 +390,7 @@ repos:
     worktree: code/mzLib-occupancy-nterm
     branch: fix/occupancy-met-cleaved-nterm
     base_clone: 'E:\GitClones\mzLib'
-    pinned: e3282169d4de3a2b2db8dcf7760e2da3597f509f
+    pinned: 815423f7
     pr: "https://github.com/smith-chem-wisc/mzLib/pull/1337"
 
 github:

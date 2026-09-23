@@ -234,3 +234,7 @@ delivered as a gzip with mtime 0, and its bytes, the per-proteoform outcomes and
 invariant are pinned in test_reported_claims (20/20). `*.tsv.gz` is gitignored globally, and 015 had
 already said the file was tracked before that was checked, so a `.gitignore` exception made the
 claim true. aging 009 needed no reply.
+
+## 2026-09-23 - #1337 review answered: the CNBr limit is documented, not guarded
+
+The only comment needing an answer on mzLib #1337 was Alexander-Sol's automated review. It found the change sound and raised one Low item. For a protease that cuts after Met, such as CNBr, a product starting at residue 2 of a Met-retained molecule would be counted as the protein N-terminus. It is the same sequence and span as the Met-removed N-terminus, so Protease emits one form for both and nothing downstream can tell them apart. Guarding against M-cleaving proteases would restore the original bug for them, so the limit went into a remarks block on StartsAfterInitiatorMethionine (815423f7, comment only, Omics builds clean) and a non-goal line in the PR body, and the reply was posted. nbollis had already approved. The worktree's '5 commits behind' was only the master merge (bfddec9a), fast-forwarded before committing. The inbox still flags aging as REPLY NEEDED on 009; it was not read this session.
