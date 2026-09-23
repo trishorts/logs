@@ -45,3 +45,5 @@ __pycache__/
 
 # Row-level search-DB resolution: regenerable with tools/ResolveSearchDb (~20 MB)
 /results/search_db_*.tsv
+# ...except the one delivered to dataRepo as a reference output (015-logs); its bytes are pinned.
+!/results/search_db_human_e116.tsv.gz

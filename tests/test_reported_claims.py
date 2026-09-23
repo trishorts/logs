@@ -204,6 +204,33 @@ def test_rodent_resolution_as_sent_to_aging_in_008():
     assert (mouse["parity_identical"], rat["parity_identical"]) == (17277, 8228)
 
 
+def test_human_search_db_table_as_delivered_in_015():
+    """015-logs handed dataRepo this file as the reference output their pyMzLib run will be diffed
+    against. Written by tools/ResolveSearchDb at #1338 2f40c40c (LF line endings), gzipped with
+    mtime 0 so the .gz is reproducible too. Counts per accession are PROTEOFORMS (52,359), not the
+    20,416 entries the entry-level counts above describe."""
+    import collections
+    import csv
+    import gzip
+    import hashlib
+    import io
+    path = RESULTS / "search_db_human_e116.tsv.gz"
+    gz = path.read_bytes()
+    assert (len(gz), hashlib.sha256(gz).hexdigest()) == (
+        728807, "e6ebada561a70d0e39d7e2e1cd36dfad1ac2ac29d8fabd7234ba611e905b6f17"), "015-logs"
+    tsv = gzip.decompress(gz)
+    assert (len(tsv), hashlib.sha256(tsv).hexdigest()) == (
+        18074372, "2deb06ee9b1bfd1b63208299485e9908c44d99b127f5b5f7b04932c77f0c6d18"), "015-logs"
+    rows = list(csv.DictReader(io.StringIO(tsv.decode("utf-8"), newline=""), delimiter="\t"))
+    assert len(rows) == 53239
+    outcome = {r["accession"]: r["outcome"] for r in rows}
+    assert collections.Counter(outcome.values()) == {
+        "resolved": 50026, "not_in_source": 1520, "multi_gene": 660, "off_primary_only": 153}, "015-logs §2"
+    null_rows = collections.Counter(r["accession"] for r in rows if r["gene_id"] == "")
+    assert set(null_rows.values()) == {1}, "015-logs §2: at most one null-gene row per accession"
+    assert sum(1 for r in rows if r["source"] == "ensembl_xref") == 7, "015-logs §2: 4 entries, 7 proteoforms"
+
+
 def test_file_partition_as_sent_in_006():
     """Every human<->mouse orthology lives in the mouse dump; the human dump has none."""
     attrib = _cardinality()["orthology_by_source_file"]
