@@ -1,0 +1,117 @@
+{
+  "manifest_version": 1,
+  "source": "ensembl",
+  "ensembl_release": "116",
+  "resolver": {
+    "mzlib_release": "1.0.592",
+    "pr": 1338,
+    "merge_commit": "5d772a23bc75daf1e488fb1fdf17703ab320ad50"
+  },
+  "species": [
+    {
+      "species": "homo_sapiens",
+      "ncbi_taxonomy_id": 9606,
+      "ensembl_release": "116",
+      "assembly": "GRCh38",
+      "genome_build": "GRCh38.p14",
+      "inputs": {
+        "gene_set": {
+          "role": "gene set: the resolver's <gtf.gz | genes.tsv.gz> argument",
+          "path": "results/gene_sets/Homo_sapiens.GRCh38.116.genes.tsv.gz",
+          "url": "https://github.com/trishorts/logs/raw/d69b392d333517774aca8c484a177b31864dddf6/results/gene_sets/Homo_sapiens.GRCh38.116.genes.tsv.gz",
+          "commit": "d69b392d333517774aca8c484a177b31864dddf6",
+          "bytes": 523218,
+          "sha256": "e72d3b85328a572a7de92581297268ec50e97dd4cd4123c1358a7dc6c931d65f",
+          "genes": 78941,
+          "built_from": {
+            "file": "Homo_sapiens.GRCh38.116.gtf.gz",
+            "url": "https://ftp.ensembl.org/pub/release-116/gtf/homo_sapiens/Homo_sapiens.GRCh38.116.gtf.gz",
+            "sha256": "ed992f0eac7197d9627bda618f8f831ba355c95bd5d0796af785387d462828b6"
+          }
+        },
+        "ensembl_uniprot_xref": {
+          "role": "Ensembl's UniProt xref: the resolver's <uniprot.tsv.gz> argument",
+          "file": "Homo_sapiens.GRCh38.116.uniprot.tsv.gz",
+          "url": "https://ftp.ensembl.org/pub/release-116/tsv/homo_sapiens/Homo_sapiens.GRCh38.116.uniprot.tsv.gz",
+          "bytes": 2124003,
+          "sha256": "f1e26db23b0771f7a5778067af20683de63d863b1c0834aa564d5d036ec85864"
+        }
+      },
+      "row_values": {
+        "gene_set_release": "116",
+        "gene_set_sha256": "ed992f0eac7197d9627bda618f8f831ba355c95bd5d0796af785387d462828b6",
+        "ensembl_xref_sha256": "f1e26db23b0771f7a5778067af20683de63d863b1c0834aa564d5d036ec85864"
+      }
+    },
+    {
+      "species": "mus_musculus",
+      "ncbi_taxonomy_id": 10090,
+      "ensembl_release": "116",
+      "assembly": "GRCm39",
+      "genome_build": "GRCm39",
+      "inputs": {
+        "gene_set": {
+          "role": "gene set: the resolver's <gtf.gz | genes.tsv.gz> argument",
+          "path": "results/gene_sets/Mus_musculus.GRCm39.116.genes.tsv.gz",
+          "url": "https://github.com/trishorts/logs/raw/d69b392d333517774aca8c484a177b31864dddf6/results/gene_sets/Mus_musculus.GRCm39.116.genes.tsv.gz",
+          "commit": "d69b392d333517774aca8c484a177b31864dddf6",
+          "bytes": 592067,
+          "sha256": "06d91f92289211867af002de7166c8ce3f70ef31e5a373a3528afb4022670d50",
+          "genes": 78348,
+          "built_from": {
+            "file": "Mus_musculus.GRCm39.116.gtf.gz",
+            "url": "https://ftp.ensembl.org/pub/release-116/gtf/mus_musculus/Mus_musculus.GRCm39.116.gtf.gz",
+            "sha256": "5c29fd9e3157cf40fdbbf76ab25bfe7f79aa61313e0b672664ddb0cb251c02e1"
+          }
+        },
+        "ensembl_uniprot_xref": {
+          "role": "Ensembl's UniProt xref: the resolver's <uniprot.tsv.gz> argument",
+          "file": "Mus_musculus.GRCm39.116.uniprot.tsv.gz",
+          "url": "https://ftp.ensembl.org/pub/release-116/tsv/mus_musculus/Mus_musculus.GRCm39.116.uniprot.tsv.gz",
+          "bytes": 1164777,
+          "sha256": "19b91eefd8cc3946a47c092a69ec065f1f2304a08927d91efd1f61c7840c6f91"
+        }
+      },
+      "row_values": {
+        "gene_set_release": "116",
+        "gene_set_sha256": "5c29fd9e3157cf40fdbbf76ab25bfe7f79aa61313e0b672664ddb0cb251c02e1",
+        "ensembl_xref_sha256": "19b91eefd8cc3946a47c092a69ec065f1f2304a08927d91efd1f61c7840c6f91"
+      }
+    },
+    {
+      "species": "rattus_norvegicus",
+      "ncbi_taxonomy_id": 10116,
+      "ensembl_release": "116",
+      "assembly": "GRCr8",
+      "genome_build": "GRCr8",
+      "inputs": {
+        "gene_set": {
+          "role": "gene set: the resolver's <gtf.gz | genes.tsv.gz> argument",
+          "path": "results/gene_sets/Rattus_norvegicus.GRCr8.116.genes.tsv.gz",
+          "url": "https://github.com/trishorts/logs/raw/d69b392d333517774aca8c484a177b31864dddf6/results/gene_sets/Rattus_norvegicus.GRCr8.116.genes.tsv.gz",
+          "commit": "d69b392d333517774aca8c484a177b31864dddf6",
+          "bytes": 288926,
+          "sha256": "426ea43ebeceb27003e3c5597fb5411932b52118b2ad91bfed6d2328efc95995",
+          "genes": 43360,
+          "built_from": {
+            "file": "Rattus_norvegicus.GRCr8.116.gtf.gz",
+            "url": "https://ftp.ensembl.org/pub/release-116/gtf/rattus_norvegicus/Rattus_norvegicus.GRCr8.116.gtf.gz",
+            "sha256": "e025aa7eeefa74e896fdfdf760d01166d8e3ba9d99ba1de2f1b004925f41d338"
+          }
+        },
+        "ensembl_uniprot_xref": {
+          "role": "Ensembl's UniProt xref: the resolver's <uniprot.tsv.gz> argument",
+          "file": "Rattus_norvegicus.GRCr8.116.uniprot.tsv.gz",
+          "url": "https://ftp.ensembl.org/pub/release-116/tsv/rattus_norvegicus/Rattus_norvegicus.GRCr8.116.uniprot.tsv.gz",
+          "bytes": 778837,
+          "sha256": "8b1c91f3d88bfafe2d4bb67a43f2a79d1f494bb56d48690a0cbd736a44030eda"
+        }
+      },
+      "row_values": {
+        "gene_set_release": "116",
+        "gene_set_sha256": "e025aa7eeefa74e896fdfdf760d01166d8e3ba9d99ba1de2f1b004925f41d338",
+        "ensembl_xref_sha256": "8b1c91f3d88bfafe2d4bb67a43f2a79d1f494bb56d48690a0cbd736a44030eda"
+      }
+    }
+  ]
+}

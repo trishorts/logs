@@ -231,6 +231,37 @@ def test_human_search_db_table_as_delivered_in_015():
     assert sum(1 for r in rows if r["source"] == "ensembl_xref") == 7, "015-logs §2: 4 entries, 7 proteoforms"
 
 
+def test_resolver_input_manifest_as_sent_in_016():
+    """The per-(species, release) manifest promised in 015 §1, sent in 016-logs."""
+    import csv
+    import gzip
+    import hashlib
+    doc = json.loads((RESULTS / "resolver_inputs_e116.json").read_text(encoding="utf-8"))
+    assert doc["resolver"]["mzlib_release"] == "1.0.592", "016-logs"
+    want = {  # species: (gene-set table sha256, row gene_set_sha256 = GTF, xref sha256)
+        "homo_sapiens": ("e72d3b85328a572a7de92581297268ec50e97dd4cd4123c1358a7dc6c931d65f",
+                         "ed992f0eac7197d9627bda618f8f831ba355c95bd5d0796af785387d462828b6",
+                         "f1e26db23b0771f7a5778067af20683de63d863b1c0834aa564d5d036ec85864"),
+        "mus_musculus": ("06d91f92289211867af002de7166c8ce3f70ef31e5a373a3528afb4022670d50",
+                         "5c29fd9e3157cf40fdbbf76ab25bfe7f79aa61313e0b672664ddb0cb251c02e1",
+                         "19b91eefd8cc3946a47c092a69ec065f1f2304a08927d91efd1f61c7840c6f91"),
+        "rattus_norvegicus": ("426ea43ebeceb27003e3c5597fb5411932b52118b2ad91bfed6d2328efc95995",
+                              "e025aa7eeefa74e896fdfdf760d01166d8e3ba9d99ba1de2f1b004925f41d338",
+                              "8b1c91f3d88bfafe2d4bb67a43f2a79d1f494bb56d48690a0cbd736a44030eda"),
+    }
+    got = {e["species"]: (e["inputs"]["gene_set"]["sha256"], e["row_values"]["gene_set_sha256"],
+                          e["row_values"]["ensembl_xref_sha256"]) for e in doc["species"]}
+    assert got == want, "016-logs"
+    for e in doc["species"]:
+        gs = e["inputs"]["gene_set"]
+        assert hashlib.sha256((ROOT / gs["path"]).read_bytes()).hexdigest() == gs["sha256"], gs["path"]
+    # The manifest's human row values are what every row of the table delivered in 015 carries.
+    with gzip.open(RESULTS / "search_db_human_e116.tsv.gz", "rt", encoding="utf-8", newline="") as f:
+        seen = {(r["gene_set_release"], r["gene_set_sha256"], r["ensembl_xref_sha256"])
+                for r in csv.DictReader(f, delimiter="\t")}
+    assert seen == {("116", want["homo_sapiens"][1], want["homo_sapiens"][2])}, seen
+
+
 def test_file_partition_as_sent_in_006():
     """Every human<->mouse orthology lives in the mouse dump; the human dump has none."""
     attrib = _cardinality()["orthology_by_source_file"]
