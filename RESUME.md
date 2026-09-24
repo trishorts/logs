@@ -113,31 +113,34 @@ Each of these cost real time on 2026-09-22.
    them.
 8. **mzLib PR house style:** open against smith-chem-wisc, start the body with the
    `<!-- project-of-origin -->` "Project of origin" line, and use `type(scope): summary` commits.
+9. **A row's `gene_set_sha256` is the GTF's sha256, not the gene-set table's** (the table's
+   `#!source-sha256` header). The manifest gives both; check rows against its `row_values`.
+10. **Read the partner's charter before promising a seam.** 015 and 016 promised S4 through
+    QuantProject after charter v0.2 had already replaced the registry; 017 withdrew it.
 
 ## Pick up at
 
+**State on 2026-09-24:** the resolver has shipped. #1337 and #1338 merged and are in **mzLib
+1.0.592**, and pyMzLib **0.2.0** projects #1338 as `proteins.resolve_genes()`. What 015 owed
+dataRepo is delivered: the input manifest is `results/resolver_inputs_e116.{json,md}`, and S4 is
+`logs:DEF-GENE-RESOLUTION v1` (`design/DEFINITIONS.md`). No reply is owed to any peer.
+
 **1. Run the thread inbox** (`python "$env:USERPROFILE/.claude/skills/project/assets/threads.py" inbox`).
-dataRepo owes an acknowledgement of 015 (it answered L1/L2/L3 and asked
-LOGS-DR1, their row diff once their first pyMzLib run exists). aging 009 was judged to need no reply, but the inbox still flags aging as REPLY NEEDED (last=009-aging); read 009 and either reply or record why not.
+We are waiting on dataRepo (after 017) and on aging (after 010). dataRepo owes:
+- **LOGS-D1**, their first pyMzLib run's row diff against `results/search_db_human_e116.tsv.gz`.
+  015 asked for it as `LOGS-DR1`, an id the ledger could not parse, so 016 re-issued it.
+- **LOGS-D2**, which join they want (016 §2):
+  - **entry-level**, which is what the verb writes (20,899 rows), and which we recommended;
+  - **proteoform-level**, which is 015's table (53,239 rows) and needs a variant option in the verb.
 
-**2. Deliver what 015 promised dataRepo.** It is small and it is owed:
-- **A manifest per (species, release)** naming both resolver inputs with path and sha256: the
-  gene-set table (`results/gene_sets/`) and Ensembl's `<Species>.<Assembly>.116.uniprot.tsv.gz` xref
-  dump (source URL and sha in `data/PROVENANCE.md`). Without the xref dump, `ensembl_xref_agrees` is
-  empty, and that column is aging's default view.
-- **Charter seam S4:** a definition id for the resolution, registered with QuantProject. No channel
-  to QuantProject is open yet. Open one (`threads.py new --to QuantProject`) carrying the concrete
-  ask.
+**2. If dataRepo picks entry-level, write the proteoform-to-entry accession rule.** It is ours, since
+accession normalization is ours. "Text before the first `_`" holds for UniProt but breaks on RefSeq
+`NP_000001`, so the rule has to be generic. It would extend `normalize()` in
+`src/logs_orthology/resolve.py`, and probably mzLib later (run `/oracle mzLib` first).
 
-**3. Re-check #1338:** `gh pr view 1338 -R smith-chem-wisc/mzLib --json state,reviewDecision,mergeable`.
-It has 10 commits and one approval (nbollis), and still shows as review-required. Alexander-Sol's
-automated review is answered on the PR: two fixes (`2c30027b`, `2f40c40c`) and one finding refuted.
-Nothing downstream can start until it merges and ships in an mzLib release. After that comes the
-pyMzLib verb, which pyMzLib owns (charter S9). Run `/bridge-oracle pyMzLib` if we draft it.
-
-**4. Next piece of work: PLAN step 6, the orthology store** (`design/PLAN.md`; its design notes are in
-the `state.yaml` gaps). The rodent data it was waiting for now exists: aging's mouse and rat databases
-are resolved (`results/search_db_resolution_{mouse,rat}.md`).
+**3. Next piece of work: PLAN step 6, the orthology store** (`design/PLAN.md`; its design notes are
+in the `state.yaml` gaps). Nothing is blocking it. aging's mouse and rat databases are resolved
+(`results/search_db_resolution_{mouse,rat}.md`), and rat searches are running at aging now.
 
 **Decided, do not re-open:**
 
@@ -145,8 +148,12 @@ are resolved (`results/search_db_resolution_{mouse,rat}.md`).
   the inputs and the release; dataRepo runs our released code through pyMzLib. Our human table
   (`results/search_db_human_e116.tsv.gz`, pinned) is only a **reference output** for their first run.
 - **The table's key is `(search_database_sha256, gene_set_release, accession, gene_id)`.** 011 said
-  `gene_stable_id`, and 015 corrected it. Accessions are proteoforms. Decoys never appear, and the
-  contaminant database is not run.
+  `gene_stable_id`, and 015 corrected it. Decoys never appear, and the contaminant database is not
+  run. Whether accessions are entries or proteoforms is **open** (LOGS-D2). A variant proteoform
+  always has its entry's answer: 0 of 31,943 differ.
+- **S4 is our own namespace, not a QuantProject registry** (charter v0.2). The id is
+  `logs:DEF-GENE-RESOLUTION v1`. It pins the method, not the inputs. **A v1 run requires the xref
+  input**, even though pyMzLib makes `xref=` optional.
 - **Resolution does not go into MetaMorpheus output (user).**
 - **Genes only Ensembl's xref links are emitted as rows** with `source = ensembl_xref`, carrying the
   XML's outcome (#1338 `3bb04188`).
@@ -155,13 +162,11 @@ are resolved (`results/search_db_resolution_{mouse,rat}.md`).
 
 **Open, and your call:**
 
-- dataRepo has **not** been told the rat finding (four id series; 725 xref-only entries).
-- The `go` thread is still unopened. Its content was the #1336 stack, which has since merged, so it
-  may no longer be needed.
-- The occupancy-manuscript findings have not been sent to Peter. mzLib #1337 is **approved** (nbollis),
-  and Alexander-Sol's review is answered: the CNBr limit is documented as a non-goal in `815423f7`,
-  not guarded in code. It waits on a merge; re-check with `gh pr view 1337 -R smith-chem-wisc/mzLib`.
-  The worktree is level with its origin branch at `815423f7`.
+- dataRepo has **not** been told the rat finding (four id series; 725 xref-only entries). aging
+  has, most recently in 010.
+- The occupancy-manuscript findings have not been sent to Peter. mzLib #1337 **merged** on
+  2026-09-23 and is in 1.0.592. The CNBr limit is documented as a non-goal, not guarded in code.
+- The `go` thread was dropped: its only content was the #1336 stack, and both PRs have merged.
 
 **Where the resolution stands.** On aging's three reviewed-proteome search databases, counted in
 entries, not proteoforms:
@@ -185,7 +190,8 @@ Sanity-check before changing anything:
 
 ```powershell
 $env:PYTHONPATH = "E:\CodeReview\logs\src"
-python tests/test_reported_claims.py    # 20 claims already sent to a partner
+python tests/test_reported_claims.py    # 22 claims already sent to a partner
+python -m logs_orthology.manifest       # regenerate results/resolver_inputs_e116.{json,md}
 python tests/test_resolve.py            # 16 resolver contracts
 python tests/test_contracts.py          # 10 contract tests
 ```
@@ -196,20 +202,21 @@ python tests/test_contracts.py          # 10 contract tests
 - `sources/cross_species_orthology_discussion.md` — the seed discussion, verbatim.
 - `ORACLE.md` — the mzLib survey and the three-way split verdict.
 - `PLAN.md` — ordered steps and the standing rules.
+- `DEFINITIONS.md` — our published definition ids (charter S4); `logs:DEF-GENE-RESOLUTION v1` is the first.
 - `threads/OWNERSHIP.md` — capability ownership; both inception collisions closed.
 - `threads/dataRepo/`, `threads/aging/` — correspondence.
 - Outside `design/`: `results/gene_sets/README.md` records the compact gene tables and how to rebuild them.
 
 <!-- BEGIN GENERATED -- render_resume.py owns this block; edit state.yaml, not here -->
 
-**logs** &middot; phase **BUILD** (4/10) &middot; created 2026-09-22 &middot; rendered 2026-09-23
+**logs** &middot; phase **BUILD** (4/10) &middot; created 2026-09-22 &middot; rendered 2026-09-24
 
 | | |
 |---|---|
-| Commits | 54 |
+| Commits | 60 |
 | Sync | [`trishorts/logs`](https://github.com/trishorts/logs) |
-| Locked decisions | 36 |
-| Open gaps | 8 |
+| Locked decisions | 38 |
+| Open gaps | 6 |
 | Gate items skipped | 2 |
 
 **Worktrees** -- details in `code/PINNED.md`

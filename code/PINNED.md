@@ -2,8 +2,8 @@
 
 | worktree | repo | branch | pinned | based on | PR |
 |---|---|---|---|---|---|
-| `code/mzLib-ensembl-genes` | mzLib (`E:\GitClones\mzLib`) | `feat/ensembl-gene-resolution` (pushed to `origin` = trishorts) | `2f40c40c8b179a2d64a0063ab3a3a37ed410f87b` | `smith/master @ 588c2249` (#1336 merged 2026-09-22) | [#1338](https://github.com/smith-chem-wisc/mzLib/pull/1338) |
-| `code/mzLib-occupancy-nterm` | mzLib | `fix/occupancy-met-cleaved-nterm` (pushed to `origin` = trishorts) | `815423f7` | `smith/master @ 588c2249` | [#1337](https://github.com/smith-chem-wisc/mzLib/pull/1337) |
+| `code/mzLib-ensembl-genes` | mzLib (`E:\GitClones\mzLib`) | `feat/ensembl-gene-resolution` (pushed to `origin` = trishorts) | `2f40c40c8b179a2d64a0063ab3a3a37ed410f87b` | `smith/master @ 588c2249` (#1336 merged 2026-09-22) | [#1338](https://github.com/smith-chem-wisc/mzLib/pull/1338) MERGED 2026-09-23 (`5d772a23`), mzLib 1.0.592 |
+| `code/mzLib-occupancy-nterm` | mzLib | `fix/occupancy-met-cleaved-nterm` (pushed to `origin` = trishorts) | `815423f7` | `smith/master @ 588c2249` | [#1337](https://github.com/smith-chem-wisc/mzLib/pull/1337) MERGED 2026-09-23 (`b4361297`), mzLib 1.0.592 |
 
 **`mzLib-ensembl-genes`** is the C# port of accession → gene resolution (PLAN step 5). The user moved
 it into mzLib on 2026-09-22. #1336 merged on 2026-09-22; the branch was rebased onto master (GO commit dropped, commits reworded
@@ -22,3 +22,5 @@ this worktree by relative path.
 protein N-terminal mods on Met-removed N-termini, and was found while checking the occupancy
 manuscript against the code. It is isolated from master and test-first; the full offline suite
 passes (6,607/0/32). Peter's #1286/#1287 rewrite the same file, and the user chose not to wait for them.
+
+**Both PRs merged on 2026-09-23 and ship in mzLib 1.0.592** (2026-09-24). The worktrees are kept at their pins. Their `origin` branches are 8 and 6 commits ahead. For #1338 those commits are two merges from master and the master commits they brought in; #1337 was not checked. No resolver file differs between `2f40c40c` and the merged head. New resolver work starts from `smith/master`, not from these branches. pyMzLib 0.2.0 projects #1338 as `proteins.resolve_genes()`.

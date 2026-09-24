@@ -314,31 +314,35 @@ decisions:
       downstream code can separate them. Excluding such proteases would restore the original bug for
       them. Effect: N-terminal occupancy may be understated for CNBr-type digests. Remarks on
       StartsAfterInitiatorMethionine (815423f7) plus a non-goal line in the PR body.
+  - date: 2026-09-24
+    text: >-
+      S4 is PUBLISHED IN OUR OWN NAMESPACE: logs:DEF-GENE-RESOLUTION v1 (design/DEFINITIONS.md).
+      Charter v0.2 had replaced the QuantProject registry with per-engine namespaces, so our 015/016
+      promise to register with QuantProject was wrong and was withdrawn in 017. The id pins the METHOD;
+      inputs (release, gene set, search db) do not change it because every row carries their sha256s.
+      The Ensembl xref input is REQUIRED for v1 even though pyMzLib's verb makes it optional - without
+      it ensembl_xref_agrees is empty and aging's default view is empty.
+  - date: 2026-09-24
+    text: >-
+      A variant proteoform takes its entry's answer (measured: 0 of 31,943 differ, human 116), so
+      entry-level vs proteoform-level is a JOIN choice, not a definition choice. The released verb
+      writes entry rows (20,899) where our tool wrote proteoform rows (53,239). The user chose to
+      OFFER BOTH to dataRepo (LOGS-D2) rather than decide; our stated recommendation is entry-level.
 
 gaps:
   - >-
-    NEXT - the route is settled ((a), see decisions); what remains, in order: (1) #1338 merges and
-    ships in an mzLib release; (2) pyMzLib builds the verb (charter seam S9, pyMzLib owns it, dataRepo
-    writes the verb list); (3) dataRepo runs it and sends its row diff against our reference table
-    (LOGS-DR1, asked in 015). Nothing of ours blocks anyone before (1).
+    NEXT (waiting on dataRepo) - #1338 shipped in mzLib 1.0.592 and pyMzLib 0.2.0 projects it as
+    proteins.resolve_genes(), so S9 is done. Open: LOGS-D1 (their first run's row diff against 015
+    Sec.2) and LOGS-D2 (entry-level vs proteoform-level join, 016 Sec.2). If they choose entry-level,
+    we owe a GENERIC proteoform->entry accession rule (ours: accession normalization); "before the
+    first _" holds for UniProt but breaks RefSeq NP_.
   - >-
-    OWED to dataRepo (promised in 015-logs §1): a manifest per (species, release) naming BOTH run
-    inputs with path + sha256 - the gene-set table (results/gene_sets/) and Ensembl's
-    <Species>.<Assembly>.116.uniprot.tsv.gz xref dump (data/compara/, gitignored; source URL + sha in
-    data/PROVENANCE.md). Without the xref input ensembl_xref_agrees is empty, and that is aging's
-    default view.
-  - >-
-    OWED (charter seam S4, ours): a definition id for the resolution, registered with QuantProject.
-    015 said we would take it up with QuantProject directly; no channel is open yet. Also: dataRepo's
-    charter §8 sign-off row for logs (CHARTER.md at dataRepo b74cff3) - 015 confirmed our rows; check
-    they recorded it.
+    CHECK dataRepo's CHARTER: 017 asked them to mark S4 done for logs (logs:DEF-GENE-RESOLUTION v1,
+    design/DEFINITIONS.md) and the Sec.8 sign-off row for logs should show 015 confirmed. Their file.
   - >-
     Rat resolves poorly by any source: by Ensembl's xref only 59.6% of reviewed rat entries resolve,
     against 94.7% of human (008 to aging). Reference-data coverage, not a search problem - but any
     rat-vs-human comparison must carry it.
-  - >-
-    OPEN a `go` channel directly (dataRepo 009 §7): our branch is stacked on their #1336 and uses its
-    idiom in the same class. Concrete content: the stack, and a request to warn before force-pushing.
   - >-
     DECIDE (orthology source of record). Ensembl Compara primary is the working assumption;
     decide how NCBI Orthologs / Alliance / HCOP support is stored alongside without merging
@@ -385,13 +389,13 @@ repos:
     branch: feat/ensembl-gene-resolution
     base_clone: 'E:\GitClones\mzLib'
     pinned: 2f40c40c8b179a2d64a0063ab3a3a37ed410f87b
-    pr: "https://github.com/smith-chem-wisc/mzLib/pull/1338 (on smith/master 588c2249 after #1336 merged 2026-09-22)"
+    pr: "https://github.com/smith-chem-wisc/mzLib/pull/1338 (MERGED 2026-09-23 as 5d772a23; in mzLib 1.0.592)"
   - name: mzLib
     worktree: code/mzLib-occupancy-nterm
     branch: fix/occupancy-met-cleaved-nterm
     base_clone: 'E:\GitClones\mzLib'
     pinned: 815423f7
-    pr: "https://github.com/smith-chem-wisc/mzLib/pull/1337"
+    pr: "https://github.com/smith-chem-wisc/mzLib/pull/1337 (MERGED 2026-09-23 as b4361297)"
 
 github:
   remote: "https://github.com/trishorts/logs"

@@ -8,14 +8,12 @@ This folder is a `/project`-managed research project. **You are de facto working
 - **Goal:** A generic, versioned, gene-centric cross-species orthology layer that lets any
   multi-organism proteomics project join protein identifications across species without collapsing
   one-to-many orthology.
-- **Pick up at:** run the thread inbox (dataRepo owes an ack of 015 and LOGS-DR1; the inbox flags
-  aging 009 as REPLY NEEDED, so read it and reply or record why not). mzLib #1337 is approved and
-  its review answered, waiting on merge. Then deliver
-  what 015 promised: a manifest per (species, release) of both resolver inputs (gene-set table +
-  Ensembl uniprot xref dump, with sha256s), and a definition id registered with QuantProject (charter
-  S4). Re-check mzLib **#1338** (`gh pr view 1338 -R smith-chem-wisc/mzLib`); dataRepo runs the
-  released resolver via pyMzLib (option (a), user rule D24), so nothing moves until it ships. Then
-  PLAN step 6, the orthology store. See `RESUME.md`.
+- **Pick up at:** run the thread inbox. We are waiting on dataRepo (017) for **LOGS-D1**, their
+  first pyMzLib run's row diff, and **LOGS-D2**, the entry- or proteoform-level join (016 §2). If
+  they pick entry-level, write a generic proteoform-to-entry accession rule; "before the first `_`"
+  breaks RefSeq `NP_`. Otherwise start **PLAN step 6, the orthology store**, which is unblocked.
+  The resolver has shipped (mzLib 1.0.592, pyMzLib 0.2.0 `proteins.resolve_genes()`), and the
+  manifest and S4 (`logs:DEF-GENE-RESOLUTION v1`) are delivered. See `RESUME.md`.
 
 ## Things that will bite you here
 
@@ -36,8 +34,8 @@ This folder is a `/project`-managed research project. **You are de facto working
    a category error — it needs `SelectMany(Properties)` and a `Distinct()`.
 6. **A number sent to a partner is a contract.** `tests/test_reported_claims.py` pins every one. If
    a re-run moves it, fix the code or send a correction — never edit the expected value.
-7. **The mzLib branch is #1338 on smith/master** (#1336 merged 2026-09-22 and was squashed, so its
-   commit had to be dropped on rebase). Push with `--force-with-lease` pinned to the old head; never
+7. **#1338 and #1337 are MERGED (mzLib 1.0.592).** The `code/` worktrees are historical pins; their
+   origin branches carry later master merges. Start new mzLib work from `smith/master`, and never
    force-push anyone else's branch.
 8. **`LoadProteinXML` applies sequence variants by default.** The human reviewed proteome loads as
    52,359 proteins from 20,416 entries (`P12345_S70N`). Say whether a count is of entries or
@@ -60,6 +58,15 @@ This folder is a `/project`-managed research project. **You are de facto working
     message calls a file "tracked"; 015 said so before checking.
 15. **The table's gene column is `gene_id`**, not `gene_stable_id` (011's error, corrected in 015).
     Read a column name from `GeneResolutionTsv.Schema`, never from a prose description.
+16. **pyMzLib's `resolve_genes` resolves ENTRIES, and `xref=` is optional.** It wrote 20,899 rows
+    where our tool wrote 53,239 proteoform rows. It does not apply variants, and every row it writes
+    is identical to a reference row. Without `xref=`, `ensembl_xref_agrees` is None everywhere, and
+    aging's default view is empty. The v1 definition requires the xref input.
+17. **A row's `gene_set_sha256` is the GTF's sha256, not the gene-set table's.** Check rows against
+    the manifest's `row_values`.
+18. **Question ids must match `threads.py`'s `QID_RE`**, so `LOGS-D1` rather than `LOGS-DR1`. An id
+    that does not match is silently left out of the ledger. Check the charter before promising a
+    seam: S4 moved to per-engine namespaces while 015 and 016 still promised QuantProject.
 
 ## Running things
 
@@ -72,7 +79,8 @@ python -m logs_orthology.resolve --reference          # -> results/resolution_hu
 python -m logs_orthology.resolve --accessions ids.tsv # accession[<TAB>contaminant] per line
 python tests/test_contracts.py         # 10 contract tests
 python tests/test_resolve.py           # 16 resolver contracts (last one reconciles on real data)
-python tests/test_reported_claims.py   # 20 claims already sent to a partner
+python tests/test_reported_claims.py   # 22 claims already sent to a partner
+python -m logs_orthology.manifest       # -> results/resolver_inputs_e116.{json,md}
 dotnet run --project tools/BuildGeneSet -c Release -- <gtf.gz> results/gene_sets/<Species>.116.genes.tsv.gz
 dotnet run --project tools/ResolveSearchDb -c Release -- <xml> <gtf.gz | genes.tsv.gz> <uniprot.tsv.gz> <out.tsv>
 python -m logs_orthology.search_db <out.tsv> [--species mus_musculus --out results/search_db_resolution_mouse]
