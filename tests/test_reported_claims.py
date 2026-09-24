@@ -262,6 +262,26 @@ def test_resolver_input_manifest_as_sent_in_016():
     assert seen == {("116", want["homo_sapiens"][1], want["homo_sapiens"][2])}, seen
 
 
+def test_entry_vs_proteoform_split_as_sent_in_016():
+    """016 §2: pyMzLib 0.2.0 writes the entry-level rows; the rest are variant proteoforms whose
+    rows equal their entry's in every column but ``accession``."""
+    import csv
+    import gzip
+    with gzip.open(RESULTS / "search_db_human_e116.tsv.gz", "rt", encoding="utf-8", newline="") as f:
+        rows = list(csv.DictReader(f, delimiter="\t"))
+    entry = [r for r in rows if "_" not in r["accession"]]
+    variant = [r for r in rows if "_" in r["accession"]]
+    assert (len(entry), len({r["accession"] for r in entry})) == (20899, 20416), "016-logs §2"
+    assert (len(variant), len({r["accession"] for r in variant})) == (32340, 31943), "016-logs §2"
+    cols = [c for c in rows[0] if c != "accession"]
+    answers: dict[str, set] = {}
+    for r in rows:
+        answers.setdefault(r["accession"], set()).add(tuple(r[c] for c in cols))
+    differ = [a for a in {r["accession"] for r in variant}
+              if answers.get(a.split("_", 1)[0]) != answers[a]]
+    assert differ == [], "016-logs §2: no variant proteoform differs from its entry"
+
+
 def test_file_partition_as_sent_in_006():
     """Every human<->mouse orthology lives in the mouse dump; the human dump has none."""
     attrib = _cardinality()["orthology_by_source_file"]
