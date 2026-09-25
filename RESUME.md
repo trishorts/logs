@@ -120,6 +120,8 @@ Each of these cost real time on 2026-09-22.
 
 ## Pick up at
 
+**Next action:** Start PLAN step 6, the orthology store (`design/PLAN.md`); nothing blocks it. Run the thread inbox first.
+
 **State on 2026-09-24:** the resolver has shipped. #1337 and #1338 merged and are in **mzLib
 1.0.592**, and pyMzLib **0.2.0** projects #1338 as `proteins.resolve_genes()`. What 015 owed
 dataRepo is delivered: the input manifest is `results/resolver_inputs_e116.{json,md}`, and S4 is
