@@ -358,6 +358,17 @@ gaps:
     REFUSE `_<digits>` (load-collision counter) rather than map it, and ship before dataRepo joins a
     variant accession (promised in 022). Waiting on dataRepo LOGS-D3 (stored rat recount by agrees view).
   - >-
+    TABLED BY USER 2026-09-26 - STORE SHAPE. Discussed, not decided. Settled in discussion: logs must be
+    generic on its own (no dependency on aging or dataRepo; dataRepo is just a consumer), and take ANY
+    Ensembl species list (user). Proposed, awaiting the user: (1) the product is a BUILDER (any species
+    list, any release, pinned sha256 inputs), plus prebuilt snapshots; (2) storage unit = one file per
+    SPECIES PAIR (Compara only speaks pairwise; 245 species in e116 = 29,890 pairs vs 2,421,090
+    triples) plus orthogroups; triples/N-way are a computed "species-set view" checking every pair
+    (45 genes are pairwise-clean but not triple-clean; never chain = transitive closure); (3) Parquet,
+    server-less "serve everything" later (est. 25-30 GB for all of e116, NOT measured); (4) hosting:
+    GitHub release (repo is PRIVATE - needs a public decision) now, Zenodo DOI for anything
+    published; (5) paralogs included? (~90% of rows; ptmQtl needs them). Do not build step 6 until decided.
+  - >-
     RESIDUE-LEVEL CORRESPONDENCE for ptmQtl (accepted 003-logs). Route: Compara 116
     protein_default.aa.fasta.gz (866 MB, peptide MSA per gene tree; README read, file NOT yet fetched)
     for between-gene columns + our own aligner for UniProt->ENSP, isoforms, custom DBs (run /oracle
