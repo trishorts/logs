@@ -328,17 +328,42 @@ decisions:
       entry-level vs proteoform-level is a JOIN choice, not a definition choice. The released verb
       writes entry rows (20,899) where our tool wrote proteoform rows (53,239). The user chose to
       OFFER BOTH to dataRepo (LOGS-D2) rather than decide; our stated recommendation is entry-level.
+  - date: 2026-09-26
+    text: >-
+      RESIDUE-LEVEL HOMOLOGY IS A LOGS CAPABILITY (user, accepting ptmQtl LOGS-P1 in 003-logs).
+      Mapping a residue on one protein to its ortholog's or paralog's residue inherits every store
+      rule: source+release per row, one relationship per row, no transitive closure, one-to-many
+      kept, typed refusals (a gap is reported, never guessed). ptmQtl owns the layer above
+      (conservation calls, network edges). Coordinates are the entry's canonical sequence (LOGS-P3),
+      matching dataRepo's entry-level join. ptmQtl is a SECOND CONSUMER at a different grain - first
+      evidence against the "generic is unfalsified" gap.
+  - date: 2026-09-26
+    text: >-
+      GITHUB PROJECT #19 "logs" (smith-chem-wisc, user request via pride 001) holds every logs PR:
+      mzLib #1337, #1338. Status options Planned/In progress/In review/Shipped. Every new logs PR goes
+      on it (CLAUDE.md rule 13). Per-item Status and planned cards were blocked by the permission
+      classifier on 2026-09-26 and are the user's to set.
+  - date: 2026-09-26
+    text: >-
+      RAT CAUSE ANSWERED (022-logs, 013-logs; pinned in test_reported_claims). dataRepo's 48.6%
+      gene-less counts `outcome` (the XML view). Aging's agrees view keeps 4,908/8,228 (59.6%). XML
+      links four series (00000 4,227 / 00060 4,122 / 00055 4,119 / 00065 4,106 entries); 950 entries
+      link only non-GRCr8 series (xref rescues 521), 3,051 link no Ensembl gene (xref rescues 204).
 
 gaps:
   - >-
-    NEXT (waiting on dataRepo) - #1338 shipped in mzLib 1.0.592 and pyMzLib 0.2.0 projects it as
-    proteins.resolve_genes(), so S9 is done. Open: LOGS-D1 (their first run's row diff against 015
-    Sec.2) and LOGS-D2 (entry-level vs proteoform-level join, 016 Sec.2). If they choose entry-level,
-    we owe a GENERIC proteoform->entry accession rule (ours: accession normalization); "before the
-    first _" holds for UniProt but breaks RefSeq NP_.
+    LOGS-D1 CLOSED (dataRepo 019/020: pyMzLib 0.2.0 identical to our reference for all three species)
+    and LOGS-D2 CLOSED (entry-level; 43,925 of 43,925 stored accessions join with no mapping). The
+    proteoform->entry rule is still OURS and still unwritten: not needed on today's corpus; it must
+    REFUSE `_<digits>` (load-collision counter) rather than map it, and ship before dataRepo joins a
+    variant accession (promised in 022). Waiting on dataRepo LOGS-D3 (stored rat recount by agrees view).
   - >-
-    CHECK dataRepo's CHARTER: 017 asked them to mark S4 done for logs (logs:DEF-GENE-RESOLUTION v1,
-    design/DEFINITIONS.md) and the Sec.8 sign-off row for logs should show 015 confirmed. Their file.
+    RESIDUE-LEVEL CORRESPONDENCE for ptmQtl (accepted 003-logs). Route: Compara 116
+    protein_default.aa.fasta.gz (866 MB, peptide MSA per gene tree; README read, file NOT yet fetched)
+    for between-gene columns + our own aligner for UniProt->ENSP, isoforms, custom DBs (run /oracle
+    mzLib first). Key (search_database_sha256, entry accession, 1-based canonical position); gaps are
+    typed refusals. Test set: ptmQtl 002 (6,944/2,494/4,886 sites). Waiting on ptmQtl LOGS-P4
+    (which datasets carry isoform-suffixed sites). Sits on top of step 6.
   - >-
     Rat resolves poorly by any source: by Ensembl's xref only 59.6% of reviewed rat entries resolve,
     against 94.7% of human (008 to aging). Reference-data coverage, not a search problem - but any

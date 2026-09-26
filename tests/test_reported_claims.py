@@ -204,6 +204,30 @@ def test_rodent_resolution_as_sent_to_aging_in_008():
     assert (mouse["parity_identical"], rat["parity_identical"]) == (17277, 8228)
 
 
+RAT_XML = Path("F:/aging_data/db/uniprotkb_proteome_UP000002494_AND_revi_2026-09-22.xml")
+
+
+def test_rat_cause_as_sent_in_022_to_datarepo_and_013_to_aging():
+    """dataRepo 020 counted rat by ``outcome`` (the XML's view: 48.6% gene-less). 022/013 answered
+    that aging's view, any ``ensembl_xref_agrees`` row, keeps 4,908 of 8,228, and split the 725
+    recovered entries by XML outcome. The id-series counts need the search XML itself."""
+    import collections
+    import re
+    rat = _search_db_species("_rat")
+    with_gene = rat["xref_view"]["resolved"] + rat["xref_view"]["multi_gene"]
+    assert (with_gene, rat["parity_identical"]) == (4908, 8228), "022-logs §1, 013-logs §1"
+    rescued_not_in_source = rat["xml_unresolved_but_xref_resolves"] - rat["xml_off_primary_only_but_xref_resolves"]
+    assert rescued_not_in_source == 204, "022-logs §1"
+    if not RAT_XML.exists():
+        print(f"        (series counts not checked: {RAT_XML} is absent on this machine)")
+        return
+    series: collections.Counter = collections.Counter()
+    for entry in RAT_XML.read_text(encoding="utf-8").split("<entry ")[1:]:
+        series.update({g[:12] for g in re.findall(r'<property type="gene ID" value="(ENSRNOG\d+)', entry)})
+    assert series == {"ENSRNOG00000": 4227, "ENSRNOG00060": 4122,
+                      "ENSRNOG00055": 4119, "ENSRNOG00065": 4106}, "022-logs §1"
+
+
 def test_human_search_db_table_as_delivered_in_015():
     """015-logs handed dataRepo this file as the reference output their pyMzLib run will be diffed
     against. Written by tools/ResolveSearchDb at #1338 2f40c40c (LF line endings), gzipped with

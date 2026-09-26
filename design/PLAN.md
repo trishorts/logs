@@ -104,10 +104,10 @@ The human search DB hash is confirmed (REQ-AGING-7). For the ~1,012 accessions w
 carry UniProt's primary gene name from the pinned DB as a label; outcome stays `not_in_source`
 (REQ-AGING-8).
 
-### 6. The store — *DEFERRED until a rodent corpus exists*
+### 6. The store — *NEXT (started 2026-09-26)*
 
-Rodent data is **months** away (REQ-AGING-2: 0 rodent deposits queued). Designing the store after
-seeing a rodent corpus beats guessing at one. The design notes below stand.
+Un-deferred: aging 012 reports 5 mouse + 4 rat datasets in the served catalog, and dataRepo closed
+LOGS-D1/D2. Residue-level correspondence for ptmQtl (003-logs) sits on top of this step.
 
 Keying, when it is built:
 

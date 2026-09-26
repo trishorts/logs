@@ -53,6 +53,8 @@ This folder is a `/project`-managed research project. **You are de facto working
     `ensembl_xref_agrees` for Ensembl's.
 13. **mzLib PRs:** open against smith-chem-wisc, start the body with the `<!-- project-of-origin -->`
     "Project of origin: `logs`" line, and use `type(scope): summary` commits (`commit-style.md`).
+    **Every logs PR goes on GitHub Project #19** (https://github.com/orgs/smith-chem-wisc/projects/19):
+    `gh project item-add 19 --owner smith-chem-wisc --url <pr>`, Status In review; Shipped on merge.
 14. **`*.tsv.gz` is gitignored globally** (only `results/gene_sets/` and the delivered
     `results/search_db_human_e116.tsv.gz` are excepted). Run `git check-ignore -v <path>` before a
     message calls a file "tracked"; 015 said so before checking.
