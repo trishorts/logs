@@ -59,6 +59,48 @@ def test_normalize_parses_and_never_repairs():
         assert a.namespace == "unrecognized" and a.entry_accession == bad
 
 
+def test_variant_proteoform_maps_to_its_entry():
+    """LOGS-D2 (dataRepo 018 §1): mzLib names an applied-variant proteoform ``{entry}_{SimpleString}``,
+    one token per variant, ordered by position."""
+    for acc, entry, variant in (("O14994_S470N", "O14994", "S470N"),
+                                ("P12345_S70N_A80T", "P12345", "S70N_A80T"),
+                                ("P12345_AB70", "P12345", "AB70"),          # a deletion
+                                ("P12345_T70TAG", "P12345", "T70TAG")):     # an anchored insertion
+        a = R.normalize(acc)
+        assert (a.entry_accession, a.variant, a.namespace, a.verbatim) == (entry, variant, "uniprot", acc)
+    a = R.normalize("P12345-2_S70N")
+    assert (a.entry_accession, a.isoform, a.variant) == ("P12345", "2", "S70N")
+    assert R.normalize("P12345").variant is None
+
+
+def test_load_collision_counter_is_never_mapped_to_the_first_entry():
+    """dataRepo 018 §1: ``P12345_2`` is ProteinDbLoader's counter for a *different* entry whose
+    accession collided. Mapping it to ``P12345`` would give it another protein's genes."""
+    for acc in ("P12345_2", "P12345_10", "P12345_S70N_2", "NP_000537_2"):
+        a = R.normalize(acc)
+        assert (a.namespace, a.entry_accession, a.variant) == ("unrecognized", acc, None), acc
+    rows = R.resolve(_idx(_x("P11111", "ENSG_A")), "P11111_2")
+    assert [r.outcome for r in rows] == [R.UNRECOGNIZED]
+
+
+def test_refseq_underscore_is_not_a_variant_suffix():
+    """"Text before the first ``_``" would turn ``NP_000537`` into ``NP``."""
+    a = R.normalize("NP_000537.3_R72P")
+    assert (a.entry_accession, a.version, a.variant, a.namespace) == ("NP_000537", "3", "R72P", "refseq")
+    assert R.normalize("NP_000537").variant is None
+
+
+def test_decoy_and_entrapment_prefixes_stay_unrecognized():
+    for acc in ("DECOY_P12345", "DECOY_P12345_S70N", "Random_P12345", "DECOY_Random_P12345"):
+        assert R.normalize(acc).namespace == "unrecognized", acc
+
+
+def test_variant_resolves_through_its_entry():
+    rows = R.resolve(_idx(_x("P11111", "ENSG_A")), "P11111_S70N")
+    assert [(r.accession, r.entry_accession, r.matched_on, r.outcome, r.gene_id) for r in rows] == \
+        [("P11111_S70N", "P11111", "entry", R.RESOLVED, "ENSG_A")]
+
+
 # ---------------------------------------------------------------------------------------------
 # Outcomes
 # ---------------------------------------------------------------------------------------------

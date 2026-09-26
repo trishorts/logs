@@ -87,6 +87,13 @@ RE_UNIPROT = re.compile(
 )
 #: RefSeq protein accessions, with an optional version. Ensembl's dump carries them unversioned.
 RE_REFSEQ_PROTEIN = re.compile(r"^((?:NP|XP|YP|WP|AP)_\d+)(?:\.(\d+))?$")
+#: mzLib's name for a proteoform with applied sequence variants: the entry's accession, then one
+#: ``_{original}{position}{variant}`` token per variant, ordered by position
+#: (``VariantApplication.GetAccession`` / ``SequenceVariation.SimpleString``). The original residues
+#: are never empty; the variant residues are empty for a deletion.
+#: NOT the same as ``_{digits}``: that is ``ProteinDbLoader``'s load-collision counter, naming a
+#: *different* entry whose accession collided, and it must never map back to the first entry.
+RE_VARIANT_SUFFIX = re.compile(r"^(.+?)((?:_[A-Z]+\d+[A-Z]*)+)$")
 
 
 @dataclass(frozen=True)
@@ -106,16 +113,38 @@ class Accession:
     #: RefSeq version, or ``None``.
     version: str | None
     namespace: str  # "uniprot" | "refseq" | "unrecognized"
+    #: mzLib's applied-variant suffix without its leading ``_`` (``S70N`` or ``S70N_A80T``), or
+    #: ``None``. A variant proteoform takes its entry's gene answer (0 of 31,943 differ, 016-logs §2).
+    variant: str | None = None
 
 
-def normalize(accession: str) -> Accession:
-    """Parse, never repair. Anything outside the grammar is ``unrecognized`` and kept verbatim."""
+def _parse_base(accession: str) -> Accession | None:
     m = RE_UNIPROT.match(accession)
     if m:
         return Accession(accession, m.group(1), m.group(2), None, "uniprot")
     m = RE_REFSEQ_PROTEIN.match(accession)
     if m:
         return Accession(accession, m.group(1), None, m.group(2), "refseq")
+    return None
+
+
+def normalize(accession: str) -> Accession:
+    """Parse, never repair. Anything outside the grammar is ``unrecognized`` and kept verbatim.
+
+    This is also the proteoform-to-entry rule (LOGS-D2): ``P12345_S70N`` is entry ``P12345``. The
+    base is matched against a full accession grammar rather than cut at the first ``_``, which would
+    break ``NP_000001``. A load-collision counter (``P12345_2``) matches no grammar and stays
+    ``unrecognized``, as its own key; so do decoy and entrapment prefixes.
+    """
+    base = _parse_base(accession)
+    if base is not None:
+        return base
+    m = RE_VARIANT_SUFFIX.match(accession)
+    if m:
+        base = _parse_base(m.group(1))
+        if base is not None:
+            return Accession(accession, base.entry_accession, base.isoform, base.version,
+                             base.namespace, m.group(2)[1:])
     return Accession(accession, accession, None, None, "unrecognized")
 
 

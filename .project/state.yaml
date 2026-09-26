@@ -354,9 +354,13 @@ gaps:
   - >-
     LOGS-D1 CLOSED (dataRepo 019/020: pyMzLib 0.2.0 identical to our reference for all three species)
     and LOGS-D2 CLOSED (entry-level; 43,925 of 43,925 stored accessions join with no mapping). The
-    proteoform->entry rule is still OURS and still unwritten: not needed on today's corpus; it must
-    REFUSE `_<digits>` (load-collision counter) rather than map it, and ship before dataRepo joins a
-    variant accession (promised in 022). Waiting on dataRepo LOGS-D3 (stored rat recount by agrees view).
+    proteoform->entry rule is WRITTEN (2026-09-26) in logs' prototype: resolve.normalize() parses
+    mzLib's `{entry}_{Orig}{pos}{Var}[_...]` suffix (VariantApplication.GetAccession, smith/master
+    636d25c5) against a full UniProt/RefSeq base grammar; `_<digits>` collision counters, decoy and
+    entrapment prefixes stay unrecognized. All 32,847 variant accessions in our three reference tables
+    parse to their entry. NOT YET where dataRepo can call it: they use pyMzLib, so the rule needs an
+    mzLib home (ORACLE.md said accession normalization -> MzLibUtil ClassExtensions; run /oracle mzLib
+    first) before a search reports variant accessions. Waiting on dataRepo LOGS-D3 (stored rat recount by agrees view).
   - >-
     TABLED BY USER 2026-09-26 - STORE SHAPE. Discussed, not decided. Settled in discussion: logs must be
     generic on its own (no dependency on aging or dataRepo; dataRepo is just a consumer), and take ANY

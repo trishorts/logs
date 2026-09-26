@@ -42,7 +42,7 @@ def summarize(cs_table: Path, species: str = "homo_sapiens") -> dict:
     with open(cs_table, encoding="utf-8", newline="") as fh:
         for r in csv.DictReader(fh, delimiter="\t"):
             sha = sha or r["search_database_sha256"]
-            if normalize(r["accession"]).namespace == "unrecognized":
+            if normalize(r["accession"]).variant is not None:
                 # A proteoform's own rows, not the genes the xref adds to it.
                 variants += r["source"] != "ensembl_xref"
                 continue
