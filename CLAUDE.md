@@ -8,12 +8,13 @@ This folder is a `/project`-managed research project. **You are de facto working
 - **Goal:** A generic, versioned, gene-centric cross-species orthology layer that lets any
   multi-organism proteomics project join protein identifications across species without collapsing
   one-to-many orthology.
-- **Pick up at:** run the thread inbox. We are waiting on dataRepo (017) for **LOGS-D1**, their
-  first pyMzLib run's row diff, and **LOGS-D2**, the entry- or proteoform-level join (016 §2). If
-  they pick entry-level, write a generic proteoform-to-entry accession rule; "before the first `_`"
-  breaks RefSeq `NP_`. Otherwise start **PLAN step 6, the orthology store**, which is unblocked.
-  The resolver has shipped (mzLib 1.0.592, pyMzLib 0.2.0 `proteins.resolve_genes()`), and the
-  manifest and S4 (`logs:DEF-GENE-RESOLUTION v1`) are delivered. See `RESUME.md`.
+- **Pick up at:** run the thread inbox. We wait on dataRepo **LOGS-D3** (stored rat recount by the
+  agrees view) and ptmQtl **LOGS-P4** (isoform-suffixed sites). Then ask the user for the
+  **store-shape decision they tabled on 2026-09-26**; the options are in the `TABLED BY USER` gap in
+  `.project/state.yaml`. Do not build PLAN step 6 before they decide. Settled: logs stands alone
+  (dataRepo is only a consumer) and takes any Ensembl species list. Gene resolution is done: LOGS-D1
+  and LOGS-D2 are closed, and the proteoform-to-entry rule is `normalize()` (still to port to mzLib).
+  Residue-level homology for ptmQtl is accepted as ours. See `RESUME.md`.
 
 ## Things that will bite you here
 
@@ -69,6 +70,8 @@ This folder is a `/project`-managed research project. **You are de facto working
 18. **Question ids must match `threads.py`'s `QID_RE`**, so `LOGS-D1` rather than `LOGS-DR1`. An id
     that does not match is silently left out of the ledger. Check the charter before promising a
     seam: S4 moved to per-engine namespaces while 015 and 016 still promised QuantProject.
+19. **Count a gene view by the view, not by `outcome`.** `outcome` is the XML's links; the
+    `ensembl_xref_agrees` view adds xref-only rows. Rat: 51.4% by `outcome`, 59.6% by agrees (022).
 
 ## Running things
 
@@ -80,8 +83,8 @@ python -m logs_orthology.xrefs          # -> results/accession_resolution.{md,js
 python -m logs_orthology.resolve --reference          # -> results/resolution_human_e116.{tsv.gz,json}
 python -m logs_orthology.resolve --accessions ids.tsv # accession[<TAB>contaminant] per line
 python tests/test_contracts.py         # 10 contract tests
-python tests/test_resolve.py           # 16 resolver contracts (last one reconciles on real data)
-python tests/test_reported_claims.py   # 22 claims already sent to a partner
+python tests/test_resolve.py           # 21 resolver contracts (last one reconciles on real data)
+python tests/test_reported_claims.py   # 23 claims already sent to a partner
 python -m logs_orthology.manifest       # -> results/resolver_inputs_e116.{json,md}
 dotnet run --project tools/BuildGeneSet -c Release -- <gtf.gz> results/gene_sets/<Species>.116.genes.tsv.gz
 dotnet run --project tools/ResolveSearchDb -c Release -- <xml> <gtf.gz | genes.tsv.gz> <uniprot.tsv.gz> <out.tsv>

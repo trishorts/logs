@@ -117,33 +117,45 @@ Each of these cost real time on 2026-09-22.
    `#!source-sha256` header). The manifest gives both; check rows against its `row_values`.
 10. **Read the partner's charter before promising a seam.** 015 and 016 promised S4 through
     QuantProject after charter v0.2 had already replaced the registry; 017 withdrew it.
+11. **Count a gene view by the view, not by `outcome`.** `outcome` reports the search XML's links;
+    the `ensembl_xref_agrees` view adds the xref-only rows. dataRepo's "48.6% of rat lost" was the
+    XML's view; aging's own view keeps 59.6% of rat entries (022-logs).
 
 ## Pick up at
 
-**Next action:** Start PLAN step 6, the orthology store (`design/PLAN.md`); nothing blocks it. Run the thread inbox first.
+**Next action:** Run the thread inbox, then ask the user for the **store-shape decision** that was
+tabled on 2026-09-26 (the options are in the `TABLED BY USER` gap in `.project/state.yaml`). Do not
+build PLAN step 6 until they decide. If they want to wait longer, the unblocked work is the
+UniProt-vs-Ensembl sequence-identity measurement for ptmQtl (step 3 below).
 
-**State on 2026-09-24:** the resolver has shipped. #1337 and #1338 merged and are in **mzLib
-1.0.592**, and pyMzLib **0.2.0** projects #1338 as `proteins.resolve_genes()`. What 015 owed
-dataRepo is delivered: the input manifest is `results/resolver_inputs_e116.{json,md}`, and S4 is
-`logs:DEF-GENE-RESOLUTION v1` (`design/DEFINITIONS.md`). No reply is owed to any peer.
+**State on 2026-09-26:** gene resolution is done and in use. dataRepo reproduced our reference output
+on its own machine for all three species (LOGS-D1) and chose the entry-level join (LOGS-D2); their
+datarepo 0.20.0 stores our rows as `gene_resolutions`, run by the instance operator (aging) under
+charter v0.3. The proteoform-to-entry rule is written (`normalize()` in
+`src/logs_orthology/resolve.py`, 12c2f3b). ptmQtl is a second consumer, and we accepted
+residue-level homology as ours (003-logs). All logs PRs live on GitHub Project **#19**.
 
 **1. Run the thread inbox** (`python "$env:USERPROFILE/.claude/skills/project/assets/threads.py" inbox`).
-We are waiting on dataRepo (after 017) and on aging (after 010). dataRepo owes:
-- **LOGS-D1**, their first pyMzLib run's row diff against `results/search_db_human_e116.tsv.gz`.
-  015 asked for it as `LOGS-DR1`, an id the ledger could not parse, so 016 re-issued it.
-- **LOGS-D2**, which join they want (016 §2):
-  - **entry-level**, which is what the verb writes (20,899 rows), and which we recommended;
-  - **proteoform-level**, which is 015's table (53,239 rows) and needs a variant option in the verb.
+We are waiting on:
+- **dataRepo, LOGS-D3:** recount their stored rat accessions by the agrees view (022 §2).
+- **ptmQtl, LOGS-P4:** which datasets carry isoform-suffixed site accessions (003 §2).
 
-**2. If dataRepo picks entry-level, write the proteoform-to-entry accession rule.** It is ours, since
-accession normalization is ours. "Text before the first `_`" holds for UniProt but breaks on RefSeq
-`NP_000001`, so the rule has to be generic. It would extend `normalize()` in
-`src/logs_orthology/resolve.py`, and probably mzLib later (run `/oracle mzLib` first).
+**2. The store (PLAN step 6), once the user decides its shape.** Settled with the user: logs stands
+alone (dataRepo is only a consumer) and takes **any Ensembl species list**. Proposed: a builder; one
+file per species pair plus orthogroups; triples and larger sets as a computed view that checks every
+pair (never chain pairs); Parquet; GitHub release (the repo is private) and Zenodo for anything
+published; paralogs optional. The loaders already exist in `src/logs_orthology/load.py`.
 
-**3. Next piece of work: PLAN step 6, the orthology store** (`design/PLAN.md`; its design notes are
-in the `state.yaml` gaps). Nothing is blocking it. aging's mouse and rat databases are resolved
-(`results/search_db_resolution_{mouse,rat}.md`), and rat searches are running at aging now.
+**3. Residue correspondence for ptmQtl** sits on top of step 2. First measurement, unblocked: how
+often a UniProt canonical sequence equals its Ensembl translation, since Compara's gene-tree
+alignment (`emf/ensembl-compara/homologies/Compara.116.protein_default.aa.fasta.gz`, 866 MB, not
+fetched) is over Ensembl proteins. Run `/oracle mzLib` before writing any aligner.
 
+**4. Port the proteoform-to-entry rule to mzLib** before any search reports variant accessions;
+dataRepo calls pyMzLib, not our Python. `/oracle mzLib` first (`design/ORACLE.md` pointed accession
+normalization at `MzLibUtil/ClassExtensions.cs`).
+
+**The user still has to** set #1337 and #1338 to Shipped on board #19 (the classifier blocked it).
 **Decided, do not re-open:**
 
 - **dataRepo runs the resolution (option (a), user rule D24; accepted in 015).** We define the logic,
@@ -164,8 +176,7 @@ in the `state.yaml` gaps). Nothing is blocking it. aging's mouse and rat databas
 
 **Open, and your call:**
 
-- dataRepo has **not** been told the rat finding (four id series; 725 xref-only entries). aging
-  has, most recently in 010.
+- The store's shape (tabled by the user on 2026-09-26; see Pick up §2).
 - The occupancy-manuscript findings have not been sent to Peter. mzLib #1337 **merged** on
   2026-09-23 and is in 1.0.592. The CNBr limit is documented as a non-goal, not guarded in code.
 - The `go` thread was dropped: its only content was the #1336 stack, and both PRs have merged.
@@ -192,9 +203,9 @@ Sanity-check before changing anything:
 
 ```powershell
 $env:PYTHONPATH = "E:\CodeReview\logs\src"
-python tests/test_reported_claims.py    # 22 claims already sent to a partner
+python tests/test_reported_claims.py    # 23 claims already sent to a partner
 python -m logs_orthology.manifest       # regenerate results/resolver_inputs_e116.{json,md}
-python tests/test_resolve.py            # 16 resolver contracts
+python tests/test_resolve.py            # 21 resolver contracts
 python tests/test_contracts.py          # 10 contract tests
 ```
 
@@ -211,14 +222,14 @@ python tests/test_contracts.py          # 10 contract tests
 
 <!-- BEGIN GENERATED -- render_resume.py owns this block; edit state.yaml, not here -->
 
-**logs** &middot; phase **BUILD** (4/10) &middot; created 2026-09-22 &middot; rendered 2026-09-24
+**logs** &middot; phase **BUILD** (4/10) &middot; created 2026-09-22 &middot; rendered 2026-09-26
 
 | | |
 |---|---|
-| Commits | 60 |
+| Commits | 76 |
 | Sync | [`trishorts/logs`](https://github.com/trishorts/logs) |
-| Locked decisions | 38 |
-| Open gaps | 6 |
+| Locked decisions | 41 |
+| Open gaps | 7 |
 | Gate items skipped | 2 |
 
 **Worktrees** -- details in `code/PINNED.md`
