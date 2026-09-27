@@ -360,7 +360,9 @@ gaps:
     entrapment prefixes stay unrecognized. All 32,847 variant accessions in our three reference tables
     parse to their entry. NOT YET where dataRepo can call it: they use pyMzLib, so the rule needs an
     mzLib home (ORACLE.md said accession normalization -> MzLibUtil ClassExtensions; run /oracle mzLib
-    first) before a search reports variant accessions. Waiting on dataRepo LOGS-D3 (stored rat recount by agrees view).
+    first) before a search reports variant accessions. LOGS-D3 CLOSED 2026-09-27 (dataRepo 023: 4,886 of 8,180
+    stored rat accessions, 59.7%, by the agrees view; 024-logs explained the 44 it drops: absent from
+    Ensembl's xref, 42 genes xref'd to TrEMBL only, 2 with no xref; pinned).
   - >-
     TABLED BY USER 2026-09-26 - STORE SHAPE. Discussed, not decided. Settled in discussion: logs must be
     generic on its own (no dependency on aging or dataRepo; dataRepo is just a consumer), and take ANY
