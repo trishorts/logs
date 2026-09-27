@@ -109,6 +109,12 @@ carry UniProt's primary gene name from the pinned DB as a label; outcome stays `
 Un-deferred: aging 012 reports 5 mouse + 4 rat datasets in the served catalog, and dataRepo closed
 LOGS-D1/D2. Residue-level correspondence for ptmQtl (003-logs) sits on top of this step.
 
+**Shape decided 2026-09-27 (user):** a builder plus snapshots, one Parquet file per species pair
+plus orthogroups, and paralogs included and typed. The schema is `logs:DEF-ORTHOLOGY v1`
+(proposed) in `design/DEFINITIONS.md`, and was sent to dataRepo in 025 before building, with
+LOGS-D4 (store it or read it in place). The notes below are the earlier keying, which that
+definition supersedes where the two differ.
+
 Keying, when it is built:
 
 - `Gene`, `ProteinAccession`, `OrthologyGroup`, `OrthologyGroupMember`, `OrthologyRelationship`

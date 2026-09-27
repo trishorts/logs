@@ -83,3 +83,117 @@ answer**, in every column except `accession`. This was measured on human Ensembl
 how it joins, not of the definition. That choice is open with dataRepo as LOGS-D2. Mapping a
 proteoform accession to its entry is ours to define (accession normalization, OWNERSHIP). For
 UniProt it is the text before the first `_`. That rule does not hold for RefSeq (`NP_000001`).
+
+---
+
+## `logs:DEF-ORTHOLOGY v1`: the orthology store (PROPOSED)
+
+**Status:** proposed 2026-09-27 and sent to dataRepo before it is built. Not built yet.
+**Implementation:** the logs builder (PLAN step 6). It is not yet written, and its home is not yet
+chosen: run `/oracle mzLib` first.
+
+### What it answers
+
+Given two species, which genes are homologous, as the source asserts them, with every relationship
+kept as its own row. Given a set of species, which one-gene-per-species tuples are orthologous in
+**every** pair. The store never picks a gene, never collapses one-to-many, and never infers a group
+by chaining pairs.
+
+### The product
+
+A **builder** takes any list of Ensembl species and a release, with every input pinned by sha256.
+It writes a **snapshot**. Prebuilt snapshots are published as GitHub releases, and any snapshot
+cited in a paper gets a Zenodo DOI. A snapshot is never updated in place: a new release, or a new
+species list, is a new snapshot.
+
+### Layout of a snapshot
+
+```
+<source>-<release>/                     e.g. compara-116/
+  manifest.json                         definition, builder version, species, every input and output file with sha256
+  genes/<species>.parquet               one row per gene of the species' primary-assembly gene set
+  members/<species>.parquet             one row per gene in a gene tree (gene -> group)
+  pairs/<species_a>__<species_b>.parquet    species_a <= species_b; species_a == species_b holds that species' paralogs
+  views.sql                             the views below, as DuckDB table macros over the Parquet files
+```
+
+Species are Ensembl production names (`homo_sapiens`). The unit is the **species pair** because
+Compara asserts relationships only pairwise. Triples and larger sets are views, never stored.
+
+### `genes/<species>.parquet`
+
+The rows of the primary-assembly gene set (the gene-set table's columns, verbatim): `gene_id`,
+`gene_version`, `gene_biotype`, `gene_name` (nullable), `seq_region`, plus `species`. The manifest
+records the GTF's sha256 per species. This is the value a `DEF-GENE-RESOLUTION` row carries as
+`gene_set_sha256`, so a consumer can check that a resolution and a snapshot use the same gene set.
+
+### `members/<species>.parquet`
+
+`gene_id`, `species`, `group_id`, `source_group_id`, `canonical_protein_id`.
+
+- `source_group_id` is Compara's gene-tree id (`ENSGT…`), verbatim.
+- `group_id` is **ours**: `<source>-<release>:<source_group_id>`. It is unique across sources and
+  releases, and it is **never promised stable across releases**.
+- In Ensembl 116, each gene is in exactly one tree and has exactly one canonical protein, so this
+  is one row per treed gene. The builder refuses a release in which that stops being true, rather
+  than choosing.
+- A gene with no row here is `not_in_any_tree`.
+
+### `pairs/<species_a>__<species_b>.parquet`
+
+One row per relationship the source asserts. Values are verbatim, and the source's `NULL` stays
+null, never 0.
+
+| column | type | meaning |
+|---|---|---|
+| `homology_id` | string | the source's id for the relationship; unique within the snapshot |
+| `relationship_type` | string | Compara's `homology_type`, verbatim (`ortholog_one2one`, `other_paralog`, …) |
+| `relationship_class` | string | `ortholog`, `paralog` or `homoeolog`, derived from `relationship_type` |
+| `species_a`, `species_b` | string | as in the file name |
+| `gene_a`, `protein_a`, `identity_a` | string, string, double | species_a's side; identity is Compara's percentage for that side |
+| `gene_b`, `protein_b`, `identity_b` | string, string, double | species_b's side |
+| `dn`, `ds` | double, nullable | verbatim |
+| `goc_score` | int32, nullable | verbatim |
+| `wga_coverage` | double, nullable | verbatim |
+| `is_high_confidence` | bool, nullable | null means the source declined to say, not false |
+| `source_dump` | string | which genome-specific dump held the row (provenance) |
+
+- **Orientation.** In a cross-species file, the `_a` side is always `species_a`. The builder swaps
+  sides where the source listed them the other way round, and each identity moves with its gene.
+- **Paralogs are included and typed.** Every paralog type observed in 116 is within one species, so
+  paralogs sit in the `<species>__<species>` file. The builder refuses a paralog row that crosses
+  species, and refuses a `homology_type` it does not know.
+- **Every pair is read from both species' dumps.** Ensembl's README says that each genome-specific
+  dump holds an arbitrary subset of that genome's relationships. So the builder reads both dumps,
+  keeps the rows for the pair, and deduplicates on `homology_id`. If the same id appears with
+  different content, the build fails.
+
+### Views (`views.sql`; filters and joins, not stored)
+
+- **`orthologs(a, b)`**: the pair file's ortholog rows, oriented so species `a`'s gene comes first.
+- **`pair_status(a, b)`**: one row per gene of `a`, with exactly one status:
+
+  | status | meaning |
+  |---|---|
+  | `has_ortholog` | at least one ortholog row to a gene of `b` |
+  | `no_edge_in_shared_tree` | the gene's tree contains a gene of `b`, but the source called no ortholog |
+  | `tree_lacks_target_species` | the gene's tree contains no gene of `b`, so there was nothing to compare |
+  | `not_in_any_tree` | in the gene set, but in no gene tree; no call was attempted |
+
+  `not_in_gene_set` is the fifth status. It applies only to a gene id supplied from outside, such
+  as a `gene_resolutions` row resolved against a different gene set. The view carries
+  `gene_biotype`, so the denominator is **the consumer's choice, and it must be named**: it is not
+  the same as `protein_coding` (rule 2).
+- **`species_set(species…)`**: the one-gene-per-species tuples in which **every pair** has an
+  ortholog row. The flag `all_one2one` is set when every one of those rows is `ortholog_one2one`.
+  A tuple is never formed by chaining (A~B and B~C does not give A~C), because Compara's pairwise
+  calls are not transitive.
+
+### What it does not do
+
+- It does not map protein accessions. That is `DEF-GENE-RESOLUTION`: join its `gene_id` to
+  `genes.gene_id`, after checking that its `gene_set_sha256` is the snapshot's GTF sha256.
+- It does not merge sources. NCBI, Alliance or HCOP would each be a separate `<source>-<release>`
+  snapshot with the same layout, and would never be unioned into one unqualified answer.
+- It does not provide residue-level correspondence (ptmQtl). That is built on top of this store and
+  is defined separately.
