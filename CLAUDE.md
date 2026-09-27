@@ -8,13 +8,12 @@ This folder is a `/project`-managed research project. **You are de facto working
 - **Goal:** A generic, versioned, gene-centric cross-species orthology layer that lets any
   multi-organism proteomics project join protein identifications across species without collapsing
   one-to-many orthology.
-- **Pick up at:** run the thread inbox. We wait on dataRepo **LOGS-D3** (stored rat recount by the
-  agrees view) and ptmQtl **LOGS-P4** (isoform-suffixed sites). Then ask the user for the
-  **store-shape decision they tabled on 2026-09-26**; the options are in the `TABLED BY USER` gap in
-  `.project/state.yaml`. Do not build PLAN step 6 before they decide. Settled: logs stands alone
-  (dataRepo is only a consumer) and takes any Ensembl species list. Gene resolution is done: LOGS-D1
-  and LOGS-D2 are closed, and the proteoform-to-entry rule is `normalize()` (still to port to mzLib).
-  Residue-level homology for ptmQtl is accepted as ours. See `RESUME.md`.
+- **Pick up at:** build PLAN step 6, the store. The shape was **decided 2026-09-27**: a builder (any
+  Ensembl species list and release, sha256-pinned inputs) plus snapshots; one Parquet file per species
+  pair plus orthogroups; N-way views check every pair; paralogs included, typed; GitHub release plus
+  Zenodo. Before building, send dataRepo the schema (promised in 024). Still waiting on ptmQtl
+  **LOGS-P4**. LOGS-D1, D2 and D3 are closed. `normalize()` still has to be ported to mzLib. Open:
+  make the repo public, or ship from a separate data repo. See `RESUME.md`.
 
 ## Things that will bite you here
 
