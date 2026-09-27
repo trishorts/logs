@@ -382,7 +382,9 @@ gaps:
     for between-gene columns + our own aligner for UniProt->ENSP, isoforms, custom DBs (run /oracle
     mzLib first). Key (search_database_sha256, entry accession, 1-based canonical position); gaps are
     typed refusals. Test set: ptmQtl 002 (6,944/2,494/4,886 sites). Waiting on ptmQtl LOGS-P4
-    (which datasets carry isoform-suffixed sites). Sits on top of step 6.
+    (which datasets carry isoform-suffixed sites) - ANSWERED 2026-09-27 (004-ptmQtl): 10 of 41 datasets, 2,409
+    target site rows, each isoform its own entry; test proteins P02751, P10636/P19332, P05067, P02545.
+    005-logs: 003 key unchanged, isoform->canonical is an alignment edge. Sits on top of step 6.
   - >-
     Rat resolves poorly by any source: by Ensembl's xref only 59.6% of reviewed rat entries resolve,
     against 94.7% of human (008 to aging). Reference-data coverage, not a search problem - but any

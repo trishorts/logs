@@ -11,8 +11,9 @@ This folder is a `/project`-managed research project. **You are de facto working
 - **Pick up at:** build PLAN step 6, the store. The shape was **decided 2026-09-27**: a builder (any
   Ensembl species list and release, sha256-pinned inputs) plus snapshots; one Parquet file per species
   pair plus orthogroups; N-way views check every pair; paralogs included, typed; GitHub release plus
-  Zenodo. Before building, send dataRepo the schema (promised in 024). Still waiting on ptmQtl
-  **LOGS-P4**. LOGS-D1, D2 and D3 are closed. `normalize()` still has to be ported to mzLib. Open:
+  Zenodo. The schema is `logs:DEF-ORTHOLOGY v1` (proposed, `design/DEFINITIONS.md`), sent to
+  dataRepo in 025. We wait on **LOGS-D4** (do they store it, or read it in place). LOGS-D1, D2, D3
+  and P4 are closed; P4 made isoform-to-canonical a real residue test case (ptmQtl 004). `normalize()` still has to be ported to mzLib. Open:
   make the repo public, or ship from a separate data repo. See `RESUME.md`.
 
 ## Things that will bite you here
