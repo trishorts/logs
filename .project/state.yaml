@@ -373,6 +373,15 @@ gaps:
     stored rat accessions, 59.7%, by the agrees view; 024-logs explained the 44 it drops: absent from
     Ensembl's xref, 42 genes xref'd to TrEMBL only, 2 with no xref; pinned).
   - >-
+    STEP 6 BUILT IN C# 2026-09-27 (user: substance goes in mzLib C#; NuGet approved). mzLib branch
+    feat/compara-orthology-store @ 16c6a8d9 (code/mzLib-orthology-store), NOT pushed, NO PR yet:
+    UsefulProteomicsDatabases.Ensembl readers + OrthologySnapshot, new OrthologyStore project (Parquet.Net
+    6.1.0) writer + views.sql. 7,026 required tests pass; hygiene OK. Real 116 human/mouse/rat snapshot
+    (snapshots/compara-116, gitignored, id b63a3331..., 13 files 9.0 MB) reproduces every cardinality.py figure
+    in C# and in DuckDB; rebuild byte-identical. Next: push + PR (smith-chem-wisc, board #19), then tell
+    dataRepo the snapshot exists (025 promised counts with the first snapshot; manifest has format, not
+    definition id; SQL view is species_set3). LOGS-D4 still open.
+  - >-
     STORE SHAPE DECIDED 2026-09-27 (see decisions). Still open under it: make the repo public, or
     ship snapshots from a separate public data repo, before the first GitHub release. The 25-30 GB
     all-of-e116 size is an estimate; measure it on the first real build.

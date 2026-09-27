@@ -86,11 +86,18 @@ UniProt it is the text before the first `_`. That rule does not hold for RefSeq 
 
 ---
 
-## `logs:DEF-ORTHOLOGY v1`: the orthology store (PROPOSED)
+## `logs:DEF-ORTHOLOGY v1`: the orthology store (PROPOSED, BUILT)
 
-**Status:** proposed 2026-09-27 and sent to dataRepo before it is built. Not built yet.
-**Implementation:** the logs builder (PLAN step 6). It is not yet written, and its home is not yet
-chosen: run `/oracle mzLib` first.
+**Status:** proposed 2026-09-27 and sent to dataRepo (025) before it was built. It was built the
+same day, and is still proposed until LOGS-D4 is answered.
+**Implementation:** mzLib (branch `feat/compara-orthology-store`, `code/mzLib-orthology-store`).
+`UsefulProteomicsDatabases.Ensembl` reads the dumps (`ComparaHomologyDump`, `ComparaGeneTreeContent`)
+and builds `OrthologySnapshot`. The `OrthologyStore` project (Parquet.Net) writes it with
+`OrthologySnapshotWriter`. The on-disk format is `ensembl-orthology-snapshot` format 1, which is this
+definition. Our driver is `tools/BuildOrthologySnapshot`.
+**Checked (2026-09-27, human/mouse/rat 116):** the C# views, the DuckDB views and `cardinality.py`
+agree on all six pair-status distributions, on 23,764 human-mouse rows and on 15,508 all-one-to-one
+human genes. A rebuild is byte-identical.
 
 ### What it answers
 
@@ -110,7 +117,7 @@ species list, is a new snapshot.
 
 ```
 <source>-<release>/                     e.g. compara-116/
-  manifest.json                         definition, builder version, species, every input and output file with sha256
+  manifest.json                         format + version, snapshot_id, release, species, gene_set_sha256, inputs and files with sha256
   genes/<species>.parquet               one row per gene of the species' primary-assembly gene set
   members/<species>.parquet             one row per gene in a gene tree (gene -> group)
   pairs/<species_a>__<species_b>.parquet    species_a <= species_b; species_a == species_b holds that species' paralogs
@@ -184,7 +191,8 @@ null, never 0.
   as a `gene_resolutions` row resolved against a different gene set. The view carries
   `gene_biotype`, so the denominator is **the consumer's choice, and it must be named**: it is not
   the same as `protein_coding` (rule 2).
-- **`species_set(species…)`**: the one-gene-per-species tuples in which **every pair** has an
+- **`species_set3(a, b, c)`** in SQL, and **`OrthologySnapshot.SpeciesSet(species…)`** for any
+  number of species in mzLib: the one-gene-per-species tuples in which **every pair** has an
   ortholog row. The flag `all_one2one` is set when every one of those rows is `ortholog_one2one`.
   A tuple is never formed by chaining (A~B and B~C does not give A~C), because Compara's pairwise
   calls are not transitive.

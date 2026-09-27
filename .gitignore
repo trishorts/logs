@@ -47,3 +47,6 @@ __pycache__/
 /results/search_db_*.tsv
 # ...except the one delivered to dataRepo as a reference output (015-logs); its bytes are pinned.
 !/results/search_db_human_e116.tsv.gz
+
+# Orthology store snapshots: release assets, recorded by their manifest (PLAN step 6)
+/snapshots/
