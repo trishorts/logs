@@ -228,6 +228,41 @@ def test_rat_cause_as_sent_in_022_to_datarepo_and_013_to_aging():
                       "ENSRNOG00055": 4119, "ENSRNOG00065": 4106}, "022-logs §1"
 
 
+def test_rat_agrees_view_losses_as_sent_in_024_to_datarepo():
+    """dataRepo 023 reported 44 rat entries the XML resolves but the agrees view drops. 024 said
+    why: not one of the 44 accessions is in Ensembl's rat UniProt xref. For 42, Ensembl links the
+    gene to TrEMBL entries only; the other 2 genes have no UniProt xref. Counted over ENTRIES:
+    the table's variant proteoform rows would make it 45."""
+    import collections
+    import csv
+    import gzip
+    with open(RESULTS / "search_db_rat_e116.tsv", encoding="utf-8", newline="") as f:
+        by: dict[str, list] = collections.defaultdict(list)
+        for r in csv.DictReader(f, delimiter="\t"):
+            if r["accession"] == r["entry_accession"]:
+                by[r["accession"]].append(r)
+    lost = {a: rs[0]["gene_id"] for a, rs in by.items()
+            if rs[0]["outcome"] in ("resolved", "multi_gene")
+            and not any(r["ensembl_xref_agrees"] == "true" for r in rs)}
+    assert len(lost) == 44, "024-logs, dataRepo 023 §2"
+    xref = ROOT / "data/compara/Rattus_norvegicus.GRCr8.116.uniprot.tsv.gz"
+    if not xref.exists():
+        print(f"        (xref split not checked: {xref} is absent on this machine)")
+        return
+    accs: set = set()
+    gene_dbs: dict[str, set] = collections.defaultdict(set)
+    with gzip.open(xref, "rt", encoding="utf-8") as f:
+        for r in csv.DictReader(f, delimiter="\t"):
+            accs.add(r["xref"])
+            gene_dbs[r["gene_stable_id"]].add(r["db_name"])
+    assert not accs & set(lost), "024-logs: none of the 44 is in Ensembl's xref"
+    split = collections.Counter(
+        "trembl_only" if gene_dbs.get(g) == {"Uniprot/SPTREMBL"} else
+        "no_xref" if not gene_dbs.get(g) else "other" for g in lost.values())
+    assert split == {"trembl_only": 42, "no_xref": 2}, "024-logs"
+    assert {a for a, g in lost.items() if not gene_dbs.get(g)} == {"P62959", "Q5XI51"}, "024-logs"
+
+
 def test_human_search_db_table_as_delivered_in_015():
     """015-logs handed dataRepo this file as the reference output their pyMzLib run will be diffed
     against. Written by tools/ResolveSearchDb at #1338 2f40c40c (LF line endings), gzipped with
