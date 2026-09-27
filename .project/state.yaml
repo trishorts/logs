@@ -349,6 +349,15 @@ decisions:
       gene-less counts `outcome` (the XML view). Aging's agrees view keeps 4,908/8,228 (59.6%). XML
       links four series (00000 4,227 / 00060 4,122 / 00055 4,119 / 00065 4,106 entries); 950 entries
       link only non-GRCr8 series (xref rescues 521), 3,051 link no Ensembl gene (xref rescues 204).
+  - date: 2026-09-27
+    text: >-
+      STORE SHAPE DECIDED (user, un-tabling the 2026-09-26 options). (1) The product is a BUILDER
+      (any Ensembl species list, any release, inputs pinned by sha256) plus prebuilt snapshots.
+      (2) The storage unit is one file per SPECIES PAIR plus orthogroups. N-way views are computed
+      by checking every pair, never by chaining. (3) Format is Parquet, queryable with no server.
+      (4) Hosting is a GitHub release now plus a Zenodo DOI for anything published; whether the repo
+      goes public, or data ships from a separate public repo, is still open. (5) Paralogs are
+      INCLUDED, typed by relationship_type, and views default to orthologs. Step 6 is unblocked.
 
 gaps:
   - >-
@@ -364,16 +373,9 @@ gaps:
     stored rat accessions, 59.7%, by the agrees view; 024-logs explained the 44 it drops: absent from
     Ensembl's xref, 42 genes xref'd to TrEMBL only, 2 with no xref; pinned).
   - >-
-    TABLED BY USER 2026-09-26 - STORE SHAPE. Discussed, not decided. Settled in discussion: logs must be
-    generic on its own (no dependency on aging or dataRepo; dataRepo is just a consumer), and take ANY
-    Ensembl species list (user). Proposed, awaiting the user: (1) the product is a BUILDER (any species
-    list, any release, pinned sha256 inputs), plus prebuilt snapshots; (2) storage unit = one file per
-    SPECIES PAIR (Compara only speaks pairwise; 245 species in e116 = 29,890 pairs vs 2,421,090
-    triples) plus orthogroups; triples/N-way are a computed "species-set view" checking every pair
-    (45 genes are pairwise-clean but not triple-clean; never chain = transitive closure); (3) Parquet,
-    server-less "serve everything" later (est. 25-30 GB for all of e116, NOT measured); (4) hosting:
-    GitHub release (repo is PRIVATE - needs a public decision) now, Zenodo DOI for anything
-    published; (5) paralogs included? (~90% of rows; ptmQtl needs them). Do not build step 6 until decided.
+    STORE SHAPE DECIDED 2026-09-27 (see decisions). Still open under it: make the repo public, or
+    ship snapshots from a separate public data repo, before the first GitHub release. The 25-30 GB
+    all-of-e116 size is an estimate; measure it on the first real build.
   - >-
     RESIDUE-LEVEL CORRESPONDENCE for ptmQtl (accepted 003-logs). Route: Compara 116
     protein_default.aa.fasta.gz (866 MB, peptide MSA per gene tree; README read, file NOT yet fetched)
