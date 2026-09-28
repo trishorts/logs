@@ -263,6 +263,42 @@ def test_rat_agrees_view_losses_as_sent_in_024_to_datarepo():
     assert {a for a, g in lost.items() if not gene_dbs.get(g)} == {"P62959", "Q5XI51"}, "024-logs"
 
 
+SNAPSHOT = ROOT / "snapshots" / "compara-116"
+
+
+def test_first_orthology_snapshot_as_sent_in_026():
+    """026-logs told dataRepo the first ``logs:DEF-ORTHOLOGY v1`` snapshot exists (mzLib #1381,
+    ``tools/BuildOrthologySnapshot``). Its manifest pins every file by sha256; these are the numbers
+    the message quoted. The snapshot is gitignored and machine-local."""
+    manifest = SNAPSHOT / "manifest.json"
+    if not manifest.exists():
+        print(f"        (not checked: {manifest} is absent on this machine)")
+        return
+    m = json.loads(manifest.read_text(encoding="utf-8"))
+    assert (m["format"], m["format_version"], m["release"]) == ("ensembl-orthology-snapshot", 1, "116"), "026-logs"
+    assert m["snapshot_id"].startswith("b63a3331eb87c93e"), "026-logs"
+    assert m["species"] == ["homo_sapiens", "mus_musculus", "rattus_norvegicus"]
+    assert m["gene_set_sha256"] == {  # the GTF sha256s, as in 016's manifest
+        "homo_sapiens": "ed992f0eac7197d9627bda618f8f831ba355c95bd5d0796af785387d462828b6",
+        "mus_musculus": "5c29fd9e3157cf40fdbbf76ab25bfe7f79aa61313e0b672664ddb0cb251c02e1",
+        "rattus_norvegicus": "e025aa7eeefa74e896fdfdf760d01166d8e3ba9d99ba1de2f1b004925f41d338"}, "026-logs"
+    rows = {f["path"]: f.get("rows") for f in m["files"]}
+    assert rows == {
+        "genes/homo_sapiens.parquet": 78941, "genes/mus_musculus.parquet": 78348,
+        "genes/rattus_norvegicus.parquet": 43360,
+        "members/homo_sapiens.parquet": 19690, "members/mus_musculus.parquet": 22045,
+        "members/rattus_norvegicus.parquet": 22379,
+        "pairs/homo_sapiens__homo_sapiens.parquet": 141173, "pairs/homo_sapiens__mus_musculus.parquet": 23764,
+        "pairs/homo_sapiens__rattus_norvegicus.parquet": 22105, "pairs/mus_musculus__mus_musculus.parquet": 373904,
+        "pairs/mus_musculus__rattus_norvegicus.parquet": 40027,
+        "pairs/rattus_norvegicus__rattus_norvegicus.parquet": 400961, "views.sql": None}, "026-logs"
+    assert (len(m["files"]), sum(f["bytes"] for f in m["files"])) == (13, 9004379), "026-logs"
+    assert m["build_checks"]["identical_duplicate_rows_dropped"] == 0, "026-logs"
+    import hashlib
+    for f in m["files"]:
+        assert hashlib.sha256((SNAPSHOT / f["path"]).read_bytes()).hexdigest() == f["sha256"], f["path"]
+
+
 def test_human_search_db_table_as_delivered_in_015():
     """015-logs handed dataRepo this file as the reference output their pyMzLib run will be diffed
     against. Written by tools/ResolveSearchDb at #1338 2f40c40c (LF line endings), gzipped with
