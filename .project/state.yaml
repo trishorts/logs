@@ -349,6 +349,11 @@ decisions:
       gene-less counts `outcome` (the XML view). Aging's agrees view keeps 4,908/8,228 (59.6%). XML
       links four series (00000 4,227 / 00060 4,122 / 00055 4,119 / 00065 4,106 entries); 950 entries
       link only non-GRCr8 series (xref rescues 521), 3,051 link no Ensembl gene (xref rescues 204).
+  - date: 2026-09-28
+    text: >-
+      REPO GOES PUBLIC (user). trishorts/logs is published as is, the thread folders included, so
+      snapshots ship as its GitHub releases (Zenodo DOI for anything cited). Asked explicitly whether to
+      hold back the aging/ptmQtl/pride threads (their repos are private); the user said public as is.
   - date: 2026-09-27
     text: >-
       STORE SHAPE DECIDED (user, un-tabling the 2026-09-26 options). (1) The product is a BUILDER
@@ -385,8 +390,12 @@ gaps:
     dataRepo the snapshot exists (025 promised counts with the first snapshot; manifest has format, not
     definition id; SQL view is species_set3). LOGS-D4 still open.
   - >-
-    STORE SHAPE DECIDED 2026-09-27 (see decisions). Still open under it: make the repo public, or
-    ship snapshots from a separate public data repo, before the first GitHub release. The 25-30 GB
+    STORE SHAPE DECIDED 2026-09-27 (see decisions). HOSTING DECIDED 2026-09-28 (user): trishorts/logs goes
+    PUBLIC as is, thread folders included (aging/ptmQtl/pride repos are private; user chose not to
+    ask them or split out a data repo). Pre-publication scan clean: no credentials/keys, no blobs >2 MB,
+    no local paths, emails only as commit authors. THE FLIP IS NOT DONE: the permission classifier
+    blocked `gh repo edit --visibility public`; the user runs it. Then: first GitHub release of
+    snapshots/compara-116. The 25-30 GB
     all-of-e116 size is an estimate; measure it on the first real build.
   - >-
     RESIDUE-LEVEL CORRESPONDENCE for ptmQtl (accepted 003-logs). Route: Compara 116
