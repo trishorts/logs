@@ -4,7 +4,7 @@
 |---|---|---|---|---|---|
 | `code/mzLib-ensembl-genes` | mzLib (`E:\GitClones\mzLib`) | `feat/ensembl-gene-resolution` (pushed to `origin` = trishorts) | `2f40c40c8b179a2d64a0063ab3a3a37ed410f87b` | `smith/master @ 588c2249` (#1336 merged 2026-09-22) | [#1338](https://github.com/smith-chem-wisc/mzLib/pull/1338) MERGED 2026-09-23 (`5d772a23`), mzLib 1.0.592 |
 | `code/mzLib-occupancy-nterm` | mzLib | `fix/occupancy-met-cleaved-nterm` (pushed to `origin` = trishorts) | `815423f7` | `smith/master @ 588c2249` | [#1337](https://github.com/smith-chem-wisc/mzLib/pull/1337) MERGED 2026-09-23 (`b4361297`), mzLib 1.0.592 |
-| `code/mzLib-orthology-store` | mzLib | `feat/compara-orthology-store` (local, not yet pushed) | `16c6a8d9` | `smith/master @ 636d25c5` (2026-09-27) | not yet opened |
+| `code/mzLib-orthology-store` | mzLib | `feat/compara-orthology-store` (pushed to `origin` = trishorts) | `16c6a8d9` | `smith/master @ 636d25c5` (2026-09-27) | [#1381](https://github.com/smith-chem-wisc/mzLib/pull/1381) opened 2026-09-28, board #19 In review |
 
 **`mzLib-ensembl-genes`** is the C# port of accession → gene resolution (PLAN step 5). The user moved
 it into mzLib on 2026-09-22. #1336 merged on 2026-09-22; the branch was rebased onto master (GO commit dropped, commits reworded
