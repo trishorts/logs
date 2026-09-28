@@ -395,7 +395,8 @@ gaps:
     ask them or split out a data repo). Pre-publication scan clean: no credentials/keys, no blobs >2 MB,
     no local paths, emails only as commit authors. PUBLIC since 2026-09-28 (user ran the flip).
     RELEASED: pre-release orthology-compara-116-b63a3331 (compara-116.tar sha256 b1d682a5..., reproducible;
-    download verified). Told dataRepo 027 and aging 016. NO LICENSE FILE yet - user's call; flagged. The 25-30 GB
+    download verified). Told dataRepo 027 and aging 016. LICENSED 2026-09-28 (user): MIT code (LICENSE), CC-BY-4.0 data+docs (LICENSE-DATA),
+    scope in LICENSING.md; views.sql stays mzLib LGPL-3.0. Corrected in dataRepo 028, aging 017. The 25-30 GB
     all-of-e116 size is an estimate; measure it on the first real build.
   - >-
     RESIDUE-LEVEL CORRESPONDENCE for ptmQtl (accepted 003-logs). Route: Compara 116
