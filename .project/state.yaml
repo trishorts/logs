@@ -370,7 +370,7 @@ gaps:
     parse to their entry. NOT YET where dataRepo can call it: they use pyMzLib, so the rule needs an
     mzLib home (ORACLE.md said accession normalization -> MzLibUtil ClassExtensions; run /oracle mzLib
     first) before a search reports variant accessions. PORTED 2026-09-28: MzLibUtil.ProteoformAccession,
-    branch feat/proteoform-accession @ 7faba057 (code/mzLib-proteoform-accession), no PR yet; parity with
+    branch feat/proteoform-accession @ 7faba057 (code/mzLib-proteoform-accession), PR #1382 (board #19 In review); parity with
     normalize() 78,774 accessions, 0 differ. Still: PR, pyMzLib projection (/bridge-oracle), then tell dataRepo.
     LOGS-D3 CLOSED 2026-09-27 (dataRepo 023: 4,886 of 8,180
     stored rat accessions, 59.7%, by the agrees view; 024-logs explained the 44 it drops: absent from
