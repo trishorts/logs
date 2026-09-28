@@ -264,3 +264,52 @@ pride relayed the user's request for one GitHub Project per research project. lo
 Step 6, the store, was started and then tabled by the user after a long discussion about what "generic" means. Settled: logs must stand alone (dataRepo is only a consumer), and must take any Ensembl species list. Proposed but undecided: the product is a builder; storage unit is the species pair (Compara only speaks pairwise, and there are 29,890 pairs among e116's 245 species against 2.4 million triples); triples and N-way sets are a computed view that checks every pair, because 45 genes are pairwise-clean and not triple-clean and chaining pairs is transitive closure; Parquet per pair so "serve everything" needs no server; hosting on a GitHub release (the repo is private) and Zenodo for anything published. The size figures for a full build are estimates, not measurements. The options are recorded in state.yaml; do not build until the user decides.
 
 Last, the proteoform-to-entry rule owed under LOGS-D2 (12c2f3b). The grammar was read from mzLib smith/master 636d25c5, not from memory: `VariantApplication.GetAccession` appends `_{Orig}{pos}{Var}` per variant, and `ProteinDbLoader` appends `_{N}` to a colliding accession. `normalize()` now matches a full UniProt or RefSeq base before the variant suffix, so `NP_` survives and `P12345_2` stays unrecognized as its own key. All 32,847 variant accessions in our three reference tables parse to their entry, and regenerating the three search-db summaries changed only their dates. The Python prototype previously treated variants as unrecognized; it now resolves them through the entry, as the C# resolver always did. It is not yet callable by dataRepo, who use pyMzLib: it needs an mzLib home, oracle first.
+
+## 2026-09-27/28 - The store was built in C#, released publicly and licensed; LOGS-D3 and P4 closed; the proteoform rule moved to mzLib
+
+The inbox closed two questions. dataRepo answered LOGS-D3: 59.7% of stored rat accessions have a gene
+under the agrees view. They left us the 44 entries the agrees view drops. None of those Swiss-Prot
+accessions is anywhere in Ensembl's rat xref. For 42 the gene is xref'd to TrEMBL entries only, and 2
+genes have no UniProt xref at all. So "agrees = false" there means Ensembl is silent, not that it
+disagrees. We said the cause (sequence matching) is a hypothesis. My first count was 45, because it
+counted a variant proteoform row as an entry. Rule 8 caught it, and 024 warned dataRepo about the
+trap. ptmQtl answered LOGS-P4: isoform-suffixed sites are real, 2,409 rows in 10 datasets, and each
+isoform is its own entry. So the 003 residue key holds unchanged, and isoform-to-canonical is an
+alignment edge.
+
+The user took the tabled store-shape decision on the proposed options: a builder plus snapshots, one
+Parquet file per species pair plus orthogroups, N-way views that check every pair, paralogs typed,
+and GitHub releases with a Zenodo DOI for anything cited. The schema (`logs:DEF-ORTHOLOGY v1`) went to
+dataRepo in 025 before building, with LOGS-D4: do they store it, or read it in place? Before
+proposing it, the data showed us that:
+- every Compara gene of the three species joins the primary gene sets;
+- homology ids never repeat across dumps;
+- paralogs never cross species;
+- each gene sits in exactly one tree, with one canonical protein.
+
+I started the builder in Python. The user stopped it: anything of substance goes in C# in mzLib, and
+/oracle comes first (now a feedback memory). The oracle found no Compara or Parquet prior art, so the
+builder went into mzLib as #1381. It has two parts: the readers and `OrthologySnapshot` in
+`UsefulProteomicsDatabases.Ensembl`, and a new `OrthologyStore` project that adds Parquet.Net. The
+user approved the NuGet. The acceptance test was reproducing numbers already sent: all six
+pair-status distributions, 23,764 human-mouse rows and 15,508 clean triples. The C# views, the DuckDB
+`views.sql` and `cardinality.py` all agree exactly, and a rebuild is byte-identical.
+
+`normalize()` was then ported the same way. It became `MzLibUtil.ProteoformAccession` in #1382, an
+addition beside `ProteinAccession.Parse`. It agrees with the Python on all 78,774 reference
+accessions, and it round-trips mzLib's own `GetAccession` names.
+
+The user made the repo public. Before that, I checked the history (no secrets, no large blobs, no
+local paths). I asked explicitly about the private partner threads it would expose, and the user said
+public as is. The permission classifier blocked `gh repo edit`, so the user flipped it. The snapshot
+went out as pre-release `orthology-compara-116-b63a3331`: one reproducible tar, with the download
+checked against its sha256. The user chose MIT for code and CC-BY-4.0 for data. `views.sql` stays
+mzLib's LGPL-3.0, which `LICENSING.md` states. Partners were told in dataRepo 026-028, aging 015-017,
+ptmQtl 006 and pride 003. Two of those messages had said "no license". They were corrected by new
+messages, not edited.
+
+Three slips were caught before sending: 45 instead of 44, "25 tests" instead of 20 in the #1382
+body, and "006-014" instead of 002-014 in aging 016. One slip was not caught: pushing pride's mirror
+also pushed an unpushed pride commit (`5f70f17`, a routine qc thread mirror) without checking first.
+`dotnet sln add` rewrote mzLib.sln wholesale (365 lines), so it was reverted and 14 lines were added
+by hand. The Bash tool also collapsed `\\` in inline Python several times (rule 10).

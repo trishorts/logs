@@ -123,41 +123,61 @@ Each of these cost real time on 2026-09-22.
 
 ## Pick up at
 
-**Next action:** Run the thread inbox, then ask the user for the **store-shape decision** that was
-tabled on 2026-09-26 (the options are in the `TABLED BY USER` gap in `.project/state.yaml`). Do not
-build PLAN step 6 until they decide. If they want to wait longer, the unblocked work is the
-UniProt-vs-Ensembl sequence-identity measurement for ptmQtl (step 3 below).
+**Next action:** run the thread inbox. Then re-check the two open mzLib PRs, which are the only
+things in flight:
 
-**State on 2026-09-26:** gene resolution is done and in use. dataRepo reproduced our reference output
-on its own machine for all three species (LOGS-D1) and chose the entry-level join (LOGS-D2); their
-datarepo 0.20.0 stores our rows as `gene_resolutions`, run by the instance operator (aging) under
-charter v0.3. The proteoform-to-entry rule is written (`normalize()` in
-`src/logs_orthology/resolve.py`, 12c2f3b). ptmQtl is a second consumer, and we accepted
-residue-level homology as ours (003-logs). All logs PRs live on GitHub Project **#19**.
+```powershell
+gh pr view 1381 --repo smith-chem-wisc/mzLib --json state,reviewDecision,comments   # the orthology store
+gh pr view 1382 --repo smith-chem-wisc/mzLib --json state,reviewDecision,comments   # ProteoformAccession
+```
 
-**1. Run the thread inbox** (`python "$env:USERPROFILE/.claude/skills/project/assets/threads.py" inbox`).
-We are waiting on:
-- **dataRepo, LOGS-D3:** recount their stored rat accessions by the agrees view (022 §2).
-- **ptmQtl, LOGS-P4:** which datasets carry isoform-suffixed site accessions (003 §2).
+Answer any review. **On a merge:**
+- move that PR's board #19 card to Shipped;
+- for #1381, drop the pre-release flag (`gh release edit orthology-compara-116-b63a3331 --repo trishorts/logs --prerelease=false`);
+- for #1382, run `/bridge-oracle pyMzLib` to project `ProteoformAccession`, then tell dataRepo that
+  a variant accession can now be joined (022 promised this before one ships).
 
-**2. The store (PLAN step 6), once the user decides its shape.** Settled with the user: logs stands
-alone (dataRepo is only a consumer) and takes **any Ensembl species list**. Proposed: a builder; one
-file per species pair plus orthogroups; triples and larger sets as a computed view that checks every
-pair (never chain pairs); Parquet; GitHub release (the repo is private) and Zenodo for anything
-published; paralogs optional. The loaders already exist in `src/logs_orthology/load.py`.
+If nothing has moved, the next build is **residue-level correspondence for ptmQtl** (PLAN step 6 is
+built, and this sits on it):
+1. Draft the residue-row schema and **send it to ptmQtl before building** (005 promised this). The key
+   is `(search_database_sha256, entry accession, 1-based position)`, and gaps are typed refusals. An
+   isoform is its own entry, so isoform-to-canonical is an alignment edge (005).
+2. The first measurement: how often a UniProt canonical sequence equals its Ensembl translation.
+   Compara's gene-tree alignment (`Compara.116.protein_default.aa.fasta.gz`, 866 MB, not fetched) is
+   over Ensembl proteins.
+3. Run `/oracle mzLib` before any aligner code. Substance goes in C# in mzLib (CLAUDE.md rule 20).
 
-**3. Residue correspondence for ptmQtl** sits on top of step 2. First measurement, unblocked: how
-often a UniProt canonical sequence equals its Ensembl translation, since Compara's gene-tree
-alignment (`emf/ensembl-compara/homologies/Compara.116.protein_default.aa.fasta.gz`, 866 MB, not
-fetched) is over Ensembl proteins. Run `/oracle mzLib` before writing any aligner.
+**Waiting on others:**
+- dataRepo **LOGS-D4**: do they store orthology rows, or read our Parquet in place (025 §3)?
+- reviews of #1381 and #1382.
 
-**4. Port the proteoform-to-entry rule to mzLib** before any search reports variant accessions;
-dataRepo calls pyMzLib, not our Python. `/oracle mzLib` first (`design/ORACLE.md` pointed accession
-normalization at `MzLibUtil/ClassExtensions.cs`).
+**State on 2026-09-28.**
+- **The store (PLAN step 6) is built** in mzLib #1381, branch `feat/compara-orthology-store` @
+  `16c6a8d9`, and **released**: pre-release
+  [`orthology-compara-116-b63a3331`](https://github.com/trishorts/logs/releases/tag/orthology-compara-116-b63a3331),
+  human, mouse and rat, Ensembl 116, 13 files, 9.0 MB.
+  - The C# views, the DuckDB `views.sql` and `cardinality.py` agree on every pinned figure.
+  - A rebuild is byte-identical.
+  - Rebuild with `tools/BuildOrthologySnapshot`. `snapshots/` is gitignored and pinned by
+    `test_first_orthology_snapshot_as_sent_in_026`.
+- **The proteoform-to-entry rule is in mzLib #1382** (`MzLibUtil.ProteoformAccession`, `7faba057`).
+  It matches `normalize()` on 78,774 accessions.
+- **The repo is public**, MIT for code and CC-BY-4.0 for data (`LICENSING.md`).
+- **LOGS-D1 to D3 and P4 are closed.** Partners have been told: dataRepo 024-028, aging 015-017,
+  ptmQtl 005-006, pride 003.
 
-**The user still has to** set #1337 and #1338 to Shipped on board #19 (the classifier blocked it).
 **Decided, do not re-open:**
 
+- **The store's shape (user, 2026-09-27).**
+  - A builder plus snapshots, taking any Ensembl species list.
+  - One Parquet file per species pair, plus gene-tree members.
+  - N-way views check every pair and never chain.
+  - Paralogs are included and typed.
+- **Hosting (user, 2026-09-28).** This repo is public, and snapshots are its GitHub releases, with a
+  Zenodo DOI once a snapshot is cited. The partner thread copies are public too, by the user's
+  explicit choice.
+- **Substance goes in C# in mzLib (user, 2026-09-27).** The Python in `src/` is measurement and test
+  oracle. Parquet.Net is approved as an mzLib dependency, in its own `OrthologyStore` project.
 - **dataRepo runs the resolution (option (a), user rule D24; accepted in 015).** We define the logic,
   the inputs and the release; dataRepo runs our released code through pyMzLib. Our human table
   (`results/search_db_human_e116.tsv.gz`, pinned) is only a **reference output** for their first run.
@@ -176,10 +196,11 @@ normalization at `MzLibUtil/ClassExtensions.cs`).
 
 **Open, and your call:**
 
-- The store's shape (tabled by the user on 2026-09-26; see Pick up §2).
 - The occupancy-manuscript findings have not been sent to Peter. mzLib #1337 **merged** on
   2026-09-23 and is in 1.0.592. The CNBr limit is documented as a non-goal, not guarded in code.
 - The `go` thread was dropped: its only content was the #1336 stack, and both PRs have merged.
+- Whether the MIT copyright holder should be the lab or UW-Madison rather than Trish Shortreed
+  (`LICENSE`).
 
 **Where the resolution stands.** On aging's three reviewed-proteome search databases, counted in
 entries, not proteoforms:
@@ -203,7 +224,7 @@ Sanity-check before changing anything:
 
 ```powershell
 $env:PYTHONPATH = "E:\CodeReview\logs\src"
-python tests/test_reported_claims.py    # 23 claims already sent to a partner
+python tests/test_reported_claims.py    # 25 claims already sent to a partner
 python -m logs_orthology.manifest       # regenerate results/resolver_inputs_e116.{json,md}
 python tests/test_resolve.py            # 21 resolver contracts
 python tests/test_contracts.py          # 10 contract tests
@@ -215,21 +236,22 @@ python tests/test_contracts.py          # 10 contract tests
 - `sources/cross_species_orthology_discussion.md` — the seed discussion, verbatim.
 - `ORACLE.md` — the mzLib survey and the three-way split verdict.
 - `PLAN.md` — ordered steps and the standing rules.
-- `DEFINITIONS.md` — our published definition ids (charter S4); `logs:DEF-GENE-RESOLUTION v1` is the first.
+- `DEFINITIONS.md` — our definition ids (charter S4): `logs:DEF-GENE-RESOLUTION v1`, and `logs:DEF-ORTHOLOGY v1` (the store, proposed and built).
 - `threads/OWNERSHIP.md` — capability ownership; both inception collisions closed.
-- `threads/dataRepo/`, `threads/aging/` — correspondence.
+- `threads/dataRepo/`, `threads/aging/`, `threads/ptmQtl/`, `threads/pride/` — correspondence (public since 2026-09-28).
+- Outside `design/`: `LICENSING.md` says which license covers what.
 - Outside `design/`: `results/gene_sets/README.md` records the compact gene tables and how to rebuild them.
 
 <!-- BEGIN GENERATED -- render_resume.py owns this block; edit state.yaml, not here -->
 
-**logs** &middot; phase **BUILD** (4/10) &middot; created 2026-09-22 &middot; rendered 2026-09-26
+**logs** &middot; phase **BUILD** (4/10) &middot; created 2026-09-22 &middot; rendered 2026-09-28
 
 | | |
 |---|---|
-| Commits | 76 |
+| Commits | 103 |
 | Sync | [`trishorts/logs`](https://github.com/trishorts/logs) |
-| Locked decisions | 41 |
-| Open gaps | 7 |
+| Locked decisions | 43 |
+| Open gaps | 8 |
 | Gate items skipped | 2 |
 
 **Worktrees** -- details in `code/PINNED.md`
@@ -238,5 +260,7 @@ python tests/test_contracts.py          # 10 contract tests
 |---|---|---|---|---|
 | `code/mzLib-ensembl-genes` | feat/ensembl-gene-resolution | `2f40c40c` | `2f40c40c` | at pin |
 | `code/mzLib-occupancy-nterm` | fix/occupancy-met-cleaved-nterm | `815423f7` | `815423f7` | at pin |
+| `code/mzLib-orthology-store` | feat/compara-orthology-store | `16c6a8d9` | `16c6a8d9` | at pin |
+| `code/mzLib-proteoform-accession` | feat/proteoform-accession | `7faba057` | `7faba057` | at pin |
 
 <!-- END GENERATED -->

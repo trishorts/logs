@@ -464,10 +464,22 @@ repos:
     base_clone: 'E:\GitClones\mzLib'
     pinned: 815423f7
     pr: "https://github.com/smith-chem-wisc/mzLib/pull/1337 (MERGED 2026-09-23 as b4361297)"
+  - name: mzLib
+    worktree: code/mzLib-orthology-store
+    branch: feat/compara-orthology-store
+    base_clone: 'E:\GitClones\mzLib'
+    pinned: 16c6a8d9a08e16d65d1be225117980aacb7f5e35
+    pr: "https://github.com/smith-chem-wisc/mzLib/pull/1381 (open, board #19 In review; the orthology store, PLAN step 6)"
+  - name: mzLib
+    worktree: code/mzLib-proteoform-accession
+    branch: feat/proteoform-accession
+    base_clone: 'E:\GitClones\mzLib'
+    pinned: 7faba0574f0e65033fb503d55d295ce5d658de42
+    pr: "https://github.com/smith-chem-wisc/mzLib/pull/1382 (open, board #19 In review; normalize() port, the LOGS-D2 rule)"
 
 github:
   remote: "https://github.com/trishorts/logs"
-  private: true
+  private: false  # public since 2026-09-28 (user)
 
 dir_map: {}
 

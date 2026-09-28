@@ -8,13 +8,21 @@ This folder is a `/project`-managed research project. **You are de facto working
 - **Goal:** A generic, versioned, gene-centric cross-species orthology layer that lets any
   multi-organism proteomics project join protein identifications across species without collapsing
   one-to-many orthology.
-- **Pick up at:** build PLAN step 6, the store. The shape was **decided 2026-09-27**: a builder (any
-  Ensembl species list and release, sha256-pinned inputs) plus snapshots; one Parquet file per species
-  pair plus orthogroups; N-way views check every pair; paralogs included, typed; GitHub release plus
-  Zenodo. The schema is `logs:DEF-ORTHOLOGY v1` (proposed, `design/DEFINITIONS.md`), sent to
-  dataRepo in 025. We wait on **LOGS-D4** (do they store it, or read it in place). LOGS-D1, D2, D3
-  and P4 are closed; P4 made isoform-to-canonical a real residue test case (ptmQtl 004). `normalize()` still has to be ported to mzLib. Open:
-  make the repo public, or ship from a separate data repo. See `RESUME.md`.
+- **Pick up at:** run the thread inbox. Then re-check the two open mzLib PRs:
+  `gh pr view 1381 --repo smith-chem-wisc/mzLib --json state,reviewDecision` (the orthology store) and
+  the same for **1382** (`ProteoformAccession`, the LOGS-D2 rule). On a merge:
+  - move its board #19 card to Shipped;
+  - for 1381, drop the pre-release flag (`gh release edit orthology-compara-116-b63a3331 --repo trishorts/logs --prerelease=false`);
+  - for 1382, run `/bridge-oracle pyMzLib` to project it, then tell dataRepo (022 promised this).
+
+  **Waiting on dataRepo LOGS-D4** (store the rows, or read the Parquet in place). If nothing has moved,
+  the next build is the residue-level correspondence for ptmQtl:
+  - draft the residue-row schema and send it to ptmQtl before building (005 promised this);
+  - key `(search_database_sha256, entry accession, position)`, with typed refusals;
+  - run `/oracle mzLib` before any aligner code.
+
+  Step 6 is BUILT (2026-09-27/28) and released: public repo, pre-release
+  `orthology-compara-116-b63a3331`, MIT for code and CC-BY-4.0 for data. See `RESUME.md`.
 
 ## Things that will bite you here
 
@@ -73,6 +81,24 @@ This folder is a `/project`-managed research project. **You are de facto working
 19. **Count a gene view by the view, not by `outcome`.** `outcome` is the XML's links; the
     `ensembl_xref_agrees` view adds xref-only rows. Rat: 51.4% by `outcome`, 59.6% by agrees (022).
 
+20. **Anything of substance is C# in mzLib, not Python** (user, 2026-09-27). The Python in `src/` is
+    measurement and test oracle: `cardinality.py` checked #1381, and `normalize()` checked #1382. Run
+    `/oracle mzLib` before writing C#.
+21. **mzLib tooling traps.**
+    - `dotnet sln add` rewrites `mzLib.sln` wholesale (365 lines, adds x86 configs). Add the Project
+      entry and its 12 configuration lines by hand, copying an existing project's.
+    - A new project also needs its DLL/XML and any NuGet dependency in `mzLib.nuspec`, in both
+      target groups.
+    - `Check-TestNameHygiene.ps1 -NoBuild` expects a Debug build; run it without `-NoBuild`.
+22. **The repo is PUBLIC** (2026-09-28). Everything committed is published, including the partner
+    thread copies. A snapshot's `views.sql` is mzLib's LGPL-3.0, not CC-BY (`LICENSING.md`).
+23. **Pushing a mirror pushes the partner's unpushed commits too.** Run `git -C ../<peer> status -sb`
+    before pushing their repo. 2026-09-28 pushed pride's `5f70f17` unchecked.
+24. **Pin a snapshot by its manifest, not its folder.** `snapshots/` is gitignored.
+    `test_first_orthology_snapshot_as_sent_in_026` checks every file and the release tar's sha256 when
+    they are present locally. Rebuild with `tools/BuildOrthologySnapshot` (the tar is reproducible:
+    `tar --sort=name --mtime=@0 --owner=0 --group=0 --numeric-owner --format=gnu`).
+
 ## Running things
 
 ```powershell
@@ -84,9 +110,10 @@ python -m logs_orthology.resolve --reference          # -> results/resolution_hu
 python -m logs_orthology.resolve --accessions ids.tsv # accession[<TAB>contaminant] per line
 python tests/test_contracts.py         # 10 contract tests
 python tests/test_resolve.py           # 21 resolver contracts (last one reconciles on real data)
-python tests/test_reported_claims.py   # 23 claims already sent to a partner
+python tests/test_reported_claims.py   # 25 claims already sent to a partner
 python -m logs_orthology.manifest       # -> results/resolver_inputs_e116.{json,md}
 dotnet run --project tools/BuildGeneSet -c Release -- <gtf.gz> results/gene_sets/<Species>.116.genes.tsv.gz
+dotnet run --project tools/BuildOrthologySnapshot -c Release -- 116 data/compara results/gene_sets snapshots/compara-116 homo_sapiens mus_musculus rattus_norvegicus   # out dir "-" = check only
 dotnet run --project tools/ResolveSearchDb -c Release -- <xml> <gtf.gz | genes.tsv.gz> <uniprot.tsv.gz> <out.tsv>
 python -m logs_orthology.search_db <out.tsv> [--species mus_musculus --out results/search_db_resolution_mouse]
 ```
