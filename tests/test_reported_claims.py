@@ -297,6 +297,14 @@ def test_first_orthology_snapshot_as_sent_in_026():
     import hashlib
     for f in m["files"]:
         assert hashlib.sha256((SNAPSHOT / f["path"]).read_bytes()).hexdigest() == f["sha256"], f["path"]
+    # 027-logs / 016-logs: the published release, tag orthology-compara-116-b63a3331. Its tar is
+    # reproducible (sorted names, zeroed mtime and owners), so a rebuild from the snapshot must match.
+    tar = ROOT / "snapshots" / "_release" / "compara-116.tar"
+    if tar.exists():
+        assert hashlib.sha256(tar.read_bytes()).hexdigest() == \
+            "b1d682a51e7e5759cd72719713d4a00a03b07b9ee033b8bdf8f0f54fd7fb747b", "release asset, 027-logs"
+    assert hashlib.sha256(manifest.read_bytes()).hexdigest() == \
+        "fd0a9d8f5d211a91bdafd4c843ee4f0085be8cf0d7ff4fc779c5e6ebda5074aa", "release asset, 027-logs"
 
 
 def test_human_search_db_table_as_delivered_in_015():

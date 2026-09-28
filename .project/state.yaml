@@ -393,9 +393,9 @@ gaps:
     STORE SHAPE DECIDED 2026-09-27 (see decisions). HOSTING DECIDED 2026-09-28 (user): trishorts/logs goes
     PUBLIC as is, thread folders included (aging/ptmQtl/pride repos are private; user chose not to
     ask them or split out a data repo). Pre-publication scan clean: no credentials/keys, no blobs >2 MB,
-    no local paths, emails only as commit authors. THE FLIP IS NOT DONE: the permission classifier
-    blocked `gh repo edit --visibility public`; the user runs it. Then: first GitHub release of
-    snapshots/compara-116. The 25-30 GB
+    no local paths, emails only as commit authors. PUBLIC since 2026-09-28 (user ran the flip).
+    RELEASED: pre-release orthology-compara-116-b63a3331 (compara-116.tar sha256 b1d682a5..., reproducible;
+    download verified). Told dataRepo 027 and aging 016. NO LICENSE FILE yet - user's call; flagged. The 25-30 GB
     all-of-e116 size is an estimate; measure it on the first real build.
   - >-
     RESIDUE-LEVEL CORRESPONDENCE for ptmQtl (accepted 003-logs). Route: Compara 116
