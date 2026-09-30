@@ -10,12 +10,13 @@ This folder is a `/project`-managed research project. **You are de facto working
   one-to-many orthology.
 - **Pick up at:** run the thread inbox. Then re-check the two open mzLib PRs:
   `gh pr view 1381 --repo smith-chem-wisc/mzLib --json state,reviewDecision` (the orthology store) and
-  the same for **1382** (`ProteoformAccession`, the LOGS-D2 rule). On a merge:
+  the same for **1382** (`VariantApplication.ParseAccession`, the LOGS-D2 rule; ready for review again 2026-09-30). On a merge:
   - move its board #19 card to Shipped;
   - for 1381, drop the pre-release flag (`gh release edit orthology-compara-116-b63a3331 --repo trishorts/logs --prerelease=false`);
   - for 1382, run `/bridge-oracle pyMzLib` to project it, then tell dataRepo (022 promised this).
 
-  **Waiting on dataRepo LOGS-D4** (store the rows, or read the Parquet in place). If nothing has moved,
+  **dataRepo 029 answers LOGS-D4** (store the rows, or read the Parquet in place); it arrived
+  2026-09-29 and has not been read into the design yet, so read it first. If it asks nothing of us,
   the next build is the residue-level correspondence for ptmQtl:
   - draft the residue-row schema and send it to ptmQtl before building (005 promised this);
   - key `(search_database_sha256, entry accession, position)`, with typed refusals;
@@ -98,6 +99,10 @@ This folder is a `/project`-managed research project. **You are de facto working
     `test_first_orthology_snapshot_as_sent_in_026` checks every file and the release tar's sha256 when
     they are present locally. Rebuild with `tools/BuildOrthologySnapshot` (the tar is reproducible:
     `tar --sort=name --mtime=@0 --owner=0 --group=0 --numeric-owner --format=gnu`).
+25. **Say plainly what a PR keeps, not only what it joins.** #1382's first description led with
+    "join a variant proteoform to its entry" and never said the variants are returned too; the user
+    read it as stripping them and drafted it (2026-09-30). Variants are applied only on request and in
+    many combinations, so the accession is the only record of them: never discard the suffix.
 
 ## Running things
 

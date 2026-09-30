@@ -363,6 +363,15 @@ decisions:
       (4) Hosting is a GitHub release now plus a Zenodo DOI for anything published; whether the repo
       goes public, or data ships from a separate public repo, is still open. (5) Paralogs are
       INCLUDED, typed by relationship_type, and views default to orthologs. Step 6 is unblocked.
+  - date: 2026-09-30
+    text: >-
+      PR 1382 KEPT, MOVED AND REWORDED (user). The user drafted 1382, having read it as stripping the
+      variant suffix, which would lose which variants a proteoform carries (they are applied only on
+      request, in many combinations, and the accession is the only record). It never stripped them:
+      it returns the verbatim accession, the parent entry AND the applied variants. The description
+      was rewritten in plain language to say so. The user accepted it as a PR because a first-"_" split
+      is wrong for RefSeq and for the "_2" collision counter, and asked that it sit beside its producer:
+      now VariantApplication.ParseAccession (Omics), next to GetAccession; MzLibUtil extension removed.
 
 gaps:
   - >-
@@ -374,8 +383,8 @@ gaps:
     entrapment prefixes stay unrecognized. All 32,847 variant accessions in our three reference tables
     parse to their entry. NOT YET where dataRepo can call it: they use pyMzLib, so the rule needs an
     mzLib home (ORACLE.md said accession normalization -> MzLibUtil ClassExtensions; run /oracle mzLib
-    first) before a search reports variant accessions. PORTED 2026-09-28: MzLibUtil.ProteoformAccession,
-    branch feat/proteoform-accession @ 7faba057 (code/mzLib-proteoform-accession), PR #1382 (board #19 In review); parity with
+    first) before a search reports variant accessions. PORTED 2026-09-28; MOVED 2026-09-30 (user) to Omics VariantApplication.ParseAccession, the inverse of GetAccession,
+    returning an Omics.BioPolymer.ProteoformAccession record; branch feat/proteoform-accession @ f773e76a (code/mzLib-proteoform-accession), PR #1382 (board #19 In review); parity with
     normalize() 78,774 accessions, 0 differ. Still: PR, pyMzLib projection (/bridge-oracle), then tell dataRepo.
     LOGS-D3 CLOSED 2026-09-27 (dataRepo 023: 4,886 of 8,180
     stored rat accessions, 59.7%, by the agrees view; 024-logs explained the 44 it drops: absent from
@@ -474,8 +483,8 @@ repos:
     worktree: code/mzLib-proteoform-accession
     branch: feat/proteoform-accession
     base_clone: 'E:\GitClones\mzLib'
-    pinned: 7faba0574f0e65033fb503d55d295ce5d658de42
-    pr: "https://github.com/smith-chem-wisc/mzLib/pull/1382 (open, board #19 In review; normalize() port, the LOGS-D2 rule)"
+    pinned: f773e76a7c4a393d083a47b883377f23b797a63c
+    pr: "https://github.com/smith-chem-wisc/mzLib/pull/1382 (open, ready for review 2026-09-30; VariantApplication.ParseAccession, the LOGS-D2 rule)"
 
 github:
   remote: "https://github.com/trishorts/logs"

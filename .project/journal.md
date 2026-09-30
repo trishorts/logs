@@ -313,3 +313,21 @@ body, and "006-014" instead of 002-014 in aging 016. One slip was not caught: pu
 also pushed an unpushed pride commit (`5f70f17`, a routine qc thread mirror) without checking first.
 `dotnet sln add` rewrote mzLib.sln wholesale (365 lines), so it was reverted and 14 lines were added
 by hand. The Bash tool also collapsed `\\` in inline Python several times (rule 10).
+
+## 2026-09-30 - #1382 was misread as stripping variants; it was reworded, moved beside GetAccession, and made ready again
+
+The user had set #1382 to draft, reading it as stripping the variant suffix from an accession. That
+would be wrong: variants are applied only when requested, in many different combinations, so the
+accession is the only record of which ones a proteoform carries. The code never stripped them - it
+returns the verbatim accession, the parent entry and the applied variants - but the description led
+with the join and never said so, and it also claimed `LoadProteinXML` "applies variants by default",
+which is really the `maxHeterozygousVariants = 4` parameter default doing it. The description was
+rewritten in plain language. Asked why a string split deserves a PR, the answer was that a first-"_"
+split is wrong for RefSeq (`NP_000537`) and silently wrong for the `_2` collision counter, and that
+the reader belongs beside the writer. The user agreed and asked for it to move there: it is now
+`VariantApplication.ParseAccession` in Omics, directly after `GetAccession`, returning an
+`Omics.BioPolymer.ProteoformAccession`; the `MzLibUtil` string extension is gone. The branch was
+rebased onto smith/master 2b16b41c and force-pushed (f773e76a); the full suite passes (7,483, 0
+failed) and the test-name hygiene check is clean. The PR is ready for review again. The session
+skipped the inbox and the brief because the user opened with the PR question; dataRepo 029 (LOGS-D4
+answered) is still unread into the design.

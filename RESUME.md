@@ -128,13 +128,13 @@ things in flight:
 
 ```powershell
 gh pr view 1381 --repo smith-chem-wisc/mzLib --json state,reviewDecision,comments   # the orthology store
-gh pr view 1382 --repo smith-chem-wisc/mzLib --json state,reviewDecision,comments   # ProteoformAccession
+gh pr view 1382 --repo smith-chem-wisc/mzLib --json state,reviewDecision,comments   # VariantApplication.ParseAccession
 ```
 
 Answer any review. **On a merge:**
 - move that PR's board #19 card to Shipped;
 - for #1381, drop the pre-release flag (`gh release edit orthology-compara-116-b63a3331 --repo trishorts/logs --prerelease=false`);
-- for #1382, run `/bridge-oracle pyMzLib` to project `ProteoformAccession`, then tell dataRepo that
+- for #1382, run `/bridge-oracle pyMzLib` to project `VariantApplication.ParseAccession`, then tell dataRepo that
   a variant accession can now be joined (022 promised this before one ships).
 
 If nothing has moved, the next build is **residue-level correspondence for ptmQtl** (PLAN step 6 is
@@ -149,6 +149,7 @@ built, and this sits on it):
 
 **Waiting on others:**
 - dataRepo **LOGS-D4**: do they store orthology rows, or read our Parquet in place (025 §3)?
+  **Answered in dataRepo 029 (2026-09-29), not yet read into the design; read it first.**
 - reviews of #1381 and #1382.
 
 **State on 2026-09-28.**
@@ -160,13 +161,17 @@ built, and this sits on it):
   - A rebuild is byte-identical.
   - Rebuild with `tools/BuildOrthologySnapshot`. `snapshots/` is gitignored and pinned by
     `test_first_orthology_snapshot_as_sent_in_026`.
-- **The proteoform-to-entry rule is in mzLib #1382** (`MzLibUtil.ProteoformAccession`, `7faba057`).
-  It matches `normalize()` on 78,774 accessions.
+- **The proteoform-to-entry rule is in mzLib #1382** (`VariantApplication.ParseAccession`, beside
+  `GetAccession`, `f773e76a`). It returns the parent entry AND the applied variants; nothing is
+  stripped. It matches `normalize()` on 78,774 accessions.
 - **The repo is public**, MIT for code and CC-BY-4.0 for data (`LICENSING.md`).
 - **LOGS-D1 to D3 and P4 are closed.** Partners have been told: dataRepo 024-028, aging 015-017,
   ptmQtl 005-006, pride 003.
 
 **Decided, do not re-open:**
+
+- **#1382 stays a PR, beside its producer (user, 2026-09-30).** The user had read it as stripping
+  the variant suffix; it keeps it. Say plainly in any description that the variants are returned.
 
 - **The store's shape (user, 2026-09-27).**
   - A builder plus snapshots, taking any Ensembl species list.
@@ -244,13 +249,13 @@ python tests/test_contracts.py          # 10 contract tests
 
 <!-- BEGIN GENERATED -- render_resume.py owns this block; edit state.yaml, not here -->
 
-**logs** &middot; phase **BUILD** (4/10) &middot; created 2026-09-22 &middot; rendered 2026-09-28
+**logs** &middot; phase **BUILD** (4/10) &middot; created 2026-09-22 &middot; rendered 2026-09-30
 
 | | |
 |---|---|
-| Commits | 103 |
+| Commits | 106 |
 | Sync | [`trishorts/logs`](https://github.com/trishorts/logs) |
-| Locked decisions | 43 |
+| Locked decisions | 44 |
 | Open gaps | 8 |
 | Gate items skipped | 2 |
 
@@ -261,6 +266,6 @@ python tests/test_contracts.py          # 10 contract tests
 | `code/mzLib-ensembl-genes` | feat/ensembl-gene-resolution | `2f40c40c` | `2f40c40c` | at pin |
 | `code/mzLib-occupancy-nterm` | fix/occupancy-met-cleaved-nterm | `815423f7` | `815423f7` | at pin |
 | `code/mzLib-orthology-store` | feat/compara-orthology-store | `16c6a8d9` | `16c6a8d9` | at pin |
-| `code/mzLib-proteoform-accession` | feat/proteoform-accession | `7faba057` | `7faba057` | at pin |
+| `code/mzLib-proteoform-accession` | feat/proteoform-accession | `f773e76a` | `f773e76a` | at pin |
 
 <!-- END GENERATED -->
