@@ -15,12 +15,13 @@ This folder is a `/project`-managed research project. **You are de facto working
   - for 1381, drop the pre-release flag (`gh release edit orthology-compara-116-b63a3331 --repo trishorts/logs --prerelease=false`);
   - for 1382, run `/bridge-oracle pyMzLib` to project it, then tell dataRepo (022 promised this).
 
-  **dataRepo 029 answers LOGS-D4** (store the rows, or read the Parquet in place); it arrived
-  2026-09-29 and has not been read into the design yet, so read it first. If it asks nothing of us,
-  the next build is the residue-level correspondence for ptmQtl:
-  - draft the residue-row schema and send it to ptmQtl before building (005 promised this);
-  - key `(search_database_sha256, entry accession, position)`, with typed refusals;
-  - run `/oracle mzLib` before any aligner code.
+  #1381 was made ready again on 2026-10-05 (master merged, writer folded into
+  `UsefulProteomicsDatabases`, ZstdSharp 0.8.8, reply posted to nbollis); it now waits on re-review.
+  **LOGS-D4 is closed** (read in place; 030 sent the file contract in `design/DEFINITIONS.md`).
+  **The residue schema is proposed, not built** (`DEF-RESIDUE-CORRESPONDENCE v1`, sent as ptmQtl 007).
+  Wait for LOGS-P5 (target databases) and LOGS-P6 (keep `substituted` rows) before building. Then
+  fetch and pin `Compara.116.protein_default.aa.fasta.gz` and check that its proteins are the store's
+  `protein_a/b`. Run `/oracle mzLib` before any aligner code.
 
   Step 6 is BUILT (2026-09-27/28) and released: public repo, pre-release
   `orthology-compara-116-b63a3331`, MIT for code and CC-BY-4.0 for data. See `RESUME.md`.
@@ -91,6 +92,9 @@ This folder is a `/project`-managed research project. **You are de facto working
     - A new project also needs its DLL/XML and any NuGet dependency in `mzLib.nuspec`, in both
       target groups.
     - `Check-TestNameHygiene.ps1 -NoBuild` expects a Debug build; run it without `-NoBuild`.
+    - mzLib ships as ONE nupkg, so a separate csproj keeps a NuGet dependency away from no consumer.
+      Before adding a package, compare its transitive pins with the nuspec's: Parquet.Net needed
+      ZstdSharp 0.8.8 against a 0.8.7 pin, and only the MetaMorpheus `integration` job saw it (NU1605).
 22. **The repo is PUBLIC** (2026-09-28). Everything committed is published, including the partner
     thread copies. A snapshot's `views.sql` is mzLib's LGPL-3.0, not CC-BY (`LICENSING.md`).
 23. **Pushing a mirror pushes the partner's unpushed commits too.** Run `git -C ../<peer> status -sb`

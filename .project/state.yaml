@@ -372,6 +372,22 @@ decisions:
       was rewritten in plain language to say so. The user accepted it as a PR because a first-"_" split
       is wrong for RefSeq and for the "_2" collision counter, and asked that it sit beside its producer:
       now VariantApplication.ParseAccession (Omics), next to GetAccession; MzLibUtil extension removed.
+  - date: 2026-10-05
+    text: >-
+      #1381 MADE READY AGAIN (user: "do whatever needs to be done"). nbollis asked why a new csproj; he
+      was right - mzLib ships as ONE nupkg, so the OrthologyStore project isolated Parquet.Net from no
+      consumer. Writer + views.sql folded into UsefulProteomicsDatabases/Ensembl (2c1fd05); the 116
+      snapshot rebuilt with it is byte-identical (b63a3331, 14/14 files). The red `integration` job WAS
+      ours: Parquet.Net 6.1.0 needs ZstdSharp.Port >= 0.8.8 and Readers/nuspec pinned 0.8.7, so
+      MetaMorpheus restore failed NU1605 (e1d7b57). `external-service-tests` was Koina's Prosit server
+      (HTTP 400, CUDA RNN), not us. Merged master 5974d4d7; required suite 7,849/0/32.
+  - date: 2026-10-05
+    text: >-
+      LOGS-D4 CLOSED as (a) read in place (dataRepo 029). DEF-ORTHOLOGY v1 PUBLISHED with an explicit
+      file contract (layout, columns, views, integrity; what bumps format_version) - 030-logs. Writing it
+      caught two wrong clauses before sending: the macros take `root` as first argument, and the SQL
+      pair_status emits four statuses, not five. DEF-RESIDUE-CORRESPONDENCE v1 PROPOSED, not built, and
+      sent to ptmQtl (007-logs) with LOGS-P5 (target databases) and LOGS-P6 (keep `substituted` rows).
 
 gaps:
   - >-
@@ -397,7 +413,8 @@ gaps:
     (snapshots/compara-116, gitignored, id b63a3331..., 13 files 9.0 MB) reproduces every cardinality.py figure
     in C# and in DuckDB; rebuild byte-identical. Next: tell
     dataRepo the snapshot exists (025 promised counts with the first snapshot; manifest has format, not
-    definition id; SQL view is species_set3). LOGS-D4 still open.
+    definition id; SQL view is species_set3). LOGS-D4 CLOSED 2026-10-05 (029/030). #1381 now @ e1d7b576
+    (writer folded into UsefulProteomicsDatabases; ZstdSharp 0.8.8), MERGEABLE, re-review pending.
   - >-
     STORE SHAPE DECIDED 2026-09-27 (see decisions). HOSTING DECIDED 2026-09-28 (user): trishorts/logs goes
     PUBLIC as is, thread folders included (aging/ptmQtl/pride repos are private; user chose not to
@@ -416,6 +433,9 @@ gaps:
     (which datasets carry isoform-suffixed sites) - ANSWERED 2026-09-27 (004-ptmQtl): 10 of 41 datasets, 2,409
     target site rows, each isoform its own entry; test proteins P02751, P10636/P19332, P05067, P02545.
     005-logs: 003 key unchanged, isoform->canonical is an alignment edge. Sits on top of step 6.
+    SCHEMA PROPOSED 2026-10-05 (design/DEFINITIONS.md DEF-RESIDUE-CORRESPONDENCE v1, sent as 007-logs):
+    homolog rows = 3 legs along ONE homology_id, 12 outcomes. Waiting on LOGS-P5/P6 before building;
+    then fetch+pin the 866 MB MSA and /oracle mzLib before any aligner code.
   - >-
     Rat resolves poorly by any source: by Ensembl's xref only 59.6% of reviewed rat entries resolve,
     against 94.7% of human (008 to aging). Reference-data coverage, not a search problem - but any
@@ -477,7 +497,7 @@ repos:
     worktree: code/mzLib-orthology-store
     branch: feat/compara-orthology-store
     base_clone: 'E:\GitClones\mzLib'
-    pinned: 16c6a8d9a08e16d65d1be225117980aacb7f5e35
+    pinned: e1d7b5765768d153567ac4a376153110c977cbdb
     pr: "https://github.com/smith-chem-wisc/mzLib/pull/1381 (open, board #19 In review; the orthology store, PLAN step 6)"
   - name: mzLib
     worktree: code/mzLib-proteoform-accession

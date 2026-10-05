@@ -59,7 +59,7 @@ if (species.Count == 3 && species.Contains("homo_sapiens"))
 Console.WriteLine($"done in {clock.Elapsed.TotalSeconds:F0} s");
 if (outDir != "-")
 {
-    var written = await OrthologyStore.OrthologySnapshotWriter.WriteAsync(snap, outDir);
+    var written = await OrthologySnapshotWriter.WriteAsync(snap, outDir);
     Console.WriteLine($"wrote snapshot {written.SnapshotId[..16]} to {outDir}: {written.Files.Count} files, " +
         $"{written.Files.Sum(f => f.Bytes):N0} bytes, in {clock.Elapsed.TotalSeconds:F0} s");
 }

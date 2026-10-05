@@ -86,15 +86,18 @@ UniProt it is the text before the first `_`. That rule does not hold for RefSeq 
 
 ---
 
-## `logs:DEF-ORTHOLOGY v1`: the orthology store (PROPOSED, BUILT)
+## `logs:DEF-ORTHOLOGY v1`: the orthology store
 
-**Status:** proposed 2026-09-27 and sent to dataRepo (025) before it was built. It was built the
-same day, and is still proposed until LOGS-D4 is answered.
-**Implementation:** mzLib (branch `feat/compara-orthology-store`, `code/mzLib-orthology-store`).
-`UsefulProteomicsDatabases.Ensembl` reads the dumps (`ComparaHomologyDump`, `ComparaGeneTreeContent`)
-and builds `OrthologySnapshot`. The `OrthologyStore` project (Parquet.Net) writes it with
-`OrthologySnapshotWriter`. The on-disk format is `ensembl-orthology-snapshot` format 1, which is this
-definition. Our driver is `tools/BuildOrthologySnapshot`.
+**Status:** proposed 2026-09-27 and sent to dataRepo (025) before it was built; built the same day.
+**Published 2026-10-05**, after dataRepo answered LOGS-D4 (029): they read the Parquet in place, so
+what we guarantee is the **file contract** below, not a column contract for their catalog.
+**Implementation:** mzLib PR #1381 (branch `feat/compara-orthology-store`, `code/mzLib-orthology-store`).
+`UsefulProteomicsDatabases.Ensembl` reads the dumps (`ComparaHomologyDump`, `ComparaGeneTreeContent`),
+builds `OrthologySnapshot`, and writes it with `OrthologySnapshotWriter` (Parquet.Net). The writer sat
+in its own `OrthologyStore` project until 2026-10-05, when review folded it into
+`UsefulProteomicsDatabases`; the snapshot it writes is byte-identical. The on-disk format is
+`ensembl-orthology-snapshot` format 1, which is this definition. Our driver is
+`tools/BuildOrthologySnapshot`.
 **Checked (2026-09-27, human/mouse/rat 116):** the C# views, the DuckDB views and `cardinality.py`
 agree on all six pair-status distributions, on 23,764 human-mouse rows and on 15,508 all-one-to-one
 human genes. A rebuild is byte-identical.
@@ -177,6 +180,8 @@ null, never 0.
 
 ### Views (`views.sql`; filters and joins, not stored)
 
+Every SQL macro takes the snapshot directory as its first argument (`root`), omitted below.
+
 - **`orthologs(a, b)`**: the pair file's ortholog rows, oriented so species `a`'s gene comes first.
 - **`pair_status(a, b)`**: one row per gene of `a`, with exactly one status:
 
@@ -197,6 +202,35 @@ null, never 0.
   A tuple is never formed by chaining (A~B and B~C does not give A~C), because Compara's pairwise
   calls are not transitive.
 
+### The file contract (what `format_version` 1 promises)
+
+A consumer that reads a snapshot in place (dataRepo, LOGS-D4 (a)) may rely on the following for
+every snapshot whose manifest says `format = ensembl-orthology-snapshot` and `format_version = 1`:
+
+- **Layout.** The paths above: `manifest.json`, `genes/<species>.parquet`,
+  `members/<species>.parquet`, `pairs/<a>__<b>.parquet` with `a <= b` in ordinal order, and
+  `views.sql`. Every species in `manifest.species` has a genes file, a members file, and a pair file
+  with every species, itself included.
+- **Columns.** The names, order and types in the three tables above, with nulls exactly where the
+  tables say a column is nullable.
+- **Views.** `views.sql` defines `orthologs(root, a, b)`, `pair_status(root, a, b)` and
+  `species_set3(root, a, b, c)` as DuckDB table macros, where `root` is the snapshot directory the
+  caller passes. They have the output columns described above. `pair_status` emits the four
+  in-gene-set statuses; `not_in_gene_set` is for the consumer to assign to a gene id the snapshot's
+  `genes` file does not hold. The helper macro `orthology_pair_file` is not part of the contract.
+- **Integrity.** `manifest.json` lists every other file with its sha256, row count and size, and
+  every input with its sha256. A snapshot is never changed after it is written.
+
+**What changes the version.** Removing or renaming a file, column or view; changing a column's type
+or nullability; or changing what a status means. Each of these makes format 2, and a v1 reader
+must refuse a format it does not know rather than guess. **What does not:** a new species list, a
+new release, or a new source (each is a new snapshot under the same format), and a view or column
+**added** to the end of a table. A consumer must select columns by name, not by position.
+
+**What is not promised.** `group_id` across releases (it is never stable), the bytes of `views.sql`
+beyond the macros' names and outputs, and the Parquet encoding details (row groups, compression).
+The data is CC-BY-4.0 and `views.sql` is mzLib's LGPL-3.0 (`LICENSING.md`).
+
 ### What it does not do
 
 - It does not map protein accessions. That is `DEF-GENE-RESOLUTION`: join its `gene_id` to
@@ -204,4 +238,88 @@ null, never 0.
 - It does not merge sources. NCBI, Alliance or HCOP would each be a separate `<source>-<release>`
   snapshot with the same layout, and would never be unioned into one unqualified answer.
 - It does not provide residue-level correspondence (ptmQtl). That is built on top of this store and
-  is defined separately.
+  is defined separately, as `DEF-RESIDUE-CORRESPONDENCE` below.
+
+---
+
+## `logs:DEF-RESIDUE-CORRESPONDENCE v1`: residue to homologous residue (PROPOSED, NOT BUILT)
+
+**Status:** proposed 2026-10-05 and sent to ptmQtl (007) **before** anything is built, as 005
+promised. No aligner code exists yet; `/oracle mzLib` runs first. **Not verified yet:** Compara's
+gene-tree peptide alignment (`Compara.116.protein_default.aa.fasta.gz`, 866 MB) has been read about
+in its README only, not fetched. Every statement below about it is what the README says, and is
+checked when the file is pinned.
+
+### What it answers
+
+Given a residue of a protein in a search database, which residue of another protein corresponds to
+it, through **one** stated relationship and **one** stated alignment, or, if none does, **where the
+chain stopped**. The store's rules all apply: source and release on every row, one relationship per
+row, no transitive closure, one-to-many kept, and a refusal is typed, never the nearest residue.
+
+### The residue key (003-logs, 005-logs)
+
+`(search_database_sha256, accession, position)`, with `position` 1-based on that entry's own sequence
+as that database holds it. An isoform that a database holds as its own entry (`P02751-8`) is keyed on
+its own sequence; nothing is moved to the canonical to store it (aging 018 agrees: positions differ).
+
+### Edges (`edge_kind`)
+
+| edge_kind | from -> to | alignment |
+|---|---|---|
+| `homolog` | a residue of gene G's entry -> a residue of gene H's entry, where the store holds a G~H row | three legs, below |
+| `isoform` | an isoform entry (`P02751-8`) -> its canonical entry (`P02751`) | our pairwise alignment of the two UniProt sequences |
+| `variant` | a sequence-variant proteoform (`P12345_S70N`) -> its entry | none for a substitution; an indel needs our pairwise alignment. A guard: ptmQtl 004 found 0 variant sites |
+
+**A `homolog` row is three coordinate changes along one relationship, not three relationships:**
+1. UniProt entry of G -> G's canonical Ensembl protein (our pairwise alignment);
+2. that protein -> H's canonical Ensembl protein, through the column of Compara's gene-tree alignment;
+3. H's Ensembl protein -> each UniProt entry of H in the target database (our pairwise alignment).
+
+Legs 1 and 3 change coordinates within one gene. Only leg 2 crosses a homology edge, and that edge is
+one `homology_id` from the store. This is why a row is not a transitive closure. Each leg's positions
+are carried, so a consumer can see which leg failed.
+
+### Row (one per source residue x target gene x target entry; never a pick)
+
+| column | meaning |
+|---|---|
+| `search_database_sha256`, `accession`, `position`, `residue` | the source residue (the key, plus the residue read from the database) |
+| `edge_kind` | `homolog`, `isoform` or `variant` |
+| `target_search_database_sha256`, `target_accession` | the target entry |
+| `target_position`, `target_residue` | null exactly when `outcome` is a refusal |
+| `outcome` | exactly one value (below) |
+| `gene_id`, `target_gene_id` | the genes, from `DEF-GENE-RESOLUTION` rows under the agrees view |
+| `homology_id`, `relationship_type`, `orthology_snapshot_id` | `homolog` rows only: the store row, verbatim, and the snapshot it came from |
+| `ensembl_protein`, `ensembl_position`, `target_ensembl_protein`, `target_ensembl_position` | `homolog` rows only: legs 1 and 2, null after the leg that failed |
+| `msa_sha256` | the Compara alignment file's sha256 (`homolog` rows) |
+| `aligner` | the id of our pairwise method and its parameters, versioned like a definition |
+| `gene_set_sha256`, `target_gene_set_sha256` | as in `DEF-GENE-RESOLUTION`, so the rows can be checked against both gene resolutions and the snapshot |
+
+### Outcomes (`outcome`)
+
+| value | meaning |
+|---|---|
+| `identical` | aligned, and the target residue is the same amino acid |
+| `substituted` | aligned, and the residue differs (S to T, say). Whether that conserves the site is ptmQtl's call, not ours |
+| `residue_mismatch` | the residue the caller supplied is not at that position in the source entry. The coordinates are wrong, so nothing is mapped |
+| `position_out_of_range` | the position is beyond the source sequence |
+| `gene_not_resolved` | the source accession has no gene in the agrees view; the resolution's own `outcome` is carried |
+| `no_homolog` | the store holds no row of the requested kind between the genes; the store's `pair_status` is carried |
+| `not_on_ensembl_protein` | leg 1: the residue sits where the UniProt entry and G's Ensembl protein differ |
+| `gap_in_target` | leg 2: the alignment column is a gap in H's protein |
+| `not_on_target_entry` | leg 3: H's Ensembl residue has no counterpart in that UniProt entry |
+| `target_gene_not_in_database` | H has no entry in the target database |
+| `isoform_specific` | an `isoform` edge: the residue is in a region the canonical entry does not have (fibronectin EDA/EDB/IIICS, lamin C's C-terminus) |
+| `variant_changed_span` | a `variant` edge: the residue is inside the changed span of an indel |
+
+A refusal row keeps every column known up to the failure, so "no ortholog", "ortholog, but a gap" and
+"we never got as far as the alignment" stay distinguishable.
+
+### What it does not do
+
+- It does not call conservation, and it does not judge whether a modification is shared. That is
+  ptmQtl's (their 001).
+- It does not chain: a mouse residue reaches a rat residue through the mouse~rat row, never through
+  human.
+- It does not pick one target when a gene has several orthologs or a target gene several entries.
