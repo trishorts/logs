@@ -331,3 +331,31 @@ rebased onto smith/master 2b16b41c and force-pushed (f773e76a); the full suite p
 failed) and the test-name hygiene check is clean. The PR is ready for review again. The session
 skipped the inbox and the brief because the user opened with the PR question; dataRepo 029 (LOGS-D4
 answered) is still unread into the design.
+
+## 2026-10-05 - #1381 made ready again; LOGS-D4 closed with a file contract; residue schema proposed to ptmQtl
+
+The inbox held dataRepo 029 and aging 018. 029 answered LOGS-D4 as read-in-place, so what we owe them
+is a file contract, not a column contract; 018 corrected aging's earlier claim that their searches
+carry no isoforms, and agreed that an isoform site must not be moved to the canonical by position.
+Neither asked anything. mzLib 1.0.593 shipped on 2026-10-03 without our PRs.
+
+#1381 had three blockers. It conflicted with master (only on the solution entry for its own
+project). nbollis asked why it needed a new csproj, and he was right: mzLib ships as one NuGet
+package, so a separate project kept Parquet.Net away from no consumer. The writer and views.sql moved
+into UsefulProteomicsDatabases/Ensembl (2c1fd05), and the real 116 snapshot rebuilt with it is
+byte-identical, id b63a3331, all 14 files. The red integration job was ours, and would have been easy
+to dismiss alongside the red external-service job, which was Koina's Prosit server failing: Parquet.Net
+6.1.0 requires ZstdSharp.Port >= 0.8.8 while Readers and the nuspec pinned 0.8.7, which MetaMorpheus's
+restore turns into NU1605. Only that integration job can see it. Bumped in e1d7b57. The required suite
+passes (7,849/0/32), hygiene is clean, the PR body was updated and nbollis answered. A PowerShell 5.1
+Set-Content added BOMs to four files on the way; reverted and redone with sed before committing.
+
+DEF-ORTHOLOGY v1 is published with an explicit file contract. Checking the draft against the snapshot
+caught two wrong clauses before sending: the SQL macros take the snapshot directory as their first
+argument, and pair_status emits four statuses, not five. Sent as dataRepo 030, with a suggestion to
+record snapshot_id. DEF-RESIDUE-CORRESPONDENCE v1 was drafted and sent to ptmQtl as 007 before any
+building: a homolog row is three coordinate changes along one homology_id (UniProt to Ensembl, the
+Compara tree-alignment column, Ensembl to UniProt), with twelve outcomes that say where the chain
+stopped. It asks LOGS-P5 (target databases) and LOGS-P6 (keep substituted rows). Compara's alignment
+file is still read about only, not fetched. At close, #1381's build and integration jobs were still
+running on e1d7b576.

@@ -131,30 +131,38 @@ gh pr view 1381 --repo smith-chem-wisc/mzLib --json state,reviewDecision,comment
 gh pr view 1382 --repo smith-chem-wisc/mzLib --json state,reviewDecision,comments   # VariantApplication.ParseAccession
 ```
 
+#1381 was made ready again on 2026-10-05: head `e1d7b576`, MERGEABLE, with a reply to nbollis's
+csproj question. When the session closed, `external-service-tests` had passed on that head and
+`build`/`integration` were still running (the integration fix is the ZstdSharp 0.8.8 bump). Check them
+first: `gh pr checks 1381 --repo smith-chem-wisc/mzLib`.
+
 Answer any review. **On a merge:**
 - move that PR's board #19 card to Shipped;
 - for #1381, drop the pre-release flag (`gh release edit orthology-compara-116-b63a3331 --repo trishorts/logs --prerelease=false`);
 - for #1382, run `/bridge-oracle pyMzLib` to project `VariantApplication.ParseAccession`, then tell dataRepo that
   a variant accession can now be joined (022 promised this before one ships).
 
-If nothing has moved, the next build is **residue-level correspondence for ptmQtl** (PLAN step 6 is
-built, and this sits on it):
-1. Draft the residue-row schema and **send it to ptmQtl before building** (005 promised this). The key
-   is `(search_database_sha256, entry accession, 1-based position)`, and gaps are typed refusals. An
-   isoform is its own entry, so isoform-to-canonical is an alignment edge (005).
-2. The first measurement: how often a UniProt canonical sequence equals its Ensembl translation.
-   Compara's gene-tree alignment (`Compara.116.protein_default.aa.fasta.gz`, 866 MB, not fetched) is
-   over Ensembl proteins.
+The next build is **residue-level correspondence for ptmQtl**. Its schema is **proposed, not built**:
+`logs:DEF-RESIDUE-CORRESPONDENCE v1` in `design/DEFINITIONS.md`, sent as ptmQtl 007 on 2026-10-05.
+1. **Wait for ptmQtl's answers to LOGS-P5** (which target databases first; we proposed aging's three
+   reviewed proteomes plus aging's isoform databases) **and LOGS-P6** (keep `substituted` rows; we
+   proposed yes). Fold any change into the definition before building.
+2. Fetch and pin `Compara.116.protein_default.aa.fasta.gz` (866 MB, README read, file not fetched).
+   Check that its proteins are the store's `protein_a`/`protein_b`. Then measure how often a UniProt
+   entry differs from its gene's Ensembl protein (that rate is the `not_on_ensembl_protein` outcome),
+   and send the number with the first build.
 3. Run `/oracle mzLib` before any aligner code. Substance goes in C# in mzLib (CLAUDE.md rule 20).
 
 **Waiting on others:**
-- dataRepo **LOGS-D4**: do they store orthology rows, or read our Parquet in place (025 §3)?
-  **Answered in dataRepo 029 (2026-09-29), not yet read into the design; read it first.**
-- reviews of #1381 and #1382.
+- ptmQtl: LOGS-P5 and LOGS-P6 (007).
+- reviews of #1381 (re-review by nbollis after the fold-in) and #1382.
 
-**State on 2026-09-28.**
+**State on 2026-10-05.**
+- **LOGS-D4 is closed: dataRepo reads the Parquet in place** (029). `DEF-ORTHOLOGY v1` is published
+  with an explicit **file contract** (layout, columns, views, integrity, and what bumps
+  `format_version`), sent as 030.
 - **The store (PLAN step 6) is built** in mzLib #1381, branch `feat/compara-orthology-store` @
-  `16c6a8d9`, and **released**: pre-release
+  `e1d7b576` (the writer now lives in `UsefulProteomicsDatabases/Ensembl`), and **released**: pre-release
   [`orthology-compara-116-b63a3331`](https://github.com/trishorts/logs/releases/tag/orthology-compara-116-b63a3331),
   human, mouse and rat, Ensembl 116, 13 files, 9.0 MB.
   - The C# views, the DuckDB `views.sql` and `cardinality.py` agree on every pinned figure.
@@ -165,8 +173,9 @@ built, and this sits on it):
   `GetAccession`, `f773e76a`). It returns the parent entry AND the applied variants; nothing is
   stripped. It matches `normalize()` on 78,774 accessions.
 - **The repo is public**, MIT for code and CC-BY-4.0 for data (`LICENSING.md`).
-- **LOGS-D1 to D3 and P4 are closed.** Partners have been told: dataRepo 024-028, aging 015-017,
-  ptmQtl 005-006, pride 003.
+- **LOGS-D1 to D4 and P4 are closed; P5 and P6 are open.** Partners have been told: dataRepo
+  024-030, aging 015-017, ptmQtl 005-007, pride 003. aging 018 (their searches DO include small
+  isoform databases) needed no reply; it agrees with the residue key.
 
 **Decided, do not re-open:**
 
@@ -182,7 +191,9 @@ built, and this sits on it):
   Zenodo DOI once a snapshot is cited. The partner thread copies are public too, by the user's
   explicit choice.
 - **Substance goes in C# in mzLib (user, 2026-09-27).** The Python in `src/` is measurement and test
-  oracle. Parquet.Net is approved as an mzLib dependency, in its own `OrthologyStore` project.
+  oracle. Parquet.Net is approved as an mzLib dependency. It sat in its own `OrthologyStore` project
+  until review (2026-10-05) folded it into `UsefulProteomicsDatabases`: mzLib ships as one package,
+  so a separate project isolated nothing.
 - **dataRepo runs the resolution (option (a), user rule D24; accepted in 015).** We define the logic,
   the inputs and the release; dataRepo runs our released code through pyMzLib. Our human table
   (`results/search_db_human_e116.tsv.gz`, pinned) is only a **reference output** for their first run.
@@ -249,13 +260,13 @@ python tests/test_contracts.py          # 10 contract tests
 
 <!-- BEGIN GENERATED -- render_resume.py owns this block; edit state.yaml, not here -->
 
-**logs** &middot; phase **BUILD** (4/10) &middot; created 2026-09-22 &middot; rendered 2026-09-30
+**logs** &middot; phase **BUILD** (4/10) &middot; created 2026-09-22 &middot; rendered 2026-10-05
 
 | | |
 |---|---|
-| Commits | 106 |
+| Commits | 110 |
 | Sync | [`trishorts/logs`](https://github.com/trishorts/logs) |
-| Locked decisions | 44 |
+| Locked decisions | 46 |
 | Open gaps | 8 |
 | Gate items skipped | 2 |
 
@@ -265,7 +276,7 @@ python tests/test_contracts.py          # 10 contract tests
 |---|---|---|---|---|
 | `code/mzLib-ensembl-genes` | feat/ensembl-gene-resolution | `2f40c40c` | `2f40c40c` | at pin |
 | `code/mzLib-occupancy-nterm` | fix/occupancy-met-cleaved-nterm | `815423f7` | `815423f7` | at pin |
-| `code/mzLib-orthology-store` | feat/compara-orthology-store | `16c6a8d9` | `16c6a8d9` | at pin |
+| `code/mzLib-orthology-store` | feat/compara-orthology-store | `e1d7b576` | `e1d7b576` | at pin |
 | `code/mzLib-proteoform-accession` | feat/proteoform-accession | `f773e76a` | `f773e76a` | at pin |
 
 <!-- END GENERATED -->
