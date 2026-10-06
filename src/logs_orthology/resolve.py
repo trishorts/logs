@@ -90,10 +90,11 @@ RE_REFSEQ_PROTEIN = re.compile(r"^((?:NP|XP|YP|WP|AP)_\d+)(?:\.(\d+))?$")
 #: mzLib's name for a proteoform with applied sequence variants: the entry's accession, then one
 #: ``_{original}{position}{variant}`` token per variant, ordered by position
 #: (``VariantApplication.GetAccession`` / ``SequenceVariation.SimpleString``). The original residues
-#: are never empty; the variant residues are empty for a deletion.
+#: are never empty; the variant residues are empty for a deletion. Either side may carry ``*``
+#: (stop-gain ``Q5*``, stop-loss ``*70R``), as in mzLib #1382 since 5e323463f.
 #: NOT the same as ``_{digits}``: that is ``ProteinDbLoader``'s load-collision counter, naming a
 #: *different* entry whose accession collided, and it must never map back to the first entry.
-RE_VARIANT_SUFFIX = re.compile(r"^(.+?)((?:_[A-Z]+\d+[A-Z]*)+)$")
+RE_VARIANT_SUFFIX = re.compile(r"^(.+?)((?:_[A-Z*]+\d+[A-Z*]*)+)$")
 
 
 @dataclass(frozen=True)

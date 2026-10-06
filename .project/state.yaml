@@ -416,6 +416,12 @@ decisions:
       Leg 1 by entry: UniProt == tree protein for 91.6/86.5/57.2% (h/m/r). /oracle mzLib: ADD-NEW. Aligner
       = mzLib #1428 (upstream, not stacked; matches Biopython on 3,000 pairs). Compara alignment reader =
       trishorts/mzLib#8, DRAFT stacked on #1381. Sent as 009-logs (pinned in test_reported_claims).
+  - date: 2026-10-06
+    text: >-
+      ALEXANDER-SOL REVIEWS ADDRESSED. #1382 (changes requested): stop-gain accessions (`P12345_Q5*`) parsed
+      Unrecognized; suffix residue classes now accept `*` (stop-loss too), round-trip test adds a stop-gain
+      and compares variants exactly (5e323463f; Python oracle regex brought to parity). #1428 (approved):
+      maxCells capped at Array.MaxLength (no int overflow), Align refuses '-'/'.' (2a5f418b6). Replies posted.
 
 gaps:
   - >-

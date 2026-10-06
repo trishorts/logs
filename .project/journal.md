@@ -422,3 +422,23 @@ first consumer (DATAREPO-76). Neither is answered yet.
 A process mistake: a real-data test was first run with the gene-tree content unrestricted, so it would
 have held millions of proteins in memory. It was stopped with `Stop-Process testhost*`, which kills
 every test host on the machine, possibly another session's. Next time, stop it by process id.
+
+## 2026-10-06 (evening) - Alexander-Sol's reviews of #1382 and #1428 addressed
+
+**#1382 (changes requested).** He reproduced a real defect. GetAccession writes a stop-gain proteoform as
+`P12345_Q5*`, but ParseAccession's suffix pattern had no `*`, so the name came back Unrecognized and could
+not be linked to its entry. UniProt natural variants rarely carry `*`, so our real-database check (78,774
+accessions) never saw one. The residue classes now accept `*` on both sides, which covers stop-loss too.
+The round-trip test gained a stop-gain variant (15 proteoforms) and now checks that the variants come back
+exactly as written, not only how many there are. Four tests failed on the old pattern and pass now (44/44
+in the accession and VariantApplication fixtures). Commit 5e323463f. The Python oracle `resolve.normalize()`
+had the same gap and was brought to parity (21/21 resolver tests, 29/29 reported claims unchanged).
+
+**#1428 (approved, two notes).** Both taken in 2a5f418b6: `maxCells` is capped at `Array.MaxLength`, so
+the int traceback size and index cannot overflow, and `Align` refuses `-` and `.` instead of scoring them
+as X. That matters for the gene-tree work, where an aligned row could be passed in by mistake. 27/27 pass.
+
+Both replies are posted on the PRs. Lesson: a check on real data only covers the alphabet that data uses.
+The variant grammar is the producer's, so test what VariantApplication can write, not only what UniProt
+happens to contain.
+
