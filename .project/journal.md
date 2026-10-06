@@ -384,3 +384,41 @@ threads. nbollis had approved on 2026-10-05; #1381 now waits on Peter's re-revie
 
 ptmQtl's 008 (answering LOGS-P5 and LOGS-P6, the questions the residue schema was waiting on) arrived
 and is committed but was not read this session. It is the next thing to do.
+
+## 2026-10-06 (later) - ptmQtl 008 folded in, Compara's alignment pinned, residue build started in two PRs
+
+The board check found nothing of ours merged. #1337 and #1338 had no Status on board #19 and were set to
+Shipped. #1381's head had moved to `6b3c4a26` (a master merge), and nbollis's approval had been dismissed
+by our own fix push, so the six referees were re-requested on it.
+
+ptmQtl 008 asked for six target databases, not three: aging's `_agingPTM-v1` builds cover 50 of their 92
+datasets. Rather than assume the builds share their base's sequences, we compared them entry by entry
+(`db_equivalence.py`). All three hold the same entries, sequences and sequence variants, and differ only in
+`modified residue` features. So one alignment serves both sha keys, and rows are written under both.
+
+The Compara alignment (908 MB) was fetched and pinned. The README's `//` separator was confirmed in the
+file before it was relied on. The check against the store held one surprise: 751,756 of 1,001,934 pair
+rows have their two proteins in different alignments. The measurement was suspected first. Almost all of
+the split rows are `other_paralog`, which by construction joins genes in different trees. But 760 ortholog
+rows also join genes that GeneTree_content puts in two trees. Those rows have no column to cross, which
+added a 13th outcome, `no_shared_alignment`. Leg 1 by entry: the UniProt sequence equals the tree protein
+for 91.6% of human pairs, 86.5% of mouse and 57.2% of rat.
+
+`/oracle mzLib` found no sequence aligner and no alignment reader (ProteinDbLoader turns `-` into `X`).
+Two pieces were written:
+- **The aligner, #1428 (upstream).** Gotoh with BLOSUM62 and free end gaps. NCBI's matrix is embedded
+  verbatim rather than typed from memory. Its optimal scores match Biopython's on 3,000 random pairs.
+- **The Compara reader, trishorts/mzLib#8.** It reads the real file in 33 s and agrees with the Python
+  count.
+
+Mid-session the user set the rule that a stacked PR stays a draft in the fork until its base merges, so
+#8 is a fork draft on #1381's branch. 009 told ptmQtl all of this, and the new numbers are pinned (29/29).
+
+The user asked how this becomes live in dataRepo, PXReprise and aging. Our first answer, "when #1381
+merges", was wrong: the released tar is readable today with DuckDB, as dataRepo showed in 029. 031 asks
+dataRepo for a read-in-place orthology engine (DATAREPO-75), and whether to build it now or wait for the
+first consumer (DATAREPO-76). Neither is answered yet.
+
+A process mistake: a real-data test was first run with the gene-tree content unrestricted, so it would
+have held millions of proteins in memory. It was stopped with `Stop-Process testhost*`, which kills
+every test host on the machine, possibly another session's. Next time, stop it by process id.

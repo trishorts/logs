@@ -123,41 +123,57 @@ Each of these cost real time on 2026-09-22.
 
 ## Pick up at
 
-**Next action:** run the thread inbox and **read ptmQtl 008** (it arrived 2026-10-05, answers
-LOGS-P5 and LOGS-P6, and is committed but unread). Fold its answers into
-`DEF-RESIDUE-CORRESPONDENCE v1` (`design/DEFINITIONS.md`), then `--mark-read`. Then re-check the two
-open mzLib PRs, which are the only things in flight:
+**Next action:** run the thread inbox. Replies are owed on **dataRepo 031** (DATAREPO-75: add a
+read-in-place orthology engine to `datarepo run`; DATAREPO-76: build it now or wait for a consumer) and
+possibly **ptmQtl 009** (outcome 13 `no_shared_alignment`; one alignment for both sha keys of each
+agingPTM-v1 pair). Then check the board against the PRs:
 
 ```powershell
-gh pr view 1381 --repo smith-chem-wisc/mzLib --json state,reviewDecision,comments   # the orthology store
+gh pr view 1381 --repo smith-chem-wisc/mzLib --json state,reviewDecision,comments   # orthology store
 gh pr view 1382 --repo smith-chem-wisc/mzLib --json state,reviewDecision,comments   # VariantApplication.ParseAccession
+gh pr view 1428 --repo smith-chem-wisc/mzLib --json state,reviewDecision,comments   # PairwiseAligner (opened 2026-10-06)
+gh pr view 8 --repo trishorts/mzLib --json state,isDraft                            # ComparaGeneTreeAlignment, fork draft on 1381
 ```
 
-#1381 is at head `b21aa4dd`. nbollis approved on 2026-10-05. On 2026-10-06 pcruzparri's two
-automated findings were fixed and answered in-thread: `d5319af` stops comparing a GTF's file-name
-number with the Compara release (Ensembl 116 names the yeast/worm/fly GTFs `.63.`), and `b21aa4d`
-checks dump values on rows that are not kept. The real snapshot rebuilt byte-identical. It waits on his
-re-review. CI on the new head was not watched: check `gh pr checks 1381 --repo smith-chem-wisc/mzLib`.
+#1381 is at `6b3c4a26` (a master merge on top of pcruzparri's two fixes, `d5319af` and `b21aa4d`).
+That push dismissed nbollis's approval, so the six referees were re-requested on 2026-10-06. It needs a
+re-approval and pcruzparri's re-review. CI is green.
 
-Answer any review. **On a merge:**
+**On a merge:**
 - move that PR's board #19 card to Shipped;
-- for #1381, drop the pre-release flag (`gh release edit orthology-compara-116-b63a3331 --repo trishorts/logs --prerelease=false`);
-- for #1382, run `/bridge-oracle pyMzLib` to project `VariantApplication.ParseAccession`, then tell dataRepo that
-  a variant accession can now be joined (022 promised this before one ships).
+- for #1381:
+  - drop the pre-release flag (`gh release edit orthology-compara-116-b63a3331 --repo trishorts/logs --prerelease=false`);
+  - rebase **trishorts/mzLib#8** onto smith/master and open it upstream with `ready for review` +
+    `ready-for-agent`, the six referees (acesnik, Alexander-Sol, pcruzparri, zhuoxinshi, RayMSMS, nbollis)
+    and a board card;
+  - tell dataRepo (031 promised it);
+- for #1382: run `/bridge-oracle pyMzLib` to project `ParseAccession`, then tell dataRepo (022 promised this).
 
-The next build is **residue-level correspondence for ptmQtl**. Its schema is **proposed, not built**:
-`logs:DEF-RESIDUE-CORRESPONDENCE v1` in `design/DEFINITIONS.md`, sent as ptmQtl 007 on 2026-10-05.
-1. **ptmQtl answered LOGS-P5** (which target databases first; we proposed aging's three reviewed
-   proteomes plus aging's isoform databases) **and LOGS-P6** (keep `substituted` rows; we proposed
-   yes) in 008. It has not been read yet. Fold any change into the definition before building.
-2. Fetch and pin `Compara.116.protein_default.aa.fasta.gz` (866 MB, README read, file not fetched).
-   Check that its proteins are the store's `protein_a`/`protein_b`. Then measure how often a UniProt
-   entry differs from its gene's Ensembl protein (that rate is the `not_on_ensembl_protein` outcome),
-   and send the number with the first build.
-3. Run `/oracle mzLib` before any aligner code. Substance goes in C# in mzLib (CLAUDE.md rule 20).
+**Stacked PRs stay drafts in the fork until their base merges** (user, 2026-10-06).
+
+**The next build is the residue-correspondence builder** (`DEF-RESIDUE-CORRESPONDENCE v1`, now 13
+outcomes, in `design/DEFINITIONS.md`). Its pieces exist:
+- legs 1 and 3 use the aligner in #1428;
+- leg 2 uses the reader in fork #8;
+- the `variant` edge reuses `VariantApplication.RestoreModificationIndex` (oracle).
+
+The oracle verdict and the conventions to match are in `design/ORACLE_residue_correspondence.md`. Run
+`/oracle mzLib` again for the builder's home before writing it. 009 promised ptmQtl the residue-level
+`not_on_ensembl_protein` rate with the first build. The by-entry rates (91.6 / 86.5 / 57.2%) are pinned.
 
 **Waiting on others:**
-- reviews of #1381 (pcruzparri's re-review; nbollis approved) and #1382.
+- reviews of #1381 (re-approval + pcruzparri), #1382 and #1428;
+- dataRepo on DATAREPO-75/76; ptmQtl on 009 (no ask, but a new outcome).
+
+**State on 2026-10-06.**
+- **Compara's alignment is pinned and checked** (`results/alignment_check_e116.md`):
+  - it holds 54,308 alignments, and every store protein is in it once;
+  - 760 ortholog rows (and every `other_paralog` row) join genes in two trees, hence `no_shared_alignment`.
+- **The agingPTM-v1 builds are the same proteins as their bases** (`results/search_db_equivalence.md`),
+  so ptmQtl's six databases need three alignments.
+- **The orthology store is not active in any consumer yet.** The released tar is readable today (dataRepo
+  029), and #1381 is needed only to build new snapshots. aging is the operator and gets it through
+  dataRepo's runner. PXReprise sees it only through dataRepo's catalog.
 
 **State on 2026-10-05.**
 - **LOGS-D4 is closed: dataRepo reads the Parquet in place** (029). `DEF-ORTHOLOGY v1` is published
@@ -242,7 +258,7 @@ Sanity-check before changing anything:
 
 ```powershell
 $env:PYTHONPATH = "E:\CodeReview\logs\src"
-python tests/test_reported_claims.py    # 25 claims already sent to a partner
+python tests/test_reported_claims.py    # 29 claims already sent to a partner
 python -m logs_orthology.manifest       # regenerate results/resolver_inputs_e116.{json,md}
 python tests/test_resolve.py            # 21 resolver contracts
 python tests/test_contracts.py          # 10 contract tests
@@ -254,10 +270,12 @@ python tests/test_contracts.py          # 10 contract tests
 - `sources/cross_species_orthology_discussion.md` — the seed discussion, verbatim.
 - `ORACLE.md` — the mzLib survey and the three-way split verdict.
 - `PLAN.md` — ordered steps and the standing rules.
-- `DEFINITIONS.md` — our definition ids (charter S4): `logs:DEF-GENE-RESOLUTION v1`, and `logs:DEF-ORTHOLOGY v1` (the store, proposed and built).
+- `DEFINITIONS.md` — our definition ids (charter S4): `logs:DEF-GENE-RESOLUTION v1`, `logs:DEF-ORTHOLOGY v1` (the store, published with its file contract) and `logs:DEF-RESIDUE-CORRESPONDENCE v1` (proposed, being built, 13 outcomes).
+- `ORACLE_residue_correspondence.md` — the 2026-10-06 `/oracle mzLib` verdict for the aligner and the Compara reader, and the conventions they match.
 - `threads/OWNERSHIP.md` — capability ownership; both inception collisions closed.
 - `threads/dataRepo/`, `threads/aging/`, `threads/ptmQtl/`, `threads/pride/` — correspondence (public since 2026-09-28).
 - Outside `design/`: `LICENSING.md` says which license covers what.
+- Outside `design/`: `tools/AlignerOracle/README.md` checks #1428's aligner against Biopython.
 - Outside `design/`: `results/gene_sets/README.md` records the compact gene tables and how to rebuild them.
 
 <!-- BEGIN GENERATED -- render_resume.py owns this block; edit state.yaml, not here -->
@@ -266,10 +284,10 @@ python tests/test_contracts.py          # 10 contract tests
 
 | | |
 |---|---|
-| Commits | 112 |
+| Commits | 115 |
 | Sync | [`trishorts/logs`](https://github.com/trishorts/logs) |
-| Locked decisions | 47 |
-| Open gaps | 8 |
+| Locked decisions | 49 |
+| Open gaps | 9 |
 | Gate items skipped | 2 |
 
 **Worktrees** -- details in `code/PINNED.md`
@@ -278,7 +296,9 @@ python tests/test_contracts.py          # 10 contract tests
 |---|---|---|---|---|
 | `code/mzLib-ensembl-genes` | feat/ensembl-gene-resolution | `2f40c40c` | `2f40c40c` | at pin |
 | `code/mzLib-occupancy-nterm` | fix/occupancy-met-cleaved-nterm | `815423f7` | `815423f7` | at pin |
-| `code/mzLib-orthology-store` | feat/compara-orthology-store | `b21aa4dd` | `b21aa4dd` | at pin |
+| `code/mzLib-orthology-store` | feat/compara-orthology-store | `6b3c4a26` | `6b3c4a26` | at pin |
 | `code/mzLib-proteoform-accession` | feat/proteoform-accession | `f773e76a` | `f773e76a` | at pin |
+| `code/mzLib-residue-aligner` | feat/protein-pairwise-alignment | `284311ef` | `284311ef` | at pin |
+| `code/mzLib-gene-tree-alignment` | feat/compara-gene-tree-alignment | `7e592059` | `7e592059` | at pin |
 
 <!-- END GENERATED -->

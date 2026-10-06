@@ -115,6 +115,15 @@ This folder is a `/project`-managed research project. **You are de facto working
     Only the trees and dumps are held to the Compara release; gene sets are held by content (#1381
     review, 2026-10-06). Check the FTP listing before trusting a naming pattern across species.
 
+27. **A store row is not a promise of a shared alignment.** Every `other_paralog` row, and 760 ortholog
+    rows in 116, join genes that Compara puts in **different** gene trees, so the `aa.fasta.gz` has no
+    column for them (`no_shared_alignment`). A split looks like a bug; it is the data.
+28. **Stop your own test host by id, never `Stop-Process testhost*`.** Other sessions run tests on this
+    machine (2026-10-06 killed them all). Also restrict any real-data `ComparaGeneTreeAlignment` or
+    `ComparaGeneTreeContent` run to gene sets: unrestricted, it holds millions of proteins.
+29. **Before saying when something is "active" for a consumer, check what they can already read.** The
+    released snapshot needs only DuckDB; #1381 is for building new ones (said wrongly, then corrected, 2026-10-06).
+
 ## Running things
 
 ```powershell
@@ -126,7 +135,7 @@ python -m logs_orthology.resolve --reference          # -> results/resolution_hu
 python -m logs_orthology.resolve --accessions ids.tsv # accession[<TAB>contaminant] per line
 python tests/test_contracts.py         # 10 contract tests
 python tests/test_resolve.py           # 21 resolver contracts (last one reconciles on real data)
-python tests/test_reported_claims.py   # 25 claims already sent to a partner
+python tests/test_reported_claims.py   # 29 claims already sent to a partner
 python -m logs_orthology.manifest       # -> results/resolver_inputs_e116.{json,md}
 dotnet run --project tools/BuildGeneSet -c Release -- <gtf.gz> results/gene_sets/<Species>.116.genes.tsv.gz
 dotnet run --project tools/BuildOrthologySnapshot -c Release -- 116 data/compara results/gene_sets snapshots/compara-116 homo_sapiens mus_musculus rattus_norvegicus   # out dir "-" = check only
