@@ -400,6 +400,22 @@ decisions:
       d5319af. (2) Non-blocking: dump values now parsed before the species filter so "every row checked"
       is true; gene-tree per-gene rules stay kept-genes-only (checking all would hold 4.2M) and the docs +
       PR body say so. b21aa4d. Real 116 snapshot rebuilt byte-identical (b63a3331, 13/13). Replies posted.
+  - date: 2026-10-06
+    text: >-
+      STACKED PRs STAY DRAFTS IN THE FORK (user): a PR stacked on an unmerged PR is a draft in
+      trishorts/mzLib, based on the branch it stacks on, until its base merges; then rebase onto
+      smith/master and open upstream with labels ready for review + ready-for-agent, the six referees
+      (acesnik, Alexander-Sol, pcruzparri, zhuoxinshi, RayMSMS, nbollis) and a board #19 card.
+  - date: 2026-10-06
+    text: >-
+      RESIDUE CORRESPONDENCE BUILD STARTED. ptmQtl 008 folded in: six target databases (the three
+      agingPTM-v1 builds are the same proteins as their bases, measured entry by entry - one alignment,
+      rows written under both sha keys) and `substituted` kept. Compara 116 aa.fasta.gz (908 MB) pinned
+      and checked: 54,308 alignments, every store protein present once, but 760 ORTHOLOG rows (and all
+      750,996 other_paralog rows) join genes in different trees -> new outcome 13 `no_shared_alignment`.
+      Leg 1 by entry: UniProt == tree protein for 91.6/86.5/57.2% (h/m/r). /oracle mzLib: ADD-NEW. Aligner
+      = mzLib #1428 (upstream, not stacked; matches Biopython on 3,000 pairs). Compara alignment reader =
+      trishorts/mzLib#8, DRAFT stacked on #1381. Sent as 009-logs (pinned in test_reported_claims).
 
 gaps:
   - >-
@@ -447,8 +463,10 @@ gaps:
     target site rows, each isoform its own entry; test proteins P02751, P10636/P19332, P05067, P02545.
     005-logs: 003 key unchanged, isoform->canonical is an alignment edge. Sits on top of step 6.
     SCHEMA PROPOSED 2026-10-05 (design/DEFINITIONS.md DEF-RESIDUE-CORRESPONDENCE v1, sent as 007-logs):
-    homolog rows = 3 legs along ONE homology_id, 12 outcomes. Waiting on LOGS-P5/P6 before building;
-    then fetch+pin the 866 MB MSA and /oracle mzLib before any aligner code.
+    homolog rows = 3 legs along ONE homology_id, 12 outcomes. LOGS-P5/P6 ANSWERED (008) and folded in
+    2026-10-06; MSA fetched + pinned + checked; /oracle done; outcome 13 added (009-logs). NEXT: the
+    residue-correspondence builder itself (legs 1-3 + isoform/variant edges) on top of #1428 and fork #8,
+    and the residue-level not_on_ensembl_protein rate promised in 009.
   - >-
     Rat resolves poorly by any source: by Ensembl's xref only 59.6% of reviewed rat entries resolve,
     against 94.7% of human (008 to aging). Reference-data coverage, not a search problem - but any
@@ -518,6 +536,18 @@ repos:
     base_clone: 'E:\GitClones\mzLib'
     pinned: f773e76a7c4a393d083a47b883377f23b797a63c
     pr: "https://github.com/smith-chem-wisc/mzLib/pull/1382 (open, ready for review 2026-09-30; VariantApplication.ParseAccession, the LOGS-D2 rule)"
+  - name: mzLib
+    worktree: code/mzLib-residue-aligner
+    branch: feat/protein-pairwise-alignment
+    base_clone: 'E:\GitClones\mzLib'
+    pinned: 284311efd
+    pr: "https://github.com/smith-chem-wisc/mzLib/pull/1428 (open 2026-10-06, board #19 In review; Omics.SequenceAlignment.PairwiseAligner)"
+  - name: mzLib
+    worktree: code/mzLib-gene-tree-alignment
+    branch: feat/compara-gene-tree-alignment
+    base_clone: 'E:\GitClones\mzLib'
+    pinned: 7e5920597
+    pr: "https://github.com/trishorts/mzLib/pull/8 (DRAFT in fork, stacked on #1381; board #19 In progress; ComparaGeneTreeAlignment)"
 
 github:
   remote: "https://github.com/trishorts/logs"

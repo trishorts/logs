@@ -242,13 +242,51 @@ The data is CC-BY-4.0 and `views.sql` is mzLib's LGPL-3.0 (`LICENSING.md`).
 
 ---
 
-## `logs:DEF-RESIDUE-CORRESPONDENCE v1`: residue to homologous residue (PROPOSED, NOT BUILT)
+## `logs:DEF-RESIDUE-CORRESPONDENCE v1`: residue to homologous residue (PROPOSED, BEING BUILT)
 
-**Status:** proposed 2026-10-05 and sent to ptmQtl (007) **before** anything is built, as 005
-promised. No aligner code exists yet; `/oracle mzLib` runs first. **Not verified yet:** Compara's
-gene-tree peptide alignment (`Compara.116.protein_default.aa.fasta.gz`, 866 MB) has been read about
-in its README only, not fetched. Every statement below about it is what the README says, and is
-checked when the file is pinned.
+**Status:** proposed 2026-10-05 and sent to ptmQtl (007) before anything was built, as 005 promised.
+On 2026-10-06 `/oracle mzLib` ran (`design/ORACLE_residue_correspondence.md`: no aligner and no MSA
+reader in mzLib), and the two building blocks were written:
+- the pairwise aligner for legs 1 and 3 is mzLib #1428 (`Omics.SequenceAlignment.PairwiseAligner`,
+  BLOSUM62, open 11, extend 1, free end gaps). On 3,000 random pairs it gives the same optimal score
+  as Biopython (`tools/AlignerOracle`). The `aligner` column carries its `Id`;
+- the leg-2 reader is `ComparaGeneTreeAlignment` on branch `feat/compara-gene-tree-alignment`.
+  It is stacked on #1381, so it stays a draft in the trishorts fork until #1381 merges.
+
+**Compara's alignment, pinned and checked** (`Compara.116.protein_default.aa.fasta.gz`, 908 MB, MD5
+verified; `results/alignment_check_e116.md`):
+- it holds 54,308 alignments, one per gene tree, and every row of an alignment has the same width;
+- every `protein_a`/`protein_b` in the store, and every member's canonical protein, is in it exactly once;
+- **not every store row has a shared alignment.** `other_paralog` rows relate genes in different
+  trees, so they never share an alignment. **760 ortholog rows also join genes in two trees** (478
+  human~mouse, 278 human~rat, 4 mouse~rat), so there is no column to cross. That case gets its own
+  refusal, `no_shared_alignment` (below).
+
+**Leg 1 at entry grain** (canonical entries x genes, agrees view): the UniProt entry's sequence is
+identical to its gene's tree protein for human 91.6%, mouse 86.5% and rat 57.2% of pairs. Where they
+are identical, leg 1 is the identity and `not_on_ensembl_protein` cannot occur. The residue rate needs
+the aligner, and it is reported with the first build.
+
+**Reviewed by ptmQtl (008, 2026-10-05): no changes requested.** 008 answered the two open questions:
+
+- **LOGS-P5, which target databases:** six, not three. aging's three reviewed proteomes plus their
+  three `_agingPTM-v1` builds, which have their own sha256 and cover 50 of ptmQtl's 92 datasets.
+  Rows are written under each database's own `search_database_sha256`. A build that holds the same
+  entries, sequences and sequence variants as its base proteome is aligned **once**, and its rows
+  are written under both keys. Measured 2026-10-06 (`python -m logs_orthology.db_equivalence`,
+  `results/search_db_equivalence.md`): **all three builds qualify.** Each holds the same entries as its
+  base (20,416 / 17,277 / 8,228), with identical sequences and sequence variants, and differs only in
+  `modified residue` features (human 56,282 -> 59,564, mouse 50,617 -> 51,372, rat 27,265 -> 30,134). aging's isoform databases give the `isoform` edges.
+- **LOGS-P6, `substituted` rows:** kept, with both residues.
+
+| species | search database | `search_database_sha256` |
+|---|---|---|
+| human | `uniprotkb_proteome_UP000005640_AND_revi_2026_09_18.xml` | `760984e8…` |
+| human | `uniprotkb_proteome_UP000005640_AND_revi_2026_09_18_agingPTM-v1.xml` | `eaefbb7e…` |
+| mouse | `uniprotkb_proteome_UP000000589_AND_revi_2026-09-22.xml` | `fb52debf…` |
+| mouse | `uniprotkb_proteome_UP000000589_AND_revi_2026-09-22_agingPTM-v1.xml` | `26ea83c2…` |
+| rat | `uniprotkb_proteome_UP000002494_AND_revi_2026-09-22.xml` | `abf612c9…` |
+| rat | `uniprotkb_proteome_UP000002494_AND_revi_2026-09-22_agingPTM-v1.xml` | `caf342e1…` |
 
 ### What it answers
 
@@ -307,6 +345,7 @@ are carried, so a consumer can see which leg failed.
 | `gene_not_resolved` | the source accession has no gene in the agrees view; the resolution's own `outcome` is carried |
 | `no_homolog` | the store holds no row of the requested kind between the genes; the store's `pair_status` is carried |
 | `not_on_ensembl_protein` | leg 1: the residue sits where the UniProt entry and G's Ensembl protein differ |
+| `no_shared_alignment` | leg 2: the store relates G and H, but their proteins are in different Compara alignments (different gene trees), so no column joins them. Always true of `other_paralog`; true of 760 ortholog rows in 116 |
 | `gap_in_target` | leg 2: the alignment column is a gap in H's protein |
 | `not_on_target_entry` | leg 3: H's Ensembl residue has no counterpart in that UniProt entry |
 | `target_gene_not_in_database` | H has no entry in the target database |

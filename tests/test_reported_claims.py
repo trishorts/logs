@@ -393,6 +393,61 @@ def test_file_partition_as_sent_in_006():
     assert hm["mus_musculus"] == 23764
 
 
+# ---------------------------------------------------------------------------------------------
+# Sent to ptmQtl in 009-logs
+# ---------------------------------------------------------------------------------------------
+
+def test_agingptm_builds_hold_the_same_proteins_as_sent_in_009():
+    """One alignment serves both sha keys: the builds differ only in modified-residue features."""
+    pairs = {p["species"]: p for p in json.loads(
+        (RESULTS / "search_db_equivalence.json").read_text(encoding="utf-8"))["pairs"]}
+    expected = {  # entries, modified residues base -> build, build sha prefix
+        "human": (20416, 56282, 59564, "eaefbb7e"),
+        "mouse": (17277, 50617, 51372, "26ea83c2"),
+        "rat": (8228, 27265, 30134, "caf342e1"),
+    }
+    for sp, (entries, before, after, sha) in expected.items():
+        p = pairs[sp]
+        assert p["same_proteins"] and p["differs_beyond_modified_residues"] == [], sp
+        assert p["entries_base"] == p["entries_built"] == entries, sp
+        assert (p["modified_residues_base"], p["modified_residues_built"]) == (before, after), sp
+        assert p["built_sha256"].startswith(sha), sp
+
+
+def _alignment_check() -> dict:
+    return json.loads((RESULTS / "alignment_check_e116.json").read_text(encoding="utf-8"))
+
+
+def test_compara_alignment_holds_the_store_as_sent_in_009():
+    a = _alignment_check()
+    assert a["format"]["stats"]["alignments"] == 54308
+    assert a["format"]["ragged_alignments"] == 0 and a["format"]["n_duplicate"] == 0
+    s = a["store"]
+    assert s["members"] == 64114 and s["members_missing"] == 0
+    assert s["pair_rows_protein_missing"] == 0
+    assert s["alignments_holding_two_trees"] == 0
+
+
+def test_orthologs_without_a_shared_alignment_as_sent_in_009():
+    split = _alignment_check()["store"]["split_rows_by_type_pair_tree"]
+    orth = {k: v for k, v in split.items() if k.startswith("ortholog")}
+    assert sum(orth.values()) == 760
+    assert all(k.endswith("|different_trees") for k in orth), "every split ortholog joins two trees"
+    by_pair = {}
+    for k, v in orth.items():
+        by_pair[k.split("|")[1]] = by_pair.get(k.split("|")[1], 0) + v
+    assert by_pair == {"homo_sapiens~mus_musculus": 478, "homo_sapiens~rattus_norvegicus": 278,
+                       "mus_musculus~rattus_norvegicus": 4}
+    assert sum(v for k, v in split.items() if k.startswith("other_paralog|")) == 750996
+
+
+def test_leg1_entry_identity_as_sent_in_009():
+    leg1 = _alignment_check()["leg1_entry_vs_tree_protein"]
+    expected = {"homo_sapiens": (19446, 17812), "mus_musculus": (15855, 13714), "rattus_norvegicus": (4967, 2841)}
+    for sp, (pairs, identical) in expected.items():
+        assert (leg1[sp]["entry_gene_pairs"], leg1[sp]["identical"]) == (pairs, identical), sp
+
+
 if __name__ == "__main__":
     import traceback
 

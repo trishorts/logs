@@ -8,22 +8,22 @@ This folder is a `/project`-managed research project. **You are de facto working
 - **Goal:** A generic, versioned, gene-centric cross-species orthology layer that lets any
   multi-organism proteomics project join protein identifications across species without collapsing
   one-to-many orthology.
-- **Pick up at:** run the thread inbox and READ ptmQtl 008 (answers LOGS-P5/P6, unread), fold it into
-  `DEF-RESIDUE-CORRESPONDENCE v1`. Then re-check the two open mzLib PRs:
-  `gh pr view 1381 --repo smith-chem-wisc/mzLib --json state,reviewDecision` (the orthology store) and
-  the same for **1382** (`VariantApplication.ParseAccession`, the LOGS-D2 rule; ready for review again 2026-09-30). On a merge:
-  - move its board #19 card to Shipped;
-  - for 1381, drop the pre-release flag (`gh release edit orthology-compara-116-b63a3331 --repo trishorts/logs --prerelease=false`);
-  - for 1382, run `/bridge-oracle pyMzLib` to project it, then tell dataRepo (022 promised this).
+- **Pick up at:** run the thread inbox (ptmQtl may answer 009: outcome 13 `no_shared_alignment`, and
+  one alignment serving both sha keys of each agingPTM-v1 pair). Then check the board against the PRs:
+  `gh pr view <n> --repo smith-chem-wisc/mzLib --json state,reviewDecision` for **1381** (orthology store;
+  nbollis's approval was dismissed by the 2026-10-06 fixes, all six referees re-requested), **1382**
+  (`ParseAccession`) and **1428** (`PairwiseAligner`, opened 2026-10-06). On a merge, move its board #19
+  card to Shipped, and:
+  - for 1381: drop the pre-release flag (`gh release edit orthology-compara-116-b63a3331 --repo trishorts/logs --prerelease=false`),
+    then rebase **trishorts/mzLib#8** (`ComparaGeneTreeAlignment`, draft, stacked on 1381) onto
+    smith/master and open it upstream with the labels, the six referees and a board card;
+  - for 1382: run `/bridge-oracle pyMzLib` to project it, then tell dataRepo (022 promised this).
 
-  #1381 @ `b21aa4dd`: nbollis approved 2026-10-05; pcruzparri's two findings fixed and answered
-  2026-10-06 (GTF file-name release no longer compared; dump values checked on unkept rows). Waits on
-  his re-review.
-  **LOGS-D4 is closed** (read in place; 030 sent the file contract in `design/DEFINITIONS.md`).
-  **The residue schema is proposed, not built** (`DEF-RESIDUE-CORRESPONDENCE v1`, sent as ptmQtl 007).
-  LOGS-P5 (target databases) and LOGS-P6 (keep `substituted` rows) are answered in 008. Then
-  fetch and pin `Compara.116.protein_default.aa.fasta.gz` and check that its proteins are the store's
-  `protein_a/b`. Run `/oracle mzLib` before any aligner code.
+  **Stacked PRs stay drafts in the fork until their base merges** (user, 2026-10-06).
+  **Next build: the residue-correspondence builder** (`DEF-RESIDUE-CORRESPONDENCE v1`, 13 outcomes), on
+  #1428 (legs 1, 3) and #8 (leg 2), plus the residue-level `not_on_ensembl_protein` rate that 009 promised.
+  The oracle verdict and conventions are in `design/ORACLE_residue_correspondence.md`. The MSA is pinned
+  (`data/PROVENANCE.md`), and `results/alignment_check_e116.md` holds its checked facts.
 
   Step 6 is BUILT (2026-09-27/28) and released: public repo, pre-release
   `orthology-compara-116-b63a3331`, MIT for code and CC-BY-4.0 for data. See `RESUME.md`.

@@ -192,8 +192,30 @@ def xref_files() -> list[SourceFile]:
     return out
 
 
+def gene_tree_alignment_file() -> SourceFile:
+    """The peptide multiple alignment of every gene tree in the 'default' collection.
+
+    Leg 2 of a ``homolog`` row in ``DEF-RESIDUE-CORRESPONDENCE`` (``design/DEFINITIONS.md``)
+    crosses a homology edge through a column of this alignment. It is over Ensembl translations
+    (``ENSP``), so a UniProt position still needs our own pairwise alignment to reach it.
+    """
+    name = f"Compara.{RELEASE}.protein_default.aa.fasta.gz"
+    return SourceFile(
+        key="gene_tree_alignment",
+        url=f"{FTP_BASE}/emf/ensembl-compara/homologies/{name}",
+        md5_manifest=f"{FTP_BASE}/emf/ensembl-compara/homologies/MD5SUM",
+        md5_name=name,
+        local_name=name,
+        description=(
+            f"Peptide multiple alignment per gene tree, collection 'default', Ensembl Compara "
+            f"release {RELEASE} (all species in the collection)."
+        ),
+    )
+
+
 def all_files() -> list[SourceFile]:
-    return [*homology_files(), gene_tree_file(), *gtf_files(), *xref_files()]
+    return [*homology_files(), gene_tree_file(), *gtf_files(), *xref_files(),
+            gene_tree_alignment_file()]
 
 
 # ---------------------------------------------------------------------------------------------

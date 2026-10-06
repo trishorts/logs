@@ -62,3 +62,22 @@ and unioned; taking one would undercount silently.
 classic BSD `sum` (16-bit checksum + 1 KiB block count) under `gtf/` and `tsv/`. Both
 are checked; the kind actually used is recorded per row above. The gene-tree content
 dump has no published checksum at all, which is recorded rather than glossed.
+
+## Ensembl release 116 — fetched 2026-10-06
+
+Pinned inputs for the cross-species orthology snapshot. The bytes are gitignored; this
+table is their record. A release bump is a **new snapshot**, never an in-place update.
+
+| File | Local path | Bytes | Checksum | Verified | SHA-256 |
+|---|---|---|---|---|---|
+| [`gene_tree_alignment`](https://ftp.ensembl.org/pub/release-116/emf/ensembl-compara/homologies/Compara.116.protein_default.aa.fasta.gz) | `data/compara/Compara.116.protein_default.aa.fasta.gz` | 908,157,830 | `md5:39f5742f5d9d597f2396ec7c462a6c53` | ✅ | `6550e2957259c89a…` |
+
+**Redundancy caveat, from the provider's own README:** each genome-specific homology
+file holds *an arbitrary subset* of the orthologies involving that genome. The human
+file alone does **not** contain every human↔mouse orthology. All three taxa are fetched
+and unioned; taking one would undercount silently.
+
+**Checksum note:** Ensembl publishes MD5 under `tsv/ensembl-compara/`, but only the
+classic BSD `sum` (16-bit checksum + 1 KiB block count) under `gtf/` and `tsv/`. Both
+are checked; the kind actually used is recorded per row above. The gene-tree content
+dump has no published checksum at all, which is recorded rather than glossed.

@@ -1,0 +1,62 @@
+{
+  "db_dir": "F:\\aging_data\\db",
+  "pairs": [
+    {
+      "entries_base": 20416,
+      "entries_built": 20416,
+      "only_in_base": [],
+      "only_in_built": [],
+      "sequence_differs": [],
+      "sequence_variants_differ": [],
+      "differs_beyond_modified_residues": [],
+      "entries_with_changed_modified_residue_count": 968,
+      "modified_residues_base": 56282,
+      "modified_residues_built": 59564,
+      "sequence_variant_features": 89123,
+      "species": "human",
+      "base_file": "uniprotkb_proteome_UP000005640_AND_revi_2026_09_18.xml",
+      "base_sha256": "760984e8d402ade6b1105b811532bdd4041e33e66bb5dc204402d4d6a7be8838",
+      "built_file": "uniprotkb_proteome_UP000005640_AND_revi_2026_09_18_agingPTM-v1.xml",
+      "built_sha256": "eaefbb7e6914bddae2a190a08d9a25101cf070ded8af539edc5d558b69ff476d",
+      "same_proteins": true
+    },
+    {
+      "entries_base": 17277,
+      "entries_built": 17277,
+      "only_in_base": [],
+      "only_in_built": [],
+      "sequence_differs": [],
+      "sequence_variants_differ": [],
+      "differs_beyond_modified_residues": [],
+      "entries_with_changed_modified_residue_count": 383,
+      "modified_residues_base": 50617,
+      "modified_residues_built": 51372,
+      "sequence_variant_features": 1183,
+      "species": "mouse",
+      "base_file": "uniprotkb_proteome_UP000000589_AND_revi_2026-09-22.xml",
+      "base_sha256": "fb52debf545202553ede1616c3c9f859632abbbf8dd71c2393133ca616813c37",
+      "built_file": "uniprotkb_proteome_UP000000589_AND_revi_2026-09-22_agingPTM-v1.xml",
+      "built_sha256": "26ea83c286fa8801e552846e57a19813a2a62dc4ac1760c0bf572faf45ef501a",
+      "same_proteins": true
+    },
+    {
+      "entries_base": 8228,
+      "entries_built": 8228,
+      "only_in_base": [],
+      "only_in_built": [],
+      "sequence_differs": [],
+      "sequence_variants_differ": [],
+      "differs_beyond_modified_residues": [],
+      "entries_with_changed_modified_residue_count": 1057,
+      "modified_residues_base": 27265,
+      "modified_residues_built": 30134,
+      "sequence_variant_features": 280,
+      "species": "rat",
+      "base_file": "uniprotkb_proteome_UP000002494_AND_revi_2026-09-22.xml",
+      "base_sha256": "abf612c90f0a3c202d4e6353c5465bd22a5800990abb947d5ea9b43ad198dd89",
+      "built_file": "uniprotkb_proteome_UP000002494_AND_revi_2026-09-22_agingPTM-v1.xml",
+      "built_sha256": "caf342e1374cd1eff295cf0c81029041ba6bf22e62c5f580fe05f12414d588c8",
+      "same_proteins": true
+    }
+  ]
+}

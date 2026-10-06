@@ -1,0 +1,66 @@
+{
+  "alignment_file": "Compara.116.protein_default.aa.fasta.gz",
+  "alignment_sha256": "6550e2957259c89a56dac6516c923246d02f1f3bbc5fbef2d94ec630e9321d36",
+  "format": {
+    "stats": {
+      "sequences": 4229614,
+      "sequences:homo_sapiens": 19690,
+      "sequences:rattus_norvegicus": 22379,
+      "sequences:mus_musculus": 22045,
+      "alignments": 54308
+    },
+    "duplicate_proteins": [],
+    "n_duplicate": 0,
+    "ragged_alignments": 0
+  },
+  "store": {
+    "pair_rows": 1001934,
+    "pair_rows_protein_missing": 0,
+    "pair_rows_split_across_alignments": 751756,
+    "split_rows_by_type_pair_tree": {
+      "ortholog_many2many|homo_sapiens~mus_musculus|different_trees": 405,
+      "ortholog_many2many|homo_sapiens~rattus_norvegicus|different_trees": 193,
+      "ortholog_one2many|homo_sapiens~mus_musculus|different_trees": 68,
+      "ortholog_one2many|homo_sapiens~rattus_norvegicus|different_trees": 78,
+      "ortholog_one2one|homo_sapiens~mus_musculus|different_trees": 5,
+      "ortholog_one2one|homo_sapiens~rattus_norvegicus|different_trees": 7,
+      "ortholog_one2one|mus_musculus~rattus_norvegicus|different_trees": 4,
+      "other_paralog|homo_sapiens~homo_sapiens|different_trees": 128020,
+      "other_paralog|mus_musculus~mus_musculus|different_trees": 295997,
+      "other_paralog|rattus_norvegicus~rattus_norvegicus|different_trees": 326979
+    },
+    "members": 64114,
+    "members_missing": 0,
+    "members_missing_examples": [],
+    "alignments_holding_two_trees": 0,
+    "our_proteins_in_alignment": 64114,
+    "our_proteins_not_a_member_canonical": 0
+  },
+  "leg1_entry_vs_tree_protein": {
+    "homo_sapiens": {
+      "search_database": "uniprotkb_proteome_UP000005640_AND_revi_2026_09_18.xml",
+      "search_database_sha256": "760984e8d402ade6b1105b811532bdd4041e33e66bb5dc204402d4d6a7be8838",
+      "entry_gene_pairs": 19446,
+      "identical": 17812,
+      "differs": 1588,
+      "gene_in_no_tree": 46
+    },
+    "mus_musculus": {
+      "search_database": "uniprotkb_proteome_UP000000589_AND_revi_2026-09-22.xml",
+      "search_database_sha256": "fb52debf545202553ede1616c3c9f859632abbbf8dd71c2393133ca616813c37",
+      "entry_gene_pairs": 15855,
+      "identical": 13714,
+      "differs": 2096,
+      "gene_in_no_tree": 45
+    },
+    "rattus_norvegicus": {
+      "search_database": "uniprotkb_proteome_UP000002494_AND_revi_2026-09-22.xml",
+      "search_database_sha256": "abf612c90f0a3c202d4e6353c5465bd22a5800990abb947d5ea9b43ad198dd89",
+      "entry_gene_pairs": 4967,
+      "identical": 2841,
+      "differs": 2124,
+      "gene_in_no_tree": 2
+    }
+  },
+  "snapshot_manifest_sha256": "fd0a9d8f5d211a91bdafd4c843ee4f0085be8cf0d7ff4fc779c5e6ebda5074aa"
+}
