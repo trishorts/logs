@@ -123,18 +123,21 @@ Each of these cost real time on 2026-09-22.
 
 ## Pick up at
 
-**Next action:** run the thread inbox. Then re-check the two open mzLib PRs, which are the only
-things in flight:
+**Next action:** run the thread inbox and **read ptmQtl 008** (it arrived 2026-10-05, answers
+LOGS-P5 and LOGS-P6, and is committed but unread). Fold its answers into
+`DEF-RESIDUE-CORRESPONDENCE v1` (`design/DEFINITIONS.md`), then `--mark-read`. Then re-check the two
+open mzLib PRs, which are the only things in flight:
 
 ```powershell
 gh pr view 1381 --repo smith-chem-wisc/mzLib --json state,reviewDecision,comments   # the orthology store
 gh pr view 1382 --repo smith-chem-wisc/mzLib --json state,reviewDecision,comments   # VariantApplication.ParseAccession
 ```
 
-#1381 was made ready again on 2026-10-05: head `e1d7b576`, MERGEABLE, with a reply to nbollis's
-csproj question. When the session closed, `external-service-tests` had passed on that head and
-`build`/`integration` were still running (the integration fix is the ZstdSharp 0.8.8 bump). Check them
-first: `gh pr checks 1381 --repo smith-chem-wisc/mzLib`.
+#1381 is at head `b21aa4dd`. nbollis approved on 2026-10-05. On 2026-10-06 pcruzparri's two
+automated findings were fixed and answered in-thread: `d5319af` stops comparing a GTF's file-name
+number with the Compara release (Ensembl 116 names the yeast/worm/fly GTFs `.63.`), and `b21aa4d`
+checks dump values on rows that are not kept. The real snapshot rebuilt byte-identical. It waits on his
+re-review. CI on the new head was not watched: check `gh pr checks 1381 --repo smith-chem-wisc/mzLib`.
 
 Answer any review. **On a merge:**
 - move that PR's board #19 card to Shipped;
@@ -144,9 +147,9 @@ Answer any review. **On a merge:**
 
 The next build is **residue-level correspondence for ptmQtl**. Its schema is **proposed, not built**:
 `logs:DEF-RESIDUE-CORRESPONDENCE v1` in `design/DEFINITIONS.md`, sent as ptmQtl 007 on 2026-10-05.
-1. **Wait for ptmQtl's answers to LOGS-P5** (which target databases first; we proposed aging's three
-   reviewed proteomes plus aging's isoform databases) **and LOGS-P6** (keep `substituted` rows; we
-   proposed yes). Fold any change into the definition before building.
+1. **ptmQtl answered LOGS-P5** (which target databases first; we proposed aging's three reviewed
+   proteomes plus aging's isoform databases) **and LOGS-P6** (keep `substituted` rows; we proposed
+   yes) in 008. It has not been read yet. Fold any change into the definition before building.
 2. Fetch and pin `Compara.116.protein_default.aa.fasta.gz` (866 MB, README read, file not fetched).
    Check that its proteins are the store's `protein_a`/`protein_b`. Then measure how often a UniProt
    entry differs from its gene's Ensembl protein (that rate is the `not_on_ensembl_protein` outcome),
@@ -154,15 +157,14 @@ The next build is **residue-level correspondence for ptmQtl**. Its schema is **p
 3. Run `/oracle mzLib` before any aligner code. Substance goes in C# in mzLib (CLAUDE.md rule 20).
 
 **Waiting on others:**
-- ptmQtl: LOGS-P5 and LOGS-P6 (007).
-- reviews of #1381 (re-review by nbollis after the fold-in) and #1382.
+- reviews of #1381 (pcruzparri's re-review; nbollis approved) and #1382.
 
 **State on 2026-10-05.**
 - **LOGS-D4 is closed: dataRepo reads the Parquet in place** (029). `DEF-ORTHOLOGY v1` is published
   with an explicit **file contract** (layout, columns, views, integrity, and what bumps
   `format_version`), sent as 030.
 - **The store (PLAN step 6) is built** in mzLib #1381, branch `feat/compara-orthology-store` @
-  `e1d7b576` (the writer now lives in `UsefulProteomicsDatabases/Ensembl`), and **released**: pre-release
+  `b21aa4dd` (the writer now lives in `UsefulProteomicsDatabases/Ensembl`), and **released**: pre-release
   [`orthology-compara-116-b63a3331`](https://github.com/trishorts/logs/releases/tag/orthology-compara-116-b63a3331),
   human, mouse and rat, Ensembl 116, 13 files, 9.0 MB.
   - The C# views, the DuckDB `views.sql` and `cardinality.py` agree on every pinned figure.
@@ -260,13 +262,13 @@ python tests/test_contracts.py          # 10 contract tests
 
 <!-- BEGIN GENERATED -- render_resume.py owns this block; edit state.yaml, not here -->
 
-**logs** &middot; phase **BUILD** (4/10) &middot; created 2026-09-22 &middot; rendered 2026-10-05
+**logs** &middot; phase **BUILD** (4/10) &middot; created 2026-09-22 &middot; rendered 2026-10-06
 
 | | |
 |---|---|
-| Commits | 110 |
+| Commits | 112 |
 | Sync | [`trishorts/logs`](https://github.com/trishorts/logs) |
-| Locked decisions | 46 |
+| Locked decisions | 47 |
 | Open gaps | 8 |
 | Gate items skipped | 2 |
 
@@ -276,7 +278,7 @@ python tests/test_contracts.py          # 10 contract tests
 |---|---|---|---|---|
 | `code/mzLib-ensembl-genes` | feat/ensembl-gene-resolution | `2f40c40c` | `2f40c40c` | at pin |
 | `code/mzLib-occupancy-nterm` | fix/occupancy-met-cleaved-nterm | `815423f7` | `815423f7` | at pin |
-| `code/mzLib-orthology-store` | feat/compara-orthology-store | `e1d7b576` | `e1d7b576` | at pin |
+| `code/mzLib-orthology-store` | feat/compara-orthology-store | `b21aa4dd` | `b21aa4dd` | at pin |
 | `code/mzLib-proteoform-accession` | feat/proteoform-accession | `f773e76a` | `f773e76a` | at pin |
 
 <!-- END GENERATED -->

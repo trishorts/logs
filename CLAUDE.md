@@ -8,18 +8,20 @@ This folder is a `/project`-managed research project. **You are de facto working
 - **Goal:** A generic, versioned, gene-centric cross-species orthology layer that lets any
   multi-organism proteomics project join protein identifications across species without collapsing
   one-to-many orthology.
-- **Pick up at:** run the thread inbox. Then re-check the two open mzLib PRs:
+- **Pick up at:** run the thread inbox and READ ptmQtl 008 (answers LOGS-P5/P6, unread), fold it into
+  `DEF-RESIDUE-CORRESPONDENCE v1`. Then re-check the two open mzLib PRs:
   `gh pr view 1381 --repo smith-chem-wisc/mzLib --json state,reviewDecision` (the orthology store) and
   the same for **1382** (`VariantApplication.ParseAccession`, the LOGS-D2 rule; ready for review again 2026-09-30). On a merge:
   - move its board #19 card to Shipped;
   - for 1381, drop the pre-release flag (`gh release edit orthology-compara-116-b63a3331 --repo trishorts/logs --prerelease=false`);
   - for 1382, run `/bridge-oracle pyMzLib` to project it, then tell dataRepo (022 promised this).
 
-  #1381 was made ready again on 2026-10-05 (master merged, writer folded into
-  `UsefulProteomicsDatabases`, ZstdSharp 0.8.8, reply posted to nbollis); it now waits on re-review.
+  #1381 @ `b21aa4dd`: nbollis approved 2026-10-05; pcruzparri's two findings fixed and answered
+  2026-10-06 (GTF file-name release no longer compared; dump values checked on unkept rows). Waits on
+  his re-review.
   **LOGS-D4 is closed** (read in place; 030 sent the file contract in `design/DEFINITIONS.md`).
   **The residue schema is proposed, not built** (`DEF-RESIDUE-CORRESPONDENCE v1`, sent as ptmQtl 007).
-  Wait for LOGS-P5 (target databases) and LOGS-P6 (keep `substituted` rows) before building. Then
+  LOGS-P5 (target databases) and LOGS-P6 (keep `substituted` rows) are answered in 008. Then
   fetch and pin `Compara.116.protein_default.aa.fasta.gz` and check that its proteins are the store's
   `protein_a/b`. Run `/oracle mzLib` before any aligner code.
 
@@ -107,6 +109,11 @@ This folder is a `/project`-managed research project. **You are de facto working
     "join a variant proteoform to its entry" and never said the variants are returned too; the user
     read it as stripping them and drafted it (2026-09-30). Variants are applied only on request and in
     many combinations, so the accession is the only record of them: never discard the suffix.
+
+26. **A GTF's file-name number is not the Compara release.** Ensembl 116 publishes the species it
+    imports from Ensembl Genomes as `.63.` (`Saccharomyces_cerevisiae.R64-1-1.63.gtf.gz`; worm, fly too).
+    Only the trees and dumps are held to the Compara release; gene sets are held by content (#1381
+    review, 2026-10-06). Check the FTP listing before trusting a naming pattern across species.
 
 ## Running things
 

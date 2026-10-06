@@ -359,3 +359,28 @@ Compara tree-alignment column, Ensembl to UniProt), with twelve outcomes that sa
 stopped. It asks LOGS-P5 (target databases) and LOGS-P6 (keep substituted rows). Compara's alignment
 file is still read about only, not fetched. At close, #1381's build and integration jobs were still
 running on e1d7b576.
+
+## 2026-10-06 - #1381: pcruzparri's two review findings fixed, snapshot unchanged
+
+Peter's automated review of #1381 posted two inline findings, and both were right. The serious one:
+Build compared the number in each GTF's file name with the Compara release, but Ensembl 116 publishes
+the three species it imports from Ensembl Genomes (yeast, worm, fly) as `.63.` - checked on the FTP,
+not taken on trust - so no snapshot could include them without renaming the download, and the error
+claimed the file was from another release. That number is the annotation's release, not Compara's, so
+the comparison was dropped (d5319af). Gene sets are now held to the dumps only by content: every gene a
+homology names must be in its species' gene set. The cost was stated in the reply and recorded: a
+wrong-release GTF that happens to hold every gene the dumps name now gets through, though the manifest
+still records its file name and sha256. A per-species expected-release parameter was the alternative
+and was rejected as API surface for one naming quirk.
+
+The second finding was a docs-versus-code gap: ComparaHomologyDump promised every row was checked, kept
+or not, but parsed values only on kept rows. Values are now parsed before the species filter
+(b21aa4d). The gene-tree reader cannot check its per-gene rules for genes it does not hold without
+holding all 4.2 million, so there the wording changed instead, in the class docs and the PR body. The
+real human/mouse/rat 116 snapshot rebuilt byte-identical (b63a3331, 13/13 files), which also means
+every value in the three full dumps survives the stricter check, so the pre-release needs no new
+version. The fixture's 38 tests pass; the full required suite was not re-run. Replies are on both
+threads. nbollis had approved on 2026-10-05; #1381 now waits on Peter's re-review.
+
+ptmQtl's 008 (answering LOGS-P5 and LOGS-P6, the questions the residue schema was waiting on) arrived
+and is committed but was not read this session. It is the next thing to do.

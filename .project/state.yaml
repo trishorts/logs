@@ -388,6 +388,18 @@ decisions:
       caught two wrong clauses before sending: the macros take `root` as first argument, and the SQL
       pair_status emits four statuses, not five. DEF-RESIDUE-CORRESPONDENCE v1 PROPOSED, not built, and
       sent to ptmQtl (007-logs) with LOGS-P5 (target databases) and LOGS-P6 (keep `substituted` rows).
+  - date: 2026-10-06
+    text: >-
+      #1381 REVIEW (pcruzparri, automated, 2 findings) ADDRESSED. (1) HIGH, correct: Ensembl 116 publishes
+      the yeast/worm/fly GTFs (imported from Ensembl Genomes) as .63., so Build refused them. DECIDED: a
+      GTF's file-name number is the annotation release, not Compara's, and is no longer compared; gene sets
+      are held to the dumps by content (every homology gene in its gene set) and the trees' restriction by
+      sha256. Trees and dumps must still name the Compara release; message now "names release N". Accepted
+      cost: a wrong-release GTF holding every gene the dumps name now gets through (manifest still records
+      its name + sha256). Rejected: a per-species expected-release parameter (API surface for one quirk).
+      d5319af. (2) Non-blocking: dump values now parsed before the species filter so "every row checked"
+      is true; gene-tree per-gene rules stay kept-genes-only (checking all would hold 4.2M) and the docs +
+      PR body say so. b21aa4d. Real 116 snapshot rebuilt byte-identical (b63a3331, 13/13). Replies posted.
 
 gaps:
   - >-
@@ -414,7 +426,8 @@ gaps:
     in C# and in DuckDB; rebuild byte-identical. Next: tell
     dataRepo the snapshot exists (025 promised counts with the first snapshot; manifest has format, not
     definition id; SQL view is species_set3). LOGS-D4 CLOSED 2026-10-05 (029/030). #1381 now @ e1d7b576
-    (writer folded into UsefulProteomicsDatabases; ZstdSharp 0.8.8), MERGEABLE, re-review pending.
+    (writer folded into UsefulProteomicsDatabases; ZstdSharp 0.8.8). nbollis APPROVED 2026-10-05; pcruzparri's
+    2 findings fixed 2026-10-06 (b21aa4dd), replies posted; awaiting his re-review.
   - >-
     STORE SHAPE DECIDED 2026-09-27 (see decisions). HOSTING DECIDED 2026-09-28 (user): trishorts/logs goes
     PUBLIC as is, thread folders included (aging/ptmQtl/pride repos are private; user chose not to
@@ -497,7 +510,7 @@ repos:
     worktree: code/mzLib-orthology-store
     branch: feat/compara-orthology-store
     base_clone: 'E:\GitClones\mzLib'
-    pinned: e1d7b5765768d153567ac4a376153110c977cbdb
+    pinned: b21aa4dd200e60c9c38e5a1d58e61a63d87f7b3e
     pr: "https://github.com/smith-chem-wisc/mzLib/pull/1381 (open, board #19 In review; the orthology store, PLAN step 6)"
   - name: mzLib
     worktree: code/mzLib-proteoform-accession
