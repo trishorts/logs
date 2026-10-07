@@ -171,6 +171,8 @@ early? Is a claim in our charter currently unfalsified? Say it before someone ha
 
 Never open an empty channel: every message carries a concrete finding or ask.
 
+- PXReprise runs the aging pipeline. Tell it in our PXReprise thread about anything of ours that touches any pipeline stage: when it merges, when it is released, and when a known bug affects it (user, 2026-10-07).
+
 **Threads come first.** Run the inbox check as step 0 of the session, before anything else:
 
 ```
