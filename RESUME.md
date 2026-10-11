@@ -120,50 +120,84 @@ Each of these cost real time on 2026-09-22.
 11. **Count a gene view by the view, not by `outcome`.** `outcome` reports the search XML's links;
     the `ensembl_xref_agrees` view adds the xref-only rows. dataRepo's "48.6% of rat lost" was the
     XML's view; aging's own view keeps 59.6% of rat entries (022-logs).
+12. **`ensembl_xref_agrees = false` means two different things.** Either Ensembl links the accession to
+    another gene, or Ensembl's xref has never heard of the accession. On the canonical v3 databases, every
+    dropped TrEMBL row is the second kind: accessions UniProt created after Ensembl 116's xref (rat 3,445).
+    Tell them apart by the xref view's `not_in_source`, which is `search_db.py`'s `agree_or_silent_covered`.
+13. **A squash-merged base leaves its old commits on a stacked branch.** #1381 merged as one commit, so #8's
+    branch still carried #1381's history. Move only your own commits: `git rebase --onto smith/master <old base>`.
 
 ## Pick up at
 
-**Next action:** run the thread inbox. Replies are owed on **dataRepo 031** (DATAREPO-75: add a
-read-in-place orthology engine to `datarepo run`; DATAREPO-76: build it now or wait for a consumer) and
-possibly **ptmQtl 009** (outcome 13 `no_shared_alignment`; one alignment for both sha keys of each
-agingPTM-v1 pair). Then check the board against the PRs:
+**Next action:** run the thread inbox. Nothing is owed by us. Four answers are owed **to** us, and each one
+decides work:
+- **ptmQtl LOGS-P7** (010-logs): which search databases get residue rows, and the join key under their D35
+  (sites pool by 15-residue window; the database is provenance only). **The builder's database list waits on this.**
+- **aging REQ-AGING-9** (021-logs): would they take a v2 "agrees or silent" gene view as their default? If yes,
+  run `/oracle mzLib` for a marker in `EnsemblGeneResolver`, then write `DEF-GENE-RESOLUTION v2`.
+- **PXReprise PXR-O9** (009-logs: where the orthology snapshot is hosted under D41, with its licences) and
+  **PXR-O10** (010-logs: tell us when the first canonical bundle is resolved). On O10, diff its rows against
+  `results/search_db_<sp>_canonical-v3_e116.tsv`, which is machine-local; rebuild it with the commands below.
+
+Then check the open PRs:
 
 ```powershell
-gh pr view 1381 --repo smith-chem-wisc/mzLib --json state,reviewDecision,comments   # orthology store
+gh pr view 1465 --repo smith-chem-wisc/mzLib --json state,reviewDecision,comments   # ComparaGeneTreeAlignment (opened 2026-10-11)
 gh pr view 1382 --repo smith-chem-wisc/mzLib --json state,reviewDecision,comments   # VariantApplication.ParseAccession
-gh pr view 1428 --repo smith-chem-wisc/mzLib --json state,reviewDecision,comments   # PairwiseAligner (opened 2026-10-06)
-gh pr view 8 --repo trishorts/mzLib --json state,isDraft                            # ComparaGeneTreeAlignment, fork draft on 1381
+gh pr checks 1465 --repo smith-chem-wisc/mzLib
 ```
 
-#1381 is at `6b3c4a26` (a master merge on top of pcruzparri's two fixes, `d5319af` and `b21aa4d`).
-That push dismissed nbollis's approval, so the six referees were re-requested on 2026-10-06. It needs a
-re-approval and pcruzparri's re-review. CI is green.
+- **#1382** has one approval (Alexander-Sol, 2026-10-08), green CI and no conflicts. It is blocked only on a
+  second approval. The user chose (2026-10-11) not to nudge.
+- **#1465** is #8's single commit rebased onto master (`c96fafee0`), with the six referees requested.
 
 **On a merge:**
 - move that PR's board #19 card to Shipped;
-- for #1381:
-  - drop the pre-release flag (`gh release edit orthology-compara-116-b63a3331 --repo trishorts/logs --prerelease=false`);
-  - rebase **trishorts/mzLib#8** onto smith/master and open it upstream with `ready for review` +
-    `ready-for-agent`, the six referees (acesnik, Alexander-Sol, pcruzparri, zhuoxinshi, RayMSMS, nbollis)
-    and a board card;
-  - tell dataRepo (031 promised it);
-- for #1382: run `/bridge-oracle pyMzLib` to project `ParseAccession`, then tell dataRepo (022 promised this).
+- for #1382: run `/bridge-oracle pyMzLib` to project `ParseAccession`, then tell dataRepo (022 promised this);
+- for #1465: delete the local branch `backup/compara-gene-tree-alignment-pre-rebase` in
+  `code/mzLib-gene-tree-alignment`.
 
 **Stacked PRs stay drafts in the fork until their base merges** (user, 2026-10-06).
 
-**The next build is the residue-correspondence builder** (`DEF-RESIDUE-CORRESPONDENCE v1`, now 13
-outcomes, in `design/DEFINITIONS.md`). Its pieces exist:
-- legs 1 and 3 use the aligner in #1428;
-- leg 2 uses the reader in fork #8;
+**The next build is the residue-correspondence builder** (`DEF-RESIDUE-CORRESPONDENCE v1`, 13 outcomes, in
+`design/DEFINITIONS.md`), written on smith/master. Its pieces:
+- legs 1 and 3 use `Omics.SequenceAlignment.PairwiseAligner` (#1428, merged);
+- leg 2 uses `ComparaGeneTreeAlignment` (#1465, in review). Stack on #1465's branch, or wait for it to merge;
 - the `variant` edge reuses `VariantApplication.RestoreModificationIndex` (oracle).
 
-The oracle verdict and the conventions to match are in `design/ORACLE_residue_correspondence.md`. Run
-`/oracle mzLib` again for the builder's home before writing it. 009 promised ptmQtl the residue-level
-`not_on_ensembl_protein` rate with the first build. The by-entry rates (91.6 / 86.5 / 57.2%) are pinned.
+The oracle verdict and conventions are in `design/ORACLE_residue_correspondence.md`. Run `/oracle mzLib` again
+for the builder's home before writing it. 009 promised ptmQtl the residue-level `not_on_ensembl_protein` rate
+with the first build. Pinned by-entry leg-1 rates: reviewed 91.6 / 86.5 / 57.2%, and canonical v3
+91.3 / 87.4 / 77.4% (h/m/r).
 
-**Waiting on others:**
-- reviews of #1381 (re-approval + pcruzparri), #1382 and #1428;
-- dataRepo on DATAREPO-75/76; ptmQtl on 009 (no ask, but a new outcome).
+**dataRepo 032 needs no reply now.** When residue rows exist, tell dataRepo **and** PXReprise how they reach the
+repository. Under D41 that is probably an engine keyed per search database and run at ingest, like
+`logs.resolve_genes`.
+
+**Waiting on others:** the four answers above, and reviews of #1382 and #1465.
+
+**State on 2026-10-11.**
+- **#1381 merged** (2026-10-06, squash `11c85118`) and **#1428 merged** (2026-10-10, `8fc0840e`). Both cards are
+  Shipped, and the release is no longer a pre-release.
+- **PXReprise now owns how the pipeline publishes** (their D41). Every search moves to UniProt's canonical
+  gene-centric proteomes (their D38), and the searched files are **agingPTM-v3**: human `fd80cf88…`, mouse
+  `3c4ac3fb…`, rat `7f08fd3c…`.
+- **Gene resolution on canonical v3** (`results/search_db_resolution_<sp>_canonical-v3.md`, sent as 010-logs):
+
+  | | reviewed, agrees view | canonical, agrees view | canonical, UniProt's links | canonical, agrees or silent |
+  |---|---:|---:|---:|---:|
+  | human | 94.7% | 94.4% (19,505 / 20,652) | 94.5% | 94.6% |
+  | mouse | 90.4% | 87.5% (19,130 / 21,860) | 92.5% | 92.7% |
+  | rat | 59.6% (4,908) | 68.5% (14,714 / 21,471) | 81.4% | 84.8% |
+
+  - pyMzLib 0.2.0, the engine's call, gives our C# rows exactly (`results/engine_parity_canonical-v3.json`).
+  - The gap between the columns is **3,445 rat and 1,105 mouse TrEMBL accessions that Ensembl 116's xref has never
+    heard of**, created by UniProt in 2025-2026.
+  - Every canonical TrEMBL entry carries an Ensembl dbReference.
+- **Leg 1 on canonical** (`results/leg1_canonical-v3_e116.md`): rat is 77.4% exact. All 13,258 canonical rat
+  TrEMBL entries cite the Ensembl consortium, and 87.5% of them are identical to the tree protein. Rat
+  Swiss-Prot is unchanged at 57.3%.
+- **Known gap:** `LICENSING.md` is not inside the release tar (PXR-O9).
 
 **State on 2026-10-06.**
 - **Compara's alignment is pinned and checked** (`results/alignment_check_e116.md`):
@@ -196,6 +230,13 @@ The oracle verdict and the conventions to match are in `design/ORACLE_residue_co
   isoform databases) needed no reply; it agrees with the residue key.
 
 **Decided, do not re-open:**
+
+- **Canonical v3 resolves on `DEF-GENE-RESOLUTION v1` unchanged (user, 2026-10-11).** The first canonical
+  delivery does not wait for a v2. "Agrees or silent" is proposed, not promised, and waits on aging
+  (REQ-AGING-9). Rejected: UniProt's links as the default (human multi-gene 71 -> 352), and a newer Ensembl
+  (it re-pins everything, and the lag recurs).
+- **Gene resolution and residue rows are per search database, not per deposit** (PXR-O8, 2026-10-11). Nothing
+  of ours reads PSMs or needs a corpus-wide recompute at publish.
 
 - **#1382 stays a PR, beside its producer (user, 2026-09-30).** The user had read it as stripping
   the variant suffix; it keeps it. Say plainly in any description that the variants are returned.
@@ -251,6 +292,10 @@ entries, not proteoforms:
   `dotnet run --project tools/ResolveSearchDb -c Release -- <search.xml> results/gene_sets/<Species>.<Assembly>.116.genes.tsv.gz data/compara/<Species>.<Assembly>.116.uniprot.tsv.gz results/search_db_<sp>_e116.tsv`,
   then `python -m logs_orthology.search_db results/search_db_<sp>_e116.tsv --species <species> --out results/search_db_resolution_<sp>`.
   Omit `--out` and `--species` for human.
+- **Canonical v3** (2026-10-11): the same two commands on `F:/aging_data/db/UP0000*_all_genecentric_2026_03_agingPTM-v3.xml`,
+  writing `results/search_db_<sp>_canonical-v3_e116.tsv`, with `--xml <the XML> --out results/search_db_resolution_<sp>_canonical-v3`.
+  Then run `python -m logs_orthology.engine_parity` (pyMzLib against the C# rows) and
+  `python -m logs_orthology.alignment_check --databases canonical-v3` (leg 1). The usage is in each module's docstring.
 - **The XMLs:** human is `F:/aging_data/db/uniprotkb_proteome_UP000005640_AND_revi_2026_09_18.xml`.
   Mouse and rat are beside it, dated `2026-09-22`, and their `.gz` sources are in `F:/aging_data/db/src/`.
 
@@ -258,7 +303,7 @@ Sanity-check before changing anything:
 
 ```powershell
 $env:PYTHONPATH = "E:\CodeReview\logs\src"
-python tests/test_reported_claims.py    # 29 claims already sent to a partner
+python tests/test_reported_claims.py    # 31 claims already sent to a partner
 python -m logs_orthology.manifest       # regenerate results/resolver_inputs_e116.{json,md}
 python tests/test_resolve.py            # 21 resolver contracts
 python tests/test_contracts.py          # 10 contract tests
@@ -273,21 +318,22 @@ python tests/test_contracts.py          # 10 contract tests
 - `DEFINITIONS.md` — our definition ids (charter S4): `logs:DEF-GENE-RESOLUTION v1`, `logs:DEF-ORTHOLOGY v1` (the store, published with its file contract) and `logs:DEF-RESIDUE-CORRESPONDENCE v1` (proposed, being built, 13 outcomes).
 - `ORACLE_residue_correspondence.md` — the 2026-10-06 `/oracle mzLib` verdict for the aligner and the Compara reader, and the conventions they match.
 - `threads/OWNERSHIP.md` — capability ownership; both inception collisions closed.
-- `threads/dataRepo/`, `threads/aging/`, `threads/ptmQtl/`, `threads/pride/` — correspondence (public since 2026-09-28).
+- `threads/dataRepo/`, `threads/aging/`, `threads/ptmQtl/`, `threads/pride/`, `threads/PXReprise/` — correspondence (public since 2026-09-28; PXReprise since 2026-10-07).
+- `NOTE_FROM_CodeReview_2026-10-06_alexsol-review-fixes.md` — a sweep note that Alexander-Sol's 2026-10-06 reviews of #1382 and #1428 were addressed (already in the journal; kept as the cross-session signal).
 - Outside `design/`: `LICENSING.md` says which license covers what.
 - Outside `design/`: `tools/AlignerOracle/README.md` checks #1428's aligner against Biopython.
 - Outside `design/`: `results/gene_sets/README.md` records the compact gene tables and how to rebuild them.
 
 <!-- BEGIN GENERATED -- render_resume.py owns this block; edit state.yaml, not here -->
 
-**logs** &middot; phase **BUILD** (4/10) &middot; created 2026-09-22 &middot; rendered 2026-10-06
+**logs** &middot; phase **BUILD** (4/10) &middot; created 2026-09-22 &middot; rendered 2026-10-11
 
 | | |
 |---|---|
-| Commits | 115 |
+| Commits | 134 |
 | Sync | [`trishorts/logs`](https://github.com/trishorts/logs) |
-| Locked decisions | 49 |
-| Open gaps | 9 |
+| Locked decisions | 52 |
+| Open gaps | 10 |
 | Gate items skipped | 2 |
 
 **Worktrees** -- details in `code/PINNED.md`
@@ -297,8 +343,8 @@ python tests/test_contracts.py          # 10 contract tests
 | `code/mzLib-ensembl-genes` | feat/ensembl-gene-resolution | `2f40c40c` | `2f40c40c` | at pin |
 | `code/mzLib-occupancy-nterm` | fix/occupancy-met-cleaved-nterm | `815423f7` | `815423f7` | at pin |
 | `code/mzLib-orthology-store` | feat/compara-orthology-store | `6b3c4a26` | `6b3c4a26` | at pin |
-| `code/mzLib-proteoform-accession` | feat/proteoform-accession | `f773e76a` | `f773e76a` | at pin |
-| `code/mzLib-residue-aligner` | feat/protein-pairwise-alignment | `284311ef` | `284311ef` | at pin |
-| `code/mzLib-gene-tree-alignment` | feat/compara-gene-tree-alignment | `7e592059` | `7e592059` | at pin |
+| `code/mzLib-proteoform-accession` | feat/proteoform-accession | `5e323463` | `5e323463` | at pin |
+| `code/mzLib-residue-aligner` | feat/protein-pairwise-alignment | `2a5f418b` | `2a5f418b` | at pin |
+| `code/mzLib-gene-tree-alignment` | feat/compara-gene-tree-alignment | `c96fafee` | `c96fafee` | at pin |
 
 <!-- END GENERATED -->

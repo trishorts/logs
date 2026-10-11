@@ -442,3 +442,49 @@ Both replies are posted on the PRs. Lesson: a check on real data only covers the
 The variant grammar is the producer's, so test what VariantApplication can write, not only what UniProt
 happens to contain.
 
+## 2026-10-11 - Two PRs merged, the canonical databases measured, #1465 upstream
+
+**What came in.** #1381 (orthology store) merged on 2026-10-06 as a squash, `11c85118`, and #1428 (`PairwiseAligner`)
+merged on 2026-10-10 as `8fc0840e`. Neither on-merge step had been done, so both board cards went to Shipped and the
+release `orthology-compara-116-b63a3331` lost its pre-release flag. The inbox held PXReprise 005-008 and dataRepo 032.
+dataRepo built `logs.register_orthology` (DATAREPO-75/76, datarepo 1.3.0). PXReprise moves every search to UniProt's
+canonical gene-centric proteomes (D38; the files are agingPTM-v3, 007) and took ownership of how the pipeline
+publishes (D41), asking PXR-O6 to O8.
+
+**PXR-O8 (009-logs).** Nothing of ours reads PSMs or needs a corpus-wide recompute at publish. We corrected 008's "once
+per deposit": gene resolution is once per search database, keyed as dataRepo's D24 already does. Checking the hosting
+question turned up a gap of our own: `LICENSING.md` is in the repo, not inside the release tar, so a copy hosted
+elsewhere arrives without its licence (asked as PXR-O9).
+
+**PXR-O6/O7 (010-logs), measured.** `tools/ResolveSearchDb` ran on the three v3 XMLs (sha256s match 007), and pyMzLib
+0.2.0's `resolve_genes`, the call dataRepo's engine makes, gives identical rows on all three
+(`engine_parity.py`). So the engine needs no change. Rat coverage under the agrees view goes from 4,908 entries to
+14,714. The surprise: UniProt's own links cover 17,474 rat entries. We suspected the measurement and checked it. In
+3,445 rat and 1,105 mouse TrEMBL entries, the accession is simply absent from Ensembl 116's xref, and nearly all were
+created by UniProt in 2025-2026. In none of them does Ensembl name another gene. But `ensembl_xref_agrees = false`
+marks "Ensembl never heard of it" and "Ensembl disagrees" alike, so the default view drops them. The other answers:
+every TrEMBL entry carries an Ensembl dbReference, and gene names play no part.
+
+**Decision (user).** The first canonical delivery goes ahead on v1 unchanged. We propose, but do not promise, a v2
+"agrees or silent" view (human 94.6%, mouse 92.7%, rat 84.8%). It needs a marker written by mzLib's resolver, then
+pyMzLib, dataRepo and aging's consent, so we asked aging first (REQ-AGING-9, 021-logs). Option B (UniProt's links)
+was rejected because it brings back readthrough and paralog multi-gene links (human 71 -> 352). Option D (a newer
+Ensembl) was rejected because it re-pins everything and the lag recurs.
+
+**Leg 1 on canonical (010-logs to ptmQtl).** 009 warned that rat refuses more often at leg 1 (57.2% identical). On
+canonical it is 77.4%, because every one of the 13,258 rat TrEMBL entries cites the Ensembl consortium, and 87.5% of
+them are identical to the tree protein. Rat Swiss-Prot is unchanged at 57.3%. ptmQtl's D35 now pools sites by
+15-residue window, with the database as provenance only, so LOGS-P7 asks which databases get residue rows and what
+the join key is. The builder's scope waits on that answer.
+
+**#8 upstream as #1465.** Because #1381 was squash-merged, #8's branch still carried #1381's old commits. Only #8's
+own commit was moved, with `git rebase --onto smith/master 6b3c4a262`. The Ensembl directory was identical between
+#8's base and master. It now sits at `c96fafee0`, with 15 suite tests and hygiene passing, and was opened with both
+labels and the six referees. Fork #8 was closed and its card archived. A local branch,
+`backup/compara-gene-tree-alignment-pre-rebase`, keeps the old commit.
+
+**Left alone by choice.** #1382 has one approval (Alexander-Sol, 10-08), CI is green and it is mergeable. The user
+chose to do nothing about the missing second approval. dataRepo 032 needs no reply until residue rows exist. The
+answer then goes to both dataRepo and PXReprise, since D41 makes per-database work an ingest step.
+
+All new numbers are pinned (`test_reported_claims.py`, 31/31).

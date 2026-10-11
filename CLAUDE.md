@@ -8,25 +8,28 @@ This folder is a `/project`-managed research project. **You are de facto working
 - **Goal:** A generic, versioned, gene-centric cross-species orthology layer that lets any
   multi-organism proteomics project join protein identifications across species without collapsing
   one-to-many orthology.
-- **Pick up at:** run the thread inbox (ptmQtl may answer 009: outcome 13 `no_shared_alignment`, and
-  one alignment serving both sha keys of each agingPTM-v1 pair). Then check the board against the PRs:
-  `gh pr view <n> --repo smith-chem-wisc/mzLib --json state,reviewDecision` for **1381** (orthology store;
-  nbollis's approval was dismissed by the 2026-10-06 fixes, all six referees re-requested), **1382**
-  (`ParseAccession`) and **1428** (`PairwiseAligner`, opened 2026-10-06). On a merge, move its board #19
-  card to Shipped, and:
-  - for 1381: drop the pre-release flag (`gh release edit orthology-compara-116-b63a3331 --repo trishorts/logs --prerelease=false`),
-    then rebase **trishorts/mzLib#8** (`ComparaGeneTreeAlignment`, draft, stacked on 1381) onto
-    smith/master and open it upstream with the labels, the six referees and a board card;
-  - for 1382: run `/bridge-oracle pyMzLib` to project it, then tell dataRepo (022 promised this).
+- **Pick up at:** run the thread inbox. We owe nothing. Four answers are owed to us:
+  - **ptmQtl LOGS-P7**: which databases get residue rows, and the join key under their D35. The builder's
+    database list waits on this.
+  - **aging REQ-AGING-9**: a v2 "agrees or silent" gene view as their default? If yes, run `/oracle mzLib`
+    for a marker in `EnsemblGeneResolver`.
+  - **PXReprise PXR-O9** (snapshot hosting, with its licences) and **PXR-O10** (first canonical bundle
+    resolved: diff it against our canonical-v3 tables).
+
+  Then `gh pr view <n> --repo smith-chem-wisc/mzLib --json state,reviewDecision` for **1465**
+  (`ComparaGeneTreeAlignment`, opened 2026-10-11, six referees) and **1382** (`ParseAccession`: one approval,
+  needs a second; the user chose not to nudge). On a merge, move its board #19 card to Shipped, and:
+  - for 1382: run `/bridge-oracle pyMzLib` to project it, then tell dataRepo (022 promised this);
+  - for 1465: delete the local branch `backup/compara-gene-tree-alignment-pre-rebase`.
 
   **Stacked PRs stay drafts in the fork until their base merges** (user, 2026-10-06).
   **Next build: the residue-correspondence builder** (`DEF-RESIDUE-CORRESPONDENCE v1`, 13 outcomes), on
-  #1428 (legs 1, 3) and #8 (leg 2), plus the residue-level `not_on_ensembl_protein` rate that 009 promised.
-  The oracle verdict and conventions are in `design/ORACLE_residue_correspondence.md`. The MSA is pinned
-  (`data/PROVENANCE.md`), and `results/alignment_check_e116.md` holds its checked facts.
+  smith/master: #1428's `PairwiseAligner` (merged) for legs 1 and 3, and #1465 for leg 2. Also the
+  residue-level `not_on_ensembl_protein` rate that 009 promised. The oracle verdict is in
+  `design/ORACLE_residue_correspondence.md`; the MSA facts are in `results/alignment_check_e116.md`.
 
-  Step 6 is BUILT (2026-09-27/28) and released: public repo, pre-release
-  `orthology-compara-116-b63a3331`, MIT for code and CC-BY-4.0 for data. See `RESUME.md`.
+  #1381 (store) merged on 2026-10-06 and #1428 on 2026-10-10. The release `orthology-compara-116-b63a3331`
+  is final, not a pre-release. The canonical v3 databases resolve on v1 unchanged (2026-10-11). See `RESUME.md`.
 
 ## Things that will bite you here
 
@@ -123,6 +126,15 @@ This folder is a `/project`-managed research project. **You are de facto working
     `ComparaGeneTreeContent` run to gene sets: unrestricted, it holds millions of proteins.
 29. **Before saying when something is "active" for a consumer, check what they can already read.** The
     released snapshot needs only DuckDB; #1381 is for building new ones (said wrongly, then corrected, 2026-10-06).
+30. **`ensembl_xref_agrees = false` means two different things.** Either Ensembl links the accession to
+    another gene, or its xref has never heard of the accession. On canonical v3, every dropped TrEMBL row is
+    the second kind (rat 3,445, mouse 1,105: UniProt accessions newer than Ensembl 116). Separate them with
+    the xref view's `not_in_source` (`search_db.py`'s `agree_or_silent_covered`).
+31. **A squash-merged base leaves its old commits on a stacked branch.** #1381 merged as one commit, so #8
+    still carried its history. Move only your own: `git rebase --onto smith/master <old base>`.
+32. **`tools/ResolveSearchDb` builds against the old `code/mzLib-ensembl-genes` pin**, which still matches the
+    resolver in 1.0.594 (checked 2026-10-11). After a resolver change, re-check this, or the measurement
+    silently uses old code. `engine_parity.py` compares it with pyMzLib.
 
 ## Running things
 
@@ -135,12 +147,14 @@ python -m logs_orthology.resolve --reference          # -> results/resolution_hu
 python -m logs_orthology.resolve --accessions ids.tsv # accession[<TAB>contaminant] per line
 python tests/test_contracts.py         # 10 contract tests
 python tests/test_resolve.py           # 21 resolver contracts (last one reconciles on real data)
-python tests/test_reported_claims.py   # 29 claims already sent to a partner
+python tests/test_reported_claims.py   # 31 claims already sent to a partner
 python -m logs_orthology.manifest       # -> results/resolver_inputs_e116.{json,md}
 dotnet run --project tools/BuildGeneSet -c Release -- <gtf.gz> results/gene_sets/<Species>.116.genes.tsv.gz
 dotnet run --project tools/BuildOrthologySnapshot -c Release -- 116 data/compara results/gene_sets snapshots/compara-116 homo_sapiens mus_musculus rattus_norvegicus   # out dir "-" = check only
 dotnet run --project tools/ResolveSearchDb -c Release -- <xml> <gtf.gz | genes.tsv.gz> <uniprot.tsv.gz> <out.tsv>
-python -m logs_orthology.search_db <out.tsv> [--species mus_musculus --out results/search_db_resolution_mouse]
+python -m logs_orthology.search_db <out.tsv> [--species mus_musculus --out results/search_db_resolution_mouse] [--xml <search.xml>]
+python -m logs_orthology.engine_parity --out results/engine_parity_canonical-v3 <sp>=<xml>:<table> ...   # pyMzLib vs the C# rows
+python -m logs_orthology.alignment_check --databases canonical-v3   # leg 1 on the canonical v3 databases
 ```
 
 Inputs live in `data/compara/` (gitignored, 673 MB, recorded in `data/PROVENANCE.md`).
