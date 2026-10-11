@@ -1,0 +1,134 @@
+{
+  "species": "mus_musculus",
+  "source_table": "search_db_mouse_canonical-v3_e116.tsv",
+  "search_database_sha256": "3c4ac3fb481e8ff1430d3f7a7aab4c2c83d44ae1de117ea942c8aefd5ffb4cc6",
+  "gene_set": "Ensembl 116 primary-assembly GTF",
+  "generated": "2026-10-11",
+  "base_entries": 21860,
+  "sequence_variant_rows": 714,
+  "xref_view": {
+    "resolved": 18893,
+    "not_in_source": 2730,
+    "multi_gene": 237
+  },
+  "xml_view": {
+    "resolved": 19942,
+    "not_in_source": 1645,
+    "multi_gene": 273
+  },
+  "xml_multi_gene_by_xref_agreeing_genes": {
+    "0": 37,
+    "1": 1,
+    "2": 183,
+    "3": 17,
+    "4": 13,
+    "5": 3,
+    "6": 4,
+    "7": 2,
+    "8": 1,
+    "9": 10,
+    "13": 1,
+    "23": 1
+  },
+  "not_in_source_in_both": 1606,
+  "xref_not_in_source_but_xml_resolves": 1124,
+  "xml_off_primary_only_but_xref_resolves": 0,
+  "xml_unresolved_but_xref_resolves": 39,
+  "parity_identical": 21860,
+  "parity_differ": 0,
+  "parity_differ_xml_has_no_ensembl_link": 0,
+  "agree_or_silent_covered": 20254,
+  "search_xml": "UP000000589_all_genecentric_2026_03_agingPTM-v3.xml",
+  "by_dataset": {
+    "Swiss-Prot": {
+      "entries": 17219,
+      "agrees_view": {
+        "one_gene": 15471,
+        "several_genes": 123,
+        "no_gene": 1625
+      },
+      "xml_view": {
+        "resolved": 15450,
+        "not_in_source": 1645,
+        "multi_gene": 124
+      },
+      "xref_view": {
+        "resolved": 15471,
+        "not_in_source": 1625,
+        "multi_gene": 123
+      },
+      "no_primary_gene_name": {
+        "entries": 262,
+        "with_agreeing_gene": 102,
+        "xml_view": {
+          "not_in_source": 160,
+          "resolved": 102
+        }
+      },
+      "no_ensembl_dbreference": {
+        "entries": 1645,
+        "with_agreeing_gene": 39
+      },
+      "neither": {
+        "entries": 160,
+        "with_agreeing_gene": 0
+      },
+      "xref_silent_xml_resolves": {
+        "entries": 19,
+        "created": {
+          "1994": 3,
+          "1995": 2,
+          "1996": 1,
+          "2000": 1,
+          "2001": 1,
+          "2003": 1,
+          "2005": 1,
+          "2006": 3,
+          "2007": 2,
+          "2008": 3,
+          "2026": 1
+        }
+      }
+    },
+    "TrEMBL": {
+      "entries": 4641,
+      "agrees_view": {
+        "one_gene": 3422,
+        "several_genes": 114,
+        "no_gene": 1105
+      },
+      "xml_view": {
+        "resolved": 4492,
+        "multi_gene": 149
+      },
+      "xref_view": {
+        "resolved": 3422,
+        "not_in_source": 1105,
+        "multi_gene": 114
+      },
+      "no_primary_gene_name": {
+        "entries": 45,
+        "with_agreeing_gene": 14,
+        "xml_view": {
+          "resolved": 44,
+          "multi_gene": 1
+        }
+      },
+      "no_ensembl_dbreference": {
+        "entries": 0,
+        "with_agreeing_gene": 0
+      },
+      "neither": {
+        "entries": 0,
+        "with_agreeing_gene": 0
+      },
+      "xref_silent_xml_resolves": {
+        "entries": 1105,
+        "created": {
+          "2025": 45,
+          "2026": 1060
+        }
+      }
+    }
+  }
+}

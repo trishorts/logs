@@ -448,6 +448,39 @@ def test_leg1_entry_identity_as_sent_in_009():
         assert (leg1[sp]["entry_gene_pairs"], leg1[sp]["identical"]) == (pairs, identical), sp
 
 
+def test_canonical_v3_resolution_as_sent_in_010_to_pxreprise():
+    """010-logs answered PXR-O6/O7 on the agingPTM-v3 canonical databases (PXReprise 007): coverage per
+    view, the TrEMBL questions, the accessions Ensembl 116's xref has never heard of, and pyMzLib
+    0.2.0 (the engine's call) against the C# rows. Counts are ENTRIES."""
+    expected = {  # sha, entries, agrees, xml, agree-or-silent, TrEMBL, TrEMBL silent
+        "human": ("fd80cf88", 20652, 19505, 19526, 19532, 323, 11),
+        "mouse": ("3c4ac3fb", 21860, 19130, 20215, 20254, 4641, 1105),
+        "rat": ("7f08fd3c", 21471, 14714, 17474, 18203, 13258, 3445),
+    }
+    for sp, (sha, n, agrees, xml, aos, trembl, silent) in expected.items():
+        s = _search_db_species(f"_{sp}_canonical-v3")
+        cov = lambda v: v.get("resolved", 0) + v.get("multi_gene", 0)  # noqa: E731
+        assert s["search_database_sha256"].startswith(sha), sp
+        assert (s["base_entries"], s["parity_identical"]) == (n, n), sp
+        assert (cov(s["xref_view"]), cov(s["xml_view"]), s["agree_or_silent_covered"]) == (agrees, xml, aos), sp
+        t = s["by_dataset"]["TrEMBL"]
+        assert (t["entries"], t["xref_silent_xml_resolves"]["entries"]) == (trembl, silent), sp
+        assert t["no_ensembl_dbreference"]["entries"] == 0, f"{sp}: every TrEMBL entry links Ensembl"
+    rat, mouse = _search_db_species("_rat_canonical-v3"), _search_db_species("_mouse_canonical-v3")
+    created = rat["by_dataset"]["TrEMBL"]["xref_silent_xml_resolves"]["created"]
+    assert created.get("2025", 0) + created.get("2026", 0) == 3442, "rat: created 2025-2026"
+    assert mouse["by_dataset"]["TrEMBL"]["xref_silent_xml_resolves"]["created"] == {"2025": 45, "2026": 1060}
+    assert rat["not_in_source_in_both"] == 2840
+    unnamed = {sp: _search_db_species(f"_{sp}_canonical-v3")["by_dataset"]["TrEMBL"]["no_primary_gene_name"]
+               for sp in ("human", "mouse", "rat")}
+    assert unnamed["rat"] == {"entries": 853, "with_agreeing_gene": 138, "xml_view": {"resolved": 813, "multi_gene": 40}}
+    assert unnamed["mouse"] == {"entries": 45, "with_agreeing_gene": 14, "xml_view": {"resolved": 44, "multi_gene": 1}}
+    assert unnamed["human"] == {"entries": 129, "with_agreeing_gene": 58, "xml_view": {"resolved": 66, "off_primary_only": 63}}
+    parity = json.loads((RESULTS / "engine_parity_canonical-v3.json").read_text(encoding="utf-8"))["species"]
+    assert {p["species"]: (p["pymzlib"], p["pymzlib_rows"], p["identical"]) for p in parity} == {
+        "human": ("0.2.0", 21139, True), "mouse": ("0.2.0", 22383, True), "rat": ("0.2.0", 22464, True)}
+
+
 if __name__ == "__main__":
     import traceback
 

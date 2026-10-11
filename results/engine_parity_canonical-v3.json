@@ -1,0 +1,53 @@
+{
+  "generated": "2026-10-11",
+  "compared_on": [
+    "accession",
+    "outcome",
+    "gene_id",
+    "source",
+    "ensembl_xref_agrees",
+    "search_database_sha256",
+    "gene_set_sha256"
+  ],
+  "species": [
+    {
+      "species": "human",
+      "search_xml": "UP000005640_all_genecentric_2026_03_agingPTM-v3.xml",
+      "reference_table": "search_db_human_canonical-v3_e116.tsv",
+      "pymzlib": "0.2.0",
+      "mzlib": "1.0.0+23c2490e10d3ccce71c941bca31610725826ba83",
+      "pymzlib_rows": 21139,
+      "reference_entry_rows": 21139,
+      "entries": 20652,
+      "only_pymzlib": 0,
+      "only_reference": 0,
+      "identical": true
+    },
+    {
+      "species": "mouse",
+      "search_xml": "UP000000589_all_genecentric_2026_03_agingPTM-v3.xml",
+      "reference_table": "search_db_mouse_canonical-v3_e116.tsv",
+      "pymzlib": "0.2.0",
+      "mzlib": "1.0.0+23c2490e10d3ccce71c941bca31610725826ba83",
+      "pymzlib_rows": 22383,
+      "reference_entry_rows": 22383,
+      "entries": 21860,
+      "only_pymzlib": 0,
+      "only_reference": 0,
+      "identical": true
+    },
+    {
+      "species": "rat",
+      "search_xml": "UP000002494_all_genecentric_2026_03_agingPTM-v3.xml",
+      "reference_table": "search_db_rat_canonical-v3_e116.tsv",
+      "pymzlib": "0.2.0",
+      "mzlib": "1.0.0+23c2490e10d3ccce71c941bca31610725826ba83",
+      "pymzlib_rows": 22464,
+      "reference_entry_rows": 22464,
+      "entries": 21471,
+      "only_pymzlib": 0,
+      "only_reference": 0,
+      "identical": true
+    }
+  ]
+}

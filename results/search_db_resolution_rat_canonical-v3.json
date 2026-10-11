@@ -1,0 +1,143 @@
+{
+  "species": "rattus_norvegicus",
+  "source_table": "search_db_rat_canonical-v3_e116.tsv",
+  "search_database_sha256": "7f08fd3c9eac4efe0e0402b305aa5af43f155644094b6df93643afa3baeafe93",
+  "gene_set": "Ensembl 116 primary-assembly GTF",
+  "generated": "2026-10-11",
+  "base_entries": 21471,
+  "sequence_variant_rows": 198,
+  "xref_view": {
+    "resolved": 14632,
+    "not_in_source": 6757,
+    "multi_gene": 82
+  },
+  "xml_view": {
+    "resolved": 17321,
+    "off_primary_only": 955,
+    "not_in_source": 3042,
+    "multi_gene": 153
+  },
+  "xml_multi_gene_by_xref_agreeing_genes": {
+    "0": 67,
+    "1": 25,
+    "2": 49,
+    "3": 7,
+    "4": 3,
+    "5": 2
+  },
+  "not_in_source_in_both": 2840,
+  "xref_not_in_source_but_xml_resolves": 3489,
+  "xml_off_primary_only_but_xref_resolves": 527,
+  "xml_unresolved_but_xref_resolves": 729,
+  "parity_identical": 21471,
+  "parity_differ": 0,
+  "parity_differ_xml_has_no_ensembl_link": 0,
+  "agree_or_silent_covered": 18203,
+  "search_xml": "UP000002494_all_genecentric_2026_03_agingPTM-v3.xml",
+  "by_dataset": {
+    "Swiss-Prot": {
+      "entries": 8213,
+      "agrees_view": {
+        "one_gene": 4857,
+        "several_genes": 44,
+        "no_gene": 3312
+      },
+      "xml_view": {
+        "resolved": 4177,
+        "off_primary_only": 949,
+        "not_in_source": 3042,
+        "multi_gene": 45
+      },
+      "xref_view": {
+        "resolved": 4857,
+        "not_in_source": 3312,
+        "multi_gene": 44
+      },
+      "no_primary_gene_name": {
+        "entries": 113,
+        "with_agreeing_gene": 43,
+        "xml_view": {
+          "not_in_source": 65,
+          "resolved": 36,
+          "off_primary_only": 11,
+          "multi_gene": 1
+        }
+      },
+      "no_ensembl_dbreference": {
+        "entries": 3042,
+        "with_agreeing_gene": 202
+      },
+      "neither": {
+        "entries": 65,
+        "with_agreeing_gene": 2
+      },
+      "xref_silent_xml_resolves": {
+        "entries": 44,
+        "created": {
+          "1986": 1,
+          "1989": 2,
+          "1990": 2,
+          "1992": 1,
+          "1993": 1,
+          "1994": 3,
+          "1995": 1,
+          "1996": 2,
+          "1997": 1,
+          "1998": 1,
+          "2000": 1,
+          "2001": 2,
+          "2004": 3,
+          "2005": 5,
+          "2006": 7,
+          "2007": 4,
+          "2008": 3,
+          "2009": 1,
+          "2016": 2,
+          "2026": 1
+        }
+      }
+    },
+    "TrEMBL": {
+      "entries": 13258,
+      "agrees_view": {
+        "one_gene": 9775,
+        "several_genes": 38,
+        "no_gene": 3445
+      },
+      "xml_view": {
+        "resolved": 13144,
+        "multi_gene": 108,
+        "off_primary_only": 6
+      },
+      "xref_view": {
+        "resolved": 9775,
+        "not_in_source": 3445,
+        "multi_gene": 38
+      },
+      "no_primary_gene_name": {
+        "entries": 853,
+        "with_agreeing_gene": 138,
+        "xml_view": {
+          "resolved": 813,
+          "multi_gene": 40
+        }
+      },
+      "no_ensembl_dbreference": {
+        "entries": 0,
+        "with_agreeing_gene": 0
+      },
+      "neither": {
+        "entries": 0,
+        "with_agreeing_gene": 0
+      },
+      "xref_silent_xml_resolves": {
+        "entries": 3445,
+        "created": {
+          "2004": 3,
+          "2025": 2713,
+          "2026": 729
+        }
+      }
+    }
+  }
+}

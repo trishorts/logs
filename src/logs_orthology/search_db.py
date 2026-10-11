@@ -13,9 +13,14 @@ dump and reports:
 Base entries are the proteins whose accession is itself a UniProt or RefSeq accession; the
 sequence-variant proteoforms ``LoadProteinXML`` adds (``P12345_S70N``) are counted separately.
 
+With ``--xml`` (the search XML the table was resolved from), the entries are also split by UniProt
+dataset (Swiss-Prot / TrEMBL), by whether they name a primary gene, and by whether they carry an
+Ensembl ``dbReference`` (PXReprise 006, PXR-O6: canonical proteomes mix the two datasets).
+
 Run:
     dotnet run --project tools/ResolveSearchDb -c Release -- <search.xml> <gtf.gz> <uniprot.tsv.gz> <out.tsv>
     python -m logs_orthology.search_db <out.tsv> [--species mus_musculus --out results/search_db_resolution_mouse]
+                                                 [--xml <search.xml>]
 """
 
 from __future__ import annotations
@@ -25,6 +30,7 @@ import collections
 import csv
 import datetime as _dt
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -34,8 +40,72 @@ from .resolve import XrefIndex, normalize, resolve
 
 csv.field_size_limit(10_000_000)
 
+_DATASET = re.compile(r'<entry\b[^>]*\bdataset="([^"]+)"')
+_CREATED = re.compile(r'<entry\b[^>]*\bcreated="(\d{4})')
 
-def summarize(cs_table: Path, species: str = "homo_sapiens") -> dict:
+
+def scan_entries(xml: Path) -> dict[str, dict]:
+    """Per UniProt entry, keyed by its first accession: its dataset, the year UniProt created it,
+    whether its ``<gene>`` has a primary name, and whether it carries an Ensembl ``dbReference``.
+    Reads the XML line by line, as UniProt writes it; ``type="primary"`` occurs only on gene names."""
+    out: dict[str, dict] = {}
+    cur = None
+    with open(xml, encoding="utf-8") as fh:
+        for line in fh:
+            s = line.lstrip()
+            if s.startswith("<entry"):
+                m, c = _DATASET.match(s), _CREATED.match(s)
+                cur, acc = {"dataset": m.group(1) if m else None, "created": c.group(1) if c else None,
+                            "primary_gene_name": False, "ensembl_dbreference": False}, None
+            elif cur is None:
+                continue
+            elif s.startswith("<accession>") and acc is None:
+                acc = s[len("<accession>"):s.index("<", len("<accession>"))]
+                out[acc] = cur
+            elif s.startswith("<name") and 'type="primary"' in s:
+                cur["primary_gene_name"] = True
+            elif s.startswith('<dbReference type="Ensembl"'):
+                cur["ensembl_dbreference"] = True
+            elif s.startswith("</entry>"):
+                cur = None
+    return out
+
+
+def _by_dataset(entries: dict[str, dict], agreeing: dict[str, set], xml_outcome: dict[str, str],
+                xref_outcome: dict[str, str]) -> dict:
+    """Coverage per UniProt dataset. ``agrees_view`` counts genes the Ensembl xref agrees with
+    (the v1 view, CLAUDE.md trap 19), never ``outcome``."""
+    out = {}
+    for ds in sorted({e["dataset"] for e in entries.values()}):
+        accs = [a for a, e in entries.items() if e["dataset"] == ds]
+        no_name = [a for a in accs if not entries[a]["primary_gene_name"]]
+        no_ens = [a for a in accs if not entries[a]["ensembl_dbreference"]]
+        neither = [a for a in accs if not entries[a]["primary_gene_name"] and not entries[a]["ensembl_dbreference"]]
+        silent = [a for a in accs if _xref_silent_xml_resolves(a, xml_outcome, xref_outcome)]
+        out[ds] = {
+            "entries": len(accs),
+            "agrees_view": {"one_gene": sum(len(agreeing[a]) == 1 for a in accs),
+                            "several_genes": sum(len(agreeing[a]) > 1 for a in accs),
+                            "no_gene": sum(not agreeing[a] for a in accs)},
+            "xml_view": dict(collections.Counter(xml_outcome[a] for a in accs)),
+            "xref_view": dict(collections.Counter(xref_outcome[a] for a in accs)),
+            "no_primary_gene_name": {"entries": len(no_name), "with_agreeing_gene": sum(bool(agreeing[a]) for a in no_name),
+                                     "xml_view": dict(collections.Counter(xml_outcome[a] for a in no_name))},
+            "no_ensembl_dbreference": {"entries": len(no_ens), "with_agreeing_gene": sum(bool(agreeing[a]) for a in no_ens)},
+            "neither": {"entries": len(neither), "with_agreeing_gene": sum(bool(agreeing[a]) for a in neither)},
+            "xref_silent_xml_resolves": {"entries": len(silent),
+                                         "created": dict(sorted(collections.Counter(entries[a]["created"] for a in silent).items()))},
+        }
+    return out
+
+
+def _xref_silent_xml_resolves(a: str, xml_outcome: dict[str, str], xref_outcome: dict[str, str]) -> bool:
+    """Ensembl's xref does not know the accession at all (``not_in_source``: silent, not a
+    disagreement), and the search XML links it to a gene in the set."""
+    return xref_outcome[a] == "not_in_source" and xml_outcome[a] in ("resolved", "multi_gene")
+
+
+def summarize(cs_table: Path, species: str = "homo_sapiens", xml: Path | None = None) -> dict:
     base_rows: dict[str, list[dict]] = collections.defaultdict(list)
     variants = 0
     sha = None
@@ -64,6 +134,14 @@ def summarize(cs_table: Path, species: str = "homo_sapiens") -> dict:
     both_nis = sum(1 for a in base_rows if xml_outcome[a] == xref_outcome[a] == "not_in_source")
     differ = [a for a in base_rows if agreeing[a] != xref_genes[a]]
 
+    extra = {}
+    if xml is not None:
+        entries = scan_entries(xml)
+        if set(entries) != set(base_rows):
+            raise SystemExit(f"{xml.name}: {len(entries):,} entries but {len(base_rows):,} base entries in "
+                             f"{cs_table.name}; the table was not resolved from this XML")
+        extra = {"search_xml": xml.name, "by_dataset": _by_dataset(entries, agreeing, xml_outcome, xref_outcome)}
+
     return {
         "species": species,
         "source_table": cs_table.name,
@@ -87,6 +165,11 @@ def summarize(cs_table: Path, species: str = "homo_sapiens") -> dict:
         "parity_identical": identical,
         "parity_differ": len(base_rows) - identical,
         "parity_differ_xml_has_no_ensembl_link": sum(1 for a in differ if xml_outcome[a] == "not_in_source"),
+        # A view a v2 could define (PXR-O7, 2026-10-11): the xref agrees, or it has never heard of
+        # the accession and the XML links a gene. Not a v1 view; counted here so its cost is known.
+        "agree_or_silent_covered": sum(
+            1 for a in base_rows if agreeing[a] or _xref_silent_xml_resolves(a, xml_outcome, xref_outcome)),
+        **extra,
     }
 
 
@@ -102,7 +185,7 @@ def render(s: dict) -> str:
         f"**{s['base_entries']:,} base entries** ({s['sequence_variant_rows']:,} further rows are sequence-variant "
         "proteoforms, resolved through their entry and not counted here).",
         "",
-        f"| outcome | Ensembl xref{' (sent in 005-logs)' if s.get('species', 'homo_sapiens') == 'homo_sapiens' else ''} | search XML's own links |",
+        f"| outcome | Ensembl xref{' (sent in 005-logs)' if s['source_table'] == 'search_db_human_e116.tsv' else ''} | search XML's own links |",
         "|---|---:|---:|",
         *[f"| `{o}` | {xv.get(o, 0):,} | {mv.get(o, 0):,} |" for o in order],
         "",
@@ -129,6 +212,39 @@ def render(s: dict) -> str:
             "XML carries no Ensembl link at all and the rest disagree on the genes themselves."),
         "",
     ]
+    if "by_dataset" in s:
+        bd = s["by_dataset"]
+        L += [
+            f"## By UniProt dataset (`{s['search_xml']}`)",
+            "",
+            "Coverage is the agrees view: an entry counts when the Ensembl xref agrees with at least one of its genes.",
+            "",
+            "| dataset | entries | one gene | several genes | no gene | covered | no primary gene name (of which covered) "
+            "| no Ensembl dbReference (of which covered) | neither (of which covered) |",
+            "|---|---:|---:|---:|---:|---:|---:|---:|---:|",
+        ]
+        for ds, d in bd.items():
+            av, n = d["agrees_view"], d["entries"]
+            cov = av["one_gene"] + av["several_genes"]
+            L.append(f"| {ds} | {n:,} | {av['one_gene']:,} | {av['several_genes']:,} | {av['no_gene']:,} | "
+                     f"{cov / n:.1%} | {d['no_primary_gene_name']['entries']:,} ({d['no_primary_gene_name']['with_agreeing_gene']:,}) | "
+                     f"{d['no_ensembl_dbreference']['entries']:,} ({d['no_ensembl_dbreference']['with_agreeing_gene']:,}) | "
+                     f"{d['neither']['entries']:,} ({d['neither']['with_agreeing_gene']:,}) |")
+        L += ["",
+              "**Ensembl's xref has never heard of the accession, but the XML links a gene** (silent, not a "
+              "disagreement; the agrees view drops these):",
+              "",
+              "| dataset | entries | created by UniProt in |",
+              "|---|---:|---|"]
+        for ds, d in bd.items():
+            sv = d["xref_silent_xml_resolves"]
+            L.append(f"| {ds} | {sv['entries']:,} | " + ", ".join(f"{y}: {n:,}" for y, n in sv["created"].items()) + " |")
+        n = s["base_entries"]
+        av = s["xref_view"].get("resolved", 0) + s["xref_view"].get("multi_gene", 0)
+        L += ["",
+              f"Covered: agrees view **{av:,}** ({av / n:.1%}); agrees-or-silent (not a v1 view) "
+              f"**{s['agree_or_silent_covered']:,}** ({s['agree_or_silent_covered'] / n:.1%}).",
+              ""]
     return "\n".join(L)
 
 
@@ -137,8 +253,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("table", type=Path, help="output of tools/ResolveSearchDb")
     ap.add_argument("--species", default="homo_sapiens", choices=sorted(sources.TAXA))
     ap.add_argument("--out", default="results/search_db_resolution")
+    ap.add_argument("--xml", type=Path, help="the search XML, to split coverage by UniProt dataset")
     args = ap.parse_args(argv)
-    s = summarize(args.table, args.species)
+    s = summarize(args.table, args.species, args.xml)
     stem = project_root() / args.out
     stem.with_suffix(".json").write_text(json.dumps(s, indent=2), encoding="utf-8")
     stem.with_suffix(".md").write_text(render(s), encoding="utf-8")

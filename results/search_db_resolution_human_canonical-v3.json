@@ -1,0 +1,133 @@
+{
+  "species": "homo_sapiens",
+  "source_table": "search_db_human_canonical-v3_e116.tsv",
+  "search_database_sha256": "fd80cf8839f8c1551bddc2d24905df6098188196934f4f43fa8c3e9a276eb14c",
+  "gene_set": "Ensembl 116 primary-assembly GTF",
+  "generated": "2026-10-11",
+  "base_entries": 20652,
+  "sequence_variant_rows": 32296,
+  "xref_view": {
+    "not_in_source": 998,
+    "resolved": 19434,
+    "off_primary_only": 149,
+    "multi_gene": 71
+  },
+  "xml_view": {
+    "not_in_source": 964,
+    "resolved": 19174,
+    "off_primary_only": 162,
+    "multi_gene": 352
+  },
+  "xml_multi_gene_by_xref_agreeing_genes": {
+    "1": 281,
+    "2": 58,
+    "3": 6,
+    "5": 2,
+    "6": 1,
+    "7": 1,
+    "10": 1,
+    "12": 1,
+    "14": 1
+  },
+  "not_in_source_in_both": 960,
+  "xref_not_in_source_but_xml_resolves": 27,
+  "xml_off_primary_only_but_xref_resolves": 2,
+  "xml_unresolved_but_xref_resolves": 6,
+  "parity_identical": 20652,
+  "parity_differ": 0,
+  "parity_differ_xml_has_no_ensembl_link": 0,
+  "agree_or_silent_covered": 19532,
+  "search_xml": "UP000005640_all_genecentric_2026_03_agingPTM-v3.xml",
+  "by_dataset": {
+    "Swiss-Prot": {
+      "entries": 20329,
+      "agrees_view": {
+        "one_gene": 19222,
+        "several_genes": 69,
+        "no_gene": 1038
+      },
+      "xml_view": {
+        "not_in_source": 964,
+        "resolved": 18953,
+        "off_primary_only": 62,
+        "multi_gene": 350
+      },
+      "xref_view": {
+        "not_in_source": 976,
+        "resolved": 19222,
+        "off_primary_only": 62,
+        "multi_gene": 69
+      },
+      "no_primary_gene_name": {
+        "entries": 135,
+        "with_agreeing_gene": 2,
+        "xml_view": {
+          "not_in_source": 133,
+          "resolved": 2
+        }
+      },
+      "no_ensembl_dbreference": {
+        "entries": 964,
+        "with_agreeing_gene": 4
+      },
+      "neither": {
+        "entries": 133,
+        "with_agreeing_gene": 0
+      },
+      "xref_silent_xml_resolves": {
+        "entries": 16,
+        "created": {
+          "2002": 2,
+          "2003": 1,
+          "2006": 3,
+          "2007": 3,
+          "2008": 5,
+          "2017": 1,
+          "2026": 1
+        }
+      }
+    },
+    "TrEMBL": {
+      "entries": 323,
+      "agrees_view": {
+        "one_gene": 212,
+        "several_genes": 2,
+        "no_gene": 109
+      },
+      "xml_view": {
+        "resolved": 221,
+        "multi_gene": 2,
+        "off_primary_only": 100
+      },
+      "xref_view": {
+        "resolved": 212,
+        "multi_gene": 2,
+        "off_primary_only": 87,
+        "not_in_source": 22
+      },
+      "no_primary_gene_name": {
+        "entries": 129,
+        "with_agreeing_gene": 58,
+        "xml_view": {
+          "resolved": 66,
+          "off_primary_only": 63
+        }
+      },
+      "no_ensembl_dbreference": {
+        "entries": 0,
+        "with_agreeing_gene": 0
+      },
+      "neither": {
+        "entries": 0,
+        "with_agreeing_gene": 0
+      },
+      "xref_silent_xml_resolves": {
+        "entries": 11,
+        "created": {
+          "2025": 3,
+          "2026": 8
+        }
+      }
+    }
+  }
+}
