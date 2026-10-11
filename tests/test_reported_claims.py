@@ -481,6 +481,37 @@ def test_canonical_v3_resolution_as_sent_in_010_to_pxreprise():
         "human": ("0.2.0", 21139, True), "mouse": ("0.2.0", 22383, True), "rat": ("0.2.0", 22464, True)}
 
 
+def test_leg1_on_canonical_v3_as_sent_in_010_to_ptmqtl():
+    """009 warned ptmQtl that rat refuses more often at leg 1 (57.2% of reviewed entries identical to
+    their tree protein). 010 corrected it for the canonical agingPTM-v3 databases: rat's TrEMBL
+    entries are mostly Ensembl's own translations. Agrees view, entry x gene pairs."""
+    leg = json.loads((RESULTS / "leg1_canonical-v3_e116.json").read_text(encoding="utf-8"))["leg1_entry_vs_tree_protein"]
+    expected = {"homo_sapiens": (19627, 17914), "mus_musculus": (19553, 17085), "rattus_norvegicus": (14819, 11463)}
+    for sp, (pairs, identical) in expected.items():
+        assert (leg[sp]["entry_gene_pairs"], leg[sp]["identical"]) == (pairs, identical), sp
+    rat = leg["rattus_norvegicus"]["by_dataset"]
+    assert (rat["TrEMBL"]["entry_gene_pairs"], rat["TrEMBL"]["identical"]) == (9859, 8622)
+    assert (rat["Swiss-Prot"]["entry_gene_pairs"], rat["Swiss-Prot"]["identical"]) == (4960, 2841)
+    xml = Path("F:/aging_data/db/UP000002494_all_genecentric_2026_03_agingPTM-v3.xml")
+    if not xml.exists():
+        print(f"        (Ensembl-consortium count not checked: {xml} is absent on this machine)")
+        return
+    import collections
+    import re
+    cites: collections.Counter = collections.Counter()
+    ds = ens = None
+    with open(xml, encoding="utf-8") as fh:
+        for line in fh:
+            s = line.lstrip()
+            if s.startswith("<entry"):
+                ds, ens = re.search(r'dataset="([^"]+)"', s).group(1), False
+            elif s.startswith('<consortium name="Ensembl"'):
+                ens = True
+            elif s.startswith("</entry>"):
+                cites[(ds, ens)] += 1
+    assert cites == {("TrEMBL", True): 13258, ("Swiss-Prot", False): 8213}, "010-logs to ptmQtl"
+
+
 if __name__ == "__main__":
     import traceback
 

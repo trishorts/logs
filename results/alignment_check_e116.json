@@ -43,7 +43,15 @@
       "entry_gene_pairs": 19446,
       "identical": 17812,
       "differs": 1588,
-      "gene_in_no_tree": 46
+      "gene_in_no_tree": 46,
+      "by_dataset": {
+        "Swiss-Prot": {
+          "identical": 17812,
+          "entry_gene_pairs": 19446,
+          "differs": 1588,
+          "gene_in_no_tree": 46
+        }
+      }
     },
     "mus_musculus": {
       "search_database": "uniprotkb_proteome_UP000000589_AND_revi_2026-09-22.xml",
@@ -51,7 +59,15 @@
       "entry_gene_pairs": 15855,
       "identical": 13714,
       "differs": 2096,
-      "gene_in_no_tree": 45
+      "gene_in_no_tree": 45,
+      "by_dataset": {
+        "Swiss-Prot": {
+          "identical": 13714,
+          "entry_gene_pairs": 15855,
+          "differs": 2096,
+          "gene_in_no_tree": 45
+        }
+      }
     },
     "rattus_norvegicus": {
       "search_database": "uniprotkb_proteome_UP000002494_AND_revi_2026-09-22.xml",
@@ -59,7 +75,15 @@
       "entry_gene_pairs": 4967,
       "identical": 2841,
       "differs": 2124,
-      "gene_in_no_tree": 2
+      "gene_in_no_tree": 2,
+      "by_dataset": {
+        "Swiss-Prot": {
+          "identical": 2841,
+          "entry_gene_pairs": 4967,
+          "differs": 2124,
+          "gene_in_no_tree": 2
+        }
+      }
     }
   },
   "snapshot_manifest_sha256": "fd0a9d8f5d211a91bdafd4c843ee4f0085be8cf0d7ff4fc779c5e6ebda5074aa"

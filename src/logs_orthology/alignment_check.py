@@ -18,8 +18,11 @@ README alone. This states, from the file:
 The ungapped human/mouse/rat tree proteins are written to
 ``data/compara/tree_proteins_e116.tsv.gz`` (gitignored, derived) for the aligner's tests.
 
-Run:  python -m logs_orthology.alignment_check [--db-dir F:/aging_data/db]
-      -> results/alignment_check_e116.{json,md}
+``--databases canonical-v3`` runs only check 3, on PXReprise's canonical agingPTM-v3 databases
+(PXReprise 007, D38), split by UniProt dataset, and writes ``results/leg1_canonical-v3_e116.*``.
+
+Run:  python -m logs_orthology.alignment_check [--db-dir F:/aging_data/db] [--databases canonical-v3]
+      -> results/alignment_check_e116.{json,md}   (or results/leg1_canonical-v3_e116.{json,md})
 """
 
 from __future__ import annotations
@@ -49,6 +52,15 @@ SEARCH_DBS = {
     "mus_musculus": ("uniprotkb_proteome_UP000000589_AND_revi_2026-09-22.xml", "search_db_mouse_e116.tsv"),
     "rattus_norvegicus": ("uniprotkb_proteome_UP000002494_AND_revi_2026-09-22.xml", "search_db_rat_e116.tsv"),
 }
+
+#: PXReprise D38's canonical searches (007); their resolution tables are 010-logs's.
+CANONICAL_V3_DBS = {
+    "homo_sapiens": ("UP000005640_all_genecentric_2026_03_agingPTM-v3.xml", "search_db_human_canonical-v3_e116.tsv"),
+    "mus_musculus": ("UP000000589_all_genecentric_2026_03_agingPTM-v3.xml", "search_db_mouse_canonical-v3_e116.tsv"),
+    "rattus_norvegicus": ("UP000002494_all_genecentric_2026_03_agingPTM-v3.xml", "search_db_rat_canonical-v3_e116.tsv"),
+}
+
+DB_SETS = {"reviewed": SEARCH_DBS, "canonical-v3": CANONICAL_V3_DBS}
 
 
 def species_of(pid: str) -> str | None:
@@ -107,18 +119,73 @@ def read_alignment(path: Path) -> tuple[dict, dict]:
                       "ragged_alignments": len(ragged)}
 
 
-def entry_sequences(xml: Path) -> dict[str, str]:
+def entry_records(xml: Path) -> dict[str, tuple[str, str]]:
+    """accession -> (sequence, UniProt dataset: Swiss-Prot or TrEMBL)."""
     out = {}
     for _, e in ET.iterparse(xml, events=("end",)):
         if e.tag == NS + "entry":
-            out[e.find(NS + "accession").text] = "".join(e.find(NS + "sequence").text.split())
+            out[e.find(NS + "accession").text] = ("".join(e.find(NS + "sequence").text.split()), e.get("dataset"))
             e.clear()
     return out
+
+
+def leg1(db: Path, dbs: dict, proteins: dict, canonical_by_gene: dict, root: Path) -> dict:
+    """Check 3 for each search database: entry x gene pairs of the agrees view, and how many are
+    identical to the gene's tree protein, overall and per UniProt dataset."""
+    out = {}
+    for sp, (xml_name, table) in dbs.items():
+        xml = db / xml_name
+        if not xml.exists():
+            out[sp] = {"skipped": f"{xml} not present"}
+            continue
+        print(f"{sp}: reading {xml_name} ...", file=sys.stderr)
+        recs = entry_records(xml)
+        pairs_eg = set()
+        with open(root / "results" / table, encoding="utf-8") as fh:
+            for row in csv.DictReader(fh, delimiter="\t"):
+                if row["ensembl_xref_agrees"] == "true" and row["gene_id"] and not row["isoform"]:
+                    pairs_eg.add((row["entry_accession"], row["gene_id"]))
+        c, by_ds = collections.Counter(), collections.defaultdict(collections.Counter)
+        for entry, gene in pairs_eg:
+            pid = canonical_by_gene.get(gene)
+            if pid is None:
+                k = "gene_in_no_tree"
+            elif pid not in proteins:
+                k = "tree_protein_not_in_alignment"
+            elif entry not in recs:
+                k = "entry_not_in_database"
+            else:
+                k = "identical" if recs[entry][0] == proteins[pid][1] else "differs"
+            c[k] += 1
+            by_ds[recs[entry][1] if entry in recs else "not_in_database"][k] += 1
+            by_ds[recs[entry][1] if entry in recs else "not_in_database"]["entry_gene_pairs"] += 1
+        out[sp] = {"search_database": xml_name, "search_database_sha256": sha256_of(xml),
+                   "entry_gene_pairs": len(pairs_eg), **dict(c),
+                   "by_dataset": {k: dict(v) for k, v in sorted(by_ds.items())}}
+    return out
+
+
+def leg1_markdown(leg: dict) -> list[str]:
+    md = ["| species | entry x gene | identical | differs | gene in no tree | other |",
+          "|---|---:|---:|---:|---:|---:|"]
+    for sp, r in leg.items():
+        if "skipped" in r:
+            md.append(f"| {sp} | skipped: {r['skipped']} | | | | |")
+            continue
+        for label, x in [(sp, r)] + [(f"{sp}, {ds}", v) for ds, v in r.get("by_dataset", {}).items()
+                                     if len(r.get("by_dataset", {})) > 1]:
+            n = x["entry_gene_pairs"]
+            other = x.get("tree_protein_not_in_alignment", 0) + x.get("entry_not_in_database", 0)
+            md.append(f"| {label} | {n:,} | {x.get('identical', 0):,} ({100*x.get('identical', 0)/n:.1f}%) "
+                      f"| {x.get('differs', 0):,} ({100*x.get('differs', 0)/n:.1f}%) "
+                      f"| {x.get('gene_in_no_tree', 0):,} | {other:,} |")
+    return md
 
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--db-dir", default="F:/aging_data/db")
+    ap.add_argument("--databases", default="reviewed", choices=sorted(DB_SETS))
     args = ap.parse_args(argv)
     root = project_root()
     snap = root / "snapshots" / f"compara-{sources.RELEASE}"
@@ -126,6 +193,24 @@ def main(argv: list[str] | None = None) -> int:
 
     print("reading the alignment ...", file=sys.stderr)
     proteins, fmt = read_alignment(aln)
+
+    if args.databases != "reviewed":
+        # Check 3 only. The alignment and store checks do not depend on the search database.
+        con = duckdb.connect()
+        members = con.sql(f"select gene_id, canonical_protein_id from '{snap.as_posix()}/members/*.parquet'").fetchall()
+        leg = leg1(Path(args.db_dir), DB_SETS[args.databases], proteins, dict(members), root)
+        out = {"databases": args.databases, "alignment_file": aln.name, "alignment_sha256": sha256_of(aln),
+               "snapshot_manifest_sha256": sha256_of(snap / "manifest.json"), "leg1_entry_vs_tree_protein": leg}
+        stem = root / "results" / f"leg1_{args.databases}_e{sources.RELEASE}"
+        stem.with_suffix(".json").write_text(json.dumps(out, indent=2) + "\n", encoding="utf-8")
+        md = [f"# Leg 1 on the {args.databases} search databases: is the UniProt entry its gene's tree protein?", "",
+              f"`python -m logs_orthology.alignment_check --databases {args.databases}`, against "
+              f"`{aln.name}` (sha256 `{out['alignment_sha256'][:16]}…`).", "",
+              "Entries x genes from the agrees view (no isoforms). An entry count, not a residue rate.", "",
+              *leg1_markdown(leg)]
+        stem.with_suffix(".md").write_text("\n".join(md) + "\n", encoding="utf-8")
+        print("\n".join(md))
+        return 0
 
     with gzip.open(data_dir() / f"tree_proteins_e{sources.RELEASE}.tsv.gz", "wt", newline="") as fh:
         fh.write("protein_id\talignment_index\tsequence\n")
@@ -167,38 +252,10 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     # 3. leg 1 at entry grain
-    leg1 = {}
-    db = Path(args.db_dir)
-    for sp, (xml_name, table) in SEARCH_DBS.items():
-        xml = db / xml_name
-        if not xml.exists():
-            leg1[sp] = {"skipped": f"{xml} not present"}
-            continue
-        print(f"{sp}: reading {xml_name} ...", file=sys.stderr)
-        seqs = entry_sequences(xml)
-        pairs_eg = set()
-        with open(root / "results" / table, encoding="utf-8") as fh:
-            for row in csv.DictReader(fh, delimiter="\t"):
-                if row["ensembl_xref_agrees"] == "true" and row["gene_id"] and not row["isoform"]:
-                    pairs_eg.add((row["entry_accession"], row["gene_id"]))
-        c = collections.Counter()
-        for entry, gene in pairs_eg:
-            pid = canonical_by_gene.get(gene)
-            if pid is None:
-                c["gene_in_no_tree"] += 1
-            elif pid not in proteins:
-                c["tree_protein_not_in_alignment"] += 1
-            elif entry not in seqs:
-                c["entry_not_in_database"] += 1
-            elif seqs[entry] == proteins[pid][1]:
-                c["identical"] += 1
-            else:
-                c["differs"] += 1
-        leg1[sp] = {"search_database": xml_name, "search_database_sha256": sha256_of(xml),
-                    "entry_gene_pairs": len(pairs_eg), **dict(c)}
+    leg = leg1(Path(args.db_dir), SEARCH_DBS, proteins, canonical_by_gene, root)
 
     out = {"alignment_file": aln.name, "alignment_sha256": sha256_of(aln), "format": fmt,
-           "store": store, "leg1_entry_vs_tree_protein": leg1,
+           "store": store, "leg1_entry_vs_tree_protein": leg,
            "snapshot_manifest_sha256": sha256_of(snap / "manifest.json")}
     (root / "results" / f"alignment_check_e{sources.RELEASE}.json").write_text(
         json.dumps(out, indent=2) + "\n", encoding="utf-8")
@@ -232,18 +289,8 @@ def main(argv: list[str] | None = None) -> int:
         "",
         "Entries x genes from the agrees view (canonical entries, no isoforms). An entry count, not a residue rate.",
         "",
-        "| species | entry x gene | identical | differs | gene in no tree | other |",
-        "|---|---:|---:|---:|---:|---:|",
+        *leg1_markdown(leg),
     ]
-    for sp, r in leg1.items():
-        if "skipped" in r:
-            md.append(f"| {sp} | skipped: {r['skipped']} | | | | |")
-            continue
-        n = r["entry_gene_pairs"]
-        other = r.get("tree_protein_not_in_alignment", 0) + r.get("entry_not_in_database", 0)
-        md.append(f"| {sp} | {n:,} | {r.get('identical', 0):,} ({100*r.get('identical', 0)/n:.1f}%) "
-                  f"| {r.get('differs', 0):,} ({100*r.get('differs', 0)/n:.1f}%) "
-                  f"| {r.get('gene_in_no_tree', 0):,} | {other:,} |")
     (root / "results" / f"alignment_check_e{sources.RELEASE}.md").write_text("\n".join(md) + "\n", encoding="utf-8")
     print("\n".join(md))
     return 0

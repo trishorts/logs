@@ -1,0 +1,74 @@
+{
+  "databases": "canonical-v3",
+  "alignment_file": "Compara.116.protein_default.aa.fasta.gz",
+  "alignment_sha256": "6550e2957259c89a56dac6516c923246d02f1f3bbc5fbef2d94ec630e9321d36",
+  "snapshot_manifest_sha256": "fd0a9d8f5d211a91bdafd4c843ee4f0085be8cf0d7ff4fc779c5e6ebda5074aa",
+  "leg1_entry_vs_tree_protein": {
+    "homo_sapiens": {
+      "search_database": "UP000005640_all_genecentric_2026_03_agingPTM-v3.xml",
+      "search_database_sha256": "fd80cf8839f8c1551bddc2d24905df6098188196934f4f43fa8c3e9a276eb14c",
+      "entry_gene_pairs": 19627,
+      "identical": 17914,
+      "differs": 1572,
+      "gene_in_no_tree": 141,
+      "by_dataset": {
+        "Swiss-Prot": {
+          "identical": 17800,
+          "entry_gene_pairs": 19411,
+          "differs": 1567,
+          "gene_in_no_tree": 44
+        },
+        "TrEMBL": {
+          "identical": 114,
+          "entry_gene_pairs": 216,
+          "gene_in_no_tree": 97,
+          "differs": 5
+        }
+      }
+    },
+    "mus_musculus": {
+      "search_database": "UP000000589_all_genecentric_2026_03_agingPTM-v3.xml",
+      "search_database_sha256": "3c4ac3fb481e8ff1430d3f7a7aab4c2c83d44ae1de117ea942c8aefd5ffb4cc6",
+      "entry_gene_pairs": 19553,
+      "identical": 17085,
+      "differs": 2398,
+      "gene_in_no_tree": 70,
+      "by_dataset": {
+        "Swiss-Prot": {
+          "identical": 13705,
+          "entry_gene_pairs": 15832,
+          "differs": 2082,
+          "gene_in_no_tree": 45
+        },
+        "TrEMBL": {
+          "identical": 3380,
+          "entry_gene_pairs": 3721,
+          "differs": 316,
+          "gene_in_no_tree": 25
+        }
+      }
+    },
+    "rattus_norvegicus": {
+      "search_database": "UP000002494_all_genecentric_2026_03_agingPTM-v3.xml",
+      "search_database_sha256": "7f08fd3c9eac4efe0e0402b305aa5af43f155644094b6df93643afa3baeafe93",
+      "entry_gene_pairs": 14819,
+      "identical": 11463,
+      "differs": 3277,
+      "gene_in_no_tree": 79,
+      "by_dataset": {
+        "Swiss-Prot": {
+          "identical": 2841,
+          "entry_gene_pairs": 4960,
+          "differs": 2117,
+          "gene_in_no_tree": 2
+        },
+        "TrEMBL": {
+          "identical": 8622,
+          "entry_gene_pairs": 9859,
+          "differs": 1160,
+          "gene_in_no_tree": 77
+        }
+      }
+    }
+  }
+}
