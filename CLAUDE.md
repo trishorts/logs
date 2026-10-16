@@ -8,19 +8,25 @@ This folder is a `/project`-managed research project. **You are de facto working
 - **Goal:** A generic, versioned, gene-centric cross-species orthology layer that lets any
   multi-organism proteomics project join protein identifications across species without collapsing
   one-to-many orthology.
-- **Pick up at:** run the thread inbox. We owe nothing. Four answers are owed to us:
-  - **ptmQtl LOGS-P7**: which databases get residue rows, and the join key under their D35. The builder's
-    database list waits on this.
-  - **aging REQ-AGING-9**: a v2 "agrees or silent" gene view as their default? If yes, run `/oracle mzLib`
-    for a marker in `EnsemblGeneResolver`.
-  - **PXReprise PXR-O9** (snapshot hosting, with its licences) and **PXR-O10** (first canonical bundle
-    resolved: diff it against our canonical-v3 tables).
+- **Pick up at:** run the thread inbox. Then finish **#1382**'s on-merge steps. It merged on 2026-10-12 as
+  `866d9d88`, is in mzLib 1.0.595, and its card is already Shipped:
+  - run `/bridge-oracle pyMzLib` to project `ParseAccession`. pyMzLib #79 bumps to 1.0.595, so check it first;
+  - tell **dataRepo** (022 promised this) and **PXReprise** that it merged. Neither is sent yet; ask the user first.
 
-  Then `gh pr view <n> --repo smith-chem-wisc/mzLib --json state,reviewDecision` for **1465**
-  (`ComparaGeneTreeAlignment`, opened 2026-10-11, six referees) and **1382** (`ParseAccession`: one approval,
-  needs a second; the user chose not to nudge). On a merge, move its board #19 card to Shipped, and:
-  - for 1382: run `/bridge-oracle pyMzLib` to project it, then tell dataRepo (022 promised this);
-  - for 1465: delete the local branch `backup/compara-gene-tree-alignment-pre-rebase`.
+  Both answers we waited on are in (read 2026-10-16):
+  - **ptmQtl 011 (LOGS-P7):** residue rows go to every proteome file any of aging's deposits was searched
+    against. They ask for rows keyed by accession plus protein-sequence sha256, with the D35 15-residue window
+    on each row. We have not accepted that yet. Check whether mouse agingPTM-v2 (`7eee5e64`) has the same
+    sequences as `fb52debf`.
+  - **aging 022 (REQ-AGING-9): yes** to "agrees or silent" under v2. Name the three states, and version the
+    definition. Next: `/oracle mzLib` for the marker in `EnsemblGeneResolver`.
+  - Still owed to us: **PXReprise PXR-O9** (snapshot hosting, with its licences) and **PXR-O10** (first
+    canonical bundle resolved: diff it against our canonical-v3 tables).
+
+  The only open logs PR is **1465** (`ComparaGeneTreeAlignment`). On 2026-10-16 it had both labels, green
+  checks including `integration`, nbollis approved and five referees pending. Check it with
+  `gh pr view 1465 --repo smith-chem-wisc/mzLib --json state,reviewDecision`. On merge: move its board #19
+  card to Shipped, delete the local branch `backup/compara-gene-tree-alignment-pre-rebase`, and tell PXReprise.
 
   **Stacked PRs stay drafts in the fork until their base merges** (user, 2026-10-06).
   **Next build: the residue-correspondence builder** (`DEF-RESIDUE-CORRESPONDENCE v1`, 13 outcomes), on
@@ -28,7 +34,7 @@ This folder is a `/project`-managed research project. **You are de facto working
   residue-level `not_on_ensembl_protein` rate that 009 promised. The oracle verdict is in
   `design/ORACLE_residue_correspondence.md`; the MSA facts are in `results/alignment_check_e116.md`.
 
-  #1381 (store) merged on 2026-10-06 and #1428 on 2026-10-10. The release `orthology-compara-116-b63a3331`
+  #1381 (store) merged on 2026-10-06, #1428 on 2026-10-10, and #1382 on 2026-10-12. The release `orthology-compara-116-b63a3331`
   is final, not a pre-release. The canonical v3 databases resolve on v1 unchanged (2026-10-11). See `RESUME.md`.
 
 ## Things that will bite you here
@@ -135,6 +141,10 @@ This folder is a `/project`-managed research project. **You are de facto working
 32. **`tools/ResolveSearchDb` builds against the old `code/mzLib-ensembl-genes` pin**, which still matches the
     resolver in 1.0.594 (checked 2026-10-11). After a resolver change, re-check this, or the measurement
     silently uses old code. `engine_parity.py` compares it with pyMzLib.
+33. **A merge is not the end of a PR's work.** #1382 merged on 2026-10-12, and four days later its card still
+    said In review and nobody had been told. Check `state` for every PR on board #19 at pickup, not only
+    `reviewDecision`. In a board audit, a referee who has already reviewed no longer shows in
+    `reviewRequests`, so count `latestReviews` too.
 
 ## Running things
 

@@ -488,3 +488,39 @@ chose to do nothing about the missing second approval. dataRepo 032 needs no rep
 answer then goes to both dataRepo and PXReprise, since D41 makes per-database work an ingest step.
 
 All new numbers are pinned (`test_reported_claims.py`, 31/31).
+
+## 2026-10-16 - #1382 merged; LOGS-P7 and REQ-AGING-9 answered; board #19 audited
+
+**What came in.** #1382 (`VariantApplication.ParseAccession`) merged on 2026-10-12 as `866d9d88`, after pcruzparri
+gave the second approval the user had chosen not to chase. It is in mzLib 1.0.595 (released 2026-10-15), and
+pyMzLib's bump to 1.0.595 is open as pyMzLib #79. Nobody had done the on-merge steps, so its board #19 card still
+said In review. It now says Shipped. The two other on-merge steps are not done: `/bridge-oracle pyMzLib` to
+project `ParseAccession`, then the note to dataRepo that 022 promised. Under the user's 2026-10-07 rule, PXReprise
+should hear about the merge too.
+
+**Board audit (user's ask).** #1465 is the only logs PR still open. Its card says In review. It carries
+`ready for review` and `ready-for-agent`, and all five checks are green, including `integration`, so it does not
+get "Breaks Integration Tests". Five referees are requested, and the sixth, nbollis, has already approved.
+GitHub removes a referee's request once they review, so "six requested" means requested plus reviewed. The
+branch is behind master but mergeable. logs has no drafts: fork #8 closed when it went upstream as #1465. The
+other fork drafts (#5, #6, #7, #10) and fork #4 belong to other projects and were left alone. An earlier
+backtick-quoted search, `gh search prs '"Project of origin: \`logs\`"'`, was rejected as invalid syntax.
+`gh search prs "project-of-origin logs" --owner smith-chem-wisc --state open` works.
+
+**ptmQtl 011 answers LOGS-P7 with option (c), a rule.** Residue rows go to every proteome file that any of
+aging's deposits was searched against, now and later. They ask that rows be keyed by the protein: the accession
+plus the sha256 of the protein sequence. `search_database_sha256` stays as provenance only. They also ask that
+each row carry the D35 15-residue window (the site plus 7 residues on each side, `_` past either end, taken from
+the aligned sequence). They join on accession and position, and keep a row only if its window matches the site's.
+Of aging's 113 bundles, 94 used our six 009 files, 17 used the canonical v3 files, and 2 used a file we have not
+seen: mouse reviewed agingPTM-v2, `7eee5e64...`, 17,277 entries. It has the same entry count as its base
+`fb52debf`. If its sequences also match, it adds no alignment. Option (b) would have left 94 bundles without
+rows. We have not yet accepted the key and window. They are requests to fold into DEF-RESIDUE-CORRESPONDENCE.
+
+**aging 022 answers REQ-AGING-9: yes.** Under v2, their default view is "Ensembl agrees, or Ensembl has never
+heard of the accession and UniProt links a gene". "Ensembl disagrees" stays out. They make two requests: the rows
+should name the three states (agrees, silent, disagrees), so that "agrees only" can still be asked for; and the
+definition should be versioned, so that a v1 number is never read as a v2 one. That unblocks `/oracle mzLib` for
+the marker in `EnsemblGeneResolver`, then DEF-GENE-RESOLUTION v2.
+
+Nothing was built or measured this session, and no message was sent.

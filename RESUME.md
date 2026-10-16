@@ -129,33 +129,44 @@ Each of these cost real time on 2026-09-22.
 
 ## Pick up at
 
-**Next action:** run the thread inbox. Nothing is owed by us. Four answers are owed **to** us, and each one
-decides work:
-- **ptmQtl LOGS-P7** (010-logs): which search databases get residue rows, and the join key under their D35
-  (sites pool by 15-residue window; the database is provenance only). **The builder's database list waits on this.**
-- **aging REQ-AGING-9** (021-logs): would they take a v2 "agrees or silent" gene view as their default? If yes,
-  run `/oracle mzLib` for a marker in `EnsemblGeneResolver`, then write `DEF-GENE-RESOLUTION v2`.
-- **PXReprise PXR-O9** (009-logs: where the orthology snapshot is hosted under D41, with its licences) and
-  **PXR-O10** (010-logs: tell us when the first canonical bundle is resolved). On O10, diff its rows against
-  `results/search_db_<sp>_canonical-v3_e116.tsv`, which is machine-local; rebuild it with the commands below.
+**Next action (2026-10-16):** run the thread inbox, then finish #1382's on-merge steps. #1382
+(`VariantApplication.ParseAccession`) **merged on 2026-10-12** as `866d9d88` and is in mzLib 1.0.595. Its board
+card is already Shipped. Still to do:
+1. Run `/bridge-oracle pyMzLib` to project `ParseAccession`. pyMzLib #79 bumps the pin to 1.0.595, so check
+   `gh pr view 79 --repo smith-chem-wisc/pyMzLib --json state` first and stack on it if it is still open.
+2. Tell **dataRepo** (022 promised this) and **PXReprise** (user rule, 2026-10-07: merges that touch their
+   pipeline) that it has merged. Neither has been sent. Ask the user before posting.
 
-Then check the open PRs:
+Both answers we were waiting on came in on 2026-10-11 and were read on 2026-10-16. Each one unblocks a build:
+- **ptmQtl LOGS-P7 (011): a rule, not a list.** Residue rows go to every proteome file that any of aging's
+  deposits was searched against. ptmQtl asks for rows keyed by **accession + sha256 of the protein sequence**
+  (the database sha256 is provenance only), with the **D35 15-residue window** on each row. We have not
+  accepted those yet: fold them into `DEF-RESIDUE-CORRESPONDENCE` and say so in the reply. One file is new to
+  us: mouse reviewed agingPTM-v2, `7eee5e64…`, 17,277 entries. Check whether its sequences equal `fb52debf`'s.
+- **aging REQ-AGING-9 (022): yes.** "Agrees or silent" becomes aging's default under v2, and "disagrees" stays
+  out. Their conditions: name the three states apart in the rows, and version the definition. Next: run
+  `/oracle mzLib` for the marker in `EnsemblGeneResolver`, then write `DEF-GENE-RESOLUTION v2`.
+
+Still owed to us: **PXReprise PXR-O9** (009-logs: where the orthology snapshot is hosted under D41, with its
+licences) and **PXR-O10** (010-logs: tell us when the first canonical bundle is resolved). On O10, diff its rows
+against `results/search_db_<sp>_canonical-v3_e116.tsv`, which is machine-local. Rebuild it with the commands below.
+
+The one open logs PR:
 
 ```powershell
-gh pr view 1465 --repo smith-chem-wisc/mzLib --json state,reviewDecision,comments   # ComparaGeneTreeAlignment (opened 2026-10-11)
-gh pr view 1382 --repo smith-chem-wisc/mzLib --json state,reviewDecision,comments   # VariantApplication.ParseAccession
+gh pr view 1465 --repo smith-chem-wisc/mzLib --json state,reviewDecision,reviewRequests,latestReviews   # ComparaGeneTreeAlignment (opened 2026-10-11)
 gh pr checks 1465 --repo smith-chem-wisc/mzLib
 ```
 
-- **#1382** has one approval (Alexander-Sol, 2026-10-08), green CI and no conflicts. It is blocked only on a
-  second approval. The user chose (2026-10-11) not to nudge.
-- **#1465** is #8's single commit rebased onto master (`c96fafee0`), with the six referees requested.
+- **#1465** is #8's single commit rebased onto master (`c96fafee0`). On 2026-10-16 its card said In review. It
+  has both labels and all five checks green, including `integration`, so it gets no "Breaks Integration Tests"
+  label. nbollis has approved, and the other five referees are still requested. GitHub removes a request once
+  the referee reviews. The branch is behind master but mergeable.
+- logs has **no draft PRs**. Fork #8 closed when #1465 went upstream. The other fork drafts belong to other
+  projects. To list logs PRs: `gh search prs "project-of-origin logs" --owner smith-chem-wisc --state open`.
 
-**On a merge:**
-- move that PR's board #19 card to Shipped;
-- for #1382: run `/bridge-oracle pyMzLib` to project `ParseAccession`, then tell dataRepo (022 promised this);
-- for #1465: delete the local branch `backup/compara-gene-tree-alignment-pre-rebase` in
-  `code/mzLib-gene-tree-alignment`.
+**On #1465's merge:** move its board #19 card to Shipped, delete the local branch
+`backup/compara-gene-tree-alignment-pre-rebase` in `code/mzLib-gene-tree-alignment`, and tell PXReprise.
 
 **Stacked PRs stay drafts in the fork until their base merges** (user, 2026-10-06).
 
@@ -174,7 +185,7 @@ with the first build. Pinned by-entry leg-1 rates: reviewed 91.6 / 86.5 / 57.2%,
 repository. Under D41 that is probably an engine keyed per search database and run at ingest, like
 `logs.resolve_genes`.
 
-**Waiting on others:** the four answers above, and reviews of #1382 and #1465.
+**Waiting on others:** PXR-O9 and PXR-O10, and the reviews of #1465.
 
 **State on 2026-10-11.**
 - **#1381 merged** (2026-10-06, squash `11c85118`) and **#1428 merged** (2026-10-10, `8fc0840e`). Both cards are
@@ -326,13 +337,13 @@ python tests/test_contracts.py          # 10 contract tests
 
 <!-- BEGIN GENERATED -- render_resume.py owns this block; edit state.yaml, not here -->
 
-**logs** &middot; phase **BUILD** (4/10) &middot; created 2026-09-22 &middot; rendered 2026-10-11
+**logs** &middot; phase **BUILD** (4/10) &middot; created 2026-09-22 &middot; rendered 2026-10-16
 
 | | |
 |---|---|
-| Commits | 134 |
+| Commits | 137 |
 | Sync | [`trishorts/logs`](https://github.com/trishorts/logs) |
-| Locked decisions | 52 |
+| Locked decisions | 54 |
 | Open gaps | 10 |
 | Gate items skipped | 2 |
 

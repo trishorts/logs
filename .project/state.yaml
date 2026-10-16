@@ -438,6 +438,21 @@ decisions:
       corpus-wide recompute at publish. Gene resolution and residue rows are per SEARCH DATABASE, not per
       deposit: skip a database already resolved. The orthology snapshot is reference data, needed once
       beside the catalog (PXR-O9 asks where it is hosted).
+  - date: 2026-10-16
+    text: >-
+      RESIDUE ROWS GO TO EVERY PROTEOME FILE ANY OF AGING'S DEPOSITS WAS SEARCHED AGAINST (ptmQtl 011, LOGS-P7
+      option c, read 2026-10-16). It is a rule, not a list, so a new database is covered without anyone asking.
+      Option b (canonical only) would have left 94 of aging's 113 bundles without rows. Today that is our six
+      009 files, the three canonical v3 files, and mouse reviewed agingPTM-v2 (7eee5e64..., 17,277 entries; if
+      its sequences equal fb52debf's it adds no alignment). ptmQtl ASKS, and we have not yet accepted, that rows
+      be keyed by accession + sha256 of the protein sequence (database sha256 = provenance only), with the D35
+      15-residue window on every row (7 each side, `_` past the ends, from the aligned sequence).
+  - date: 2026-10-16
+    text: >-
+      AGING TAKES "AGREES OR SILENT" AS ITS DEFAULT UNDER v2 (aging 022, REQ-AGING-9 yes). "Ensembl disagrees"
+      stays out of the default. Their conditions: name the three states apart in the rows (agrees / silent /
+      disagrees), so "agrees only" stays queryable, and version the definition so a v1 number is never read as
+      v2. v1 stays the delivered definition until v2 is built.
 
 gaps:
   - >-
@@ -451,9 +466,10 @@ gaps:
     mzLib home (ORACLE.md said accession normalization -> MzLibUtil ClassExtensions; run /oracle mzLib
     first) before a search reports variant accessions. PORTED 2026-09-28; MOVED 2026-09-30 (user) to Omics VariantApplication.ParseAccession, the inverse of GetAccession,
     returning an Omics.BioPolymer.ProteoformAccession record; branch feat/proteoform-accession @ 5e323463f (code/mzLib-proteoform-accession), PR #1382 (board #19 In review); parity with
-    normalize() 78,774 accessions, 0 differ. 2026-10-11: Alexander-Sol APPROVED (10-08), CI green, mergeable, BLOCKED
-    on a second approval; the user chose not to nudge. PR head 620e8ab0 = a master merge on top of 5e323463f.
-    Still: merge, pyMzLib projection (/bridge-oracle), then tell dataRepo (022 promised).
+    normalize() 78,774 accessions, 0 differ. MERGED 2026-10-12 as 866d9d88 (Alexander-Sol 10-08 and pcruzparri
+    10-12 approved); it is in mzLib 1.0.595 (2026-10-15); board #19 Shipped 2026-10-16.
+    Still: pyMzLib projection (/bridge-oracle pyMzLib; pyMzLib #79 bumps to 1.0.595), then tell dataRepo (022
+    promised) and PXReprise (merge notice, user rule 2026-10-07).
     LOGS-D3 CLOSED 2026-09-27 (dataRepo 023: 4,886 of 8,180
     stored rat accessions, 59.7%, by the agrees view; 024-logs explained the 44 it drops: absent from
     Ensembl's xref, 42 genes xref'd to TrEMBL only, 2 with no xref; pinned).
@@ -481,8 +497,10 @@ gaps:
     residue-correspondence builder itself (legs 1-3 + isoform/variant edges) on mzLib master (#1428 MERGED
     2026-10-10; leg-2 reader upstream as #1465, opened 2026-10-11), and the residue-level not_on_ensembl_protein
     rate promised in 009. 2026-10-11 (010-logs): on canonical v3, rat leg 1 is 77.4% exact (TrEMBL 87.5%),
-    not 57.2%. ITS DATABASE LIST WAITS ON LOGS-P7: searches move to canonical and ptmQtl D35 pools by
-    15-residue window (database = provenance), so which databases get rows, and on what join key?
+    not 57.2%. LOGS-P7 ANSWERED (011-ptmQtl, read 2026-10-16; see decisions): every proteome file any of
+    aging's deposits was searched against. Still to settle with ptmQtl: their requested key (accession +
+    protein-sequence sha256) and the D35 window column, both into DEF-RESIDUE-CORRESPONDENCE; and check
+    whether mouse agingPTM-v2 (7eee5e64) has the same sequences as fb52debf.
   - >-
     ORTHOLOGY STORE NOT YET ACTIVE IN ANY CONSUMER (2026-10-06). The released tar is readable now
     (DuckDB, dataRepo 029) - #1381 is needed only to BUILD new snapshots. 031-logs asked dataRepo for a
@@ -502,9 +520,10 @@ gaps:
   - >-
     v2 GENE VIEW "agrees or silent" (2026-10-11, proposed not promised). `ensembl_xref_agrees = false` marks
     both "Ensembl links this accession to another gene" and "Ensembl has never heard of the accession"; on
-    canonical v3 every dropped TrEMBL row is the second kind. Waiting on aging REQ-AGING-9 (021-logs). If
-    yes: /oracle mzLib for a marker in EnsemblGeneResolver (additive column vs a third value), then a
-    DEF-GENE-RESOLUTION v2, pyMzLib and dataRepo. search_db.py already counts it (agree_or_silent_covered).
+    canonical v3 every dropped TrEMBL row is the second kind. aging said YES (022, REQ-AGING-9; see decisions):
+    name the three states, version the definition. NEXT: /oracle mzLib for a marker in EnsemblGeneResolver
+    (additive column vs a third value), then a DEF-GENE-RESOLUTION v2, pyMzLib and dataRepo. search_db.py
+    already counts it (agree_or_silent_covered).
   - >-
     RELEASE TAR CARRIES NO LICENCE FILE (found 2026-10-11). The licences (data CC-BY-4.0, views.sql
     LGPL-3.0) are in the repo's LICENSING.md, not in compara-116.tar or its manifest. A copy hosted
@@ -574,7 +593,7 @@ repos:
     branch: feat/proteoform-accession
     base_clone: 'E:\GitClones\mzLib'
     pinned: 5e323463f54eca14f4c261dbdcf792be713b4519
-    pr: "https://github.com/smith-chem-wisc/mzLib/pull/1382 (open; Alexander-Sol approved 2026-10-08, needs a second approval; PR head 620e8ab0 is a master merge on top of the pin; VariantApplication.ParseAccession, the LOGS-D2 rule)"
+    pr: "https://github.com/smith-chem-wisc/mzLib/pull/1382 (MERGED 2026-10-12 as 866d9d88, in mzLib 1.0.595; board #19 Shipped; VariantApplication.ParseAccession, the LOGS-D2 rule)"
   - name: mzLib
     worktree: code/mzLib-residue-aligner
     branch: feat/protein-pairwise-alignment
