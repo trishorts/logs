@@ -8,25 +8,26 @@ This folder is a `/project`-managed research project. **You are de facto working
 - **Goal:** A generic, versioned, gene-centric cross-species orthology layer that lets any
   multi-organism proteomics project join protein identifications across species without collapsing
   one-to-many orthology.
-- **Pick up at:** run the thread inbox. Then finish **#1382**'s on-merge steps. It merged on 2026-10-12 as
-  `866d9d88`, is in mzLib 1.0.595, and its card is already Shipped:
-  - run `/bridge-oracle pyMzLib` to project `ParseAccession`. pyMzLib #79 bumps to 1.0.595, so check it first;
-  - tell **dataRepo** (022 promised this) and **PXReprise** that it merged. Neither is sent yet; ask the user first.
+- **Pick up at (2026-11-10):** run the thread inbox. Nobody is waiting on us, and no logs PR is open
+  (board #19: all six Shipped). Open items:
+  - **dataRepo has not been told** that #1382 (1.0.595) and #1465 (1.0.596) merged. Our 022 promised it. Ask
+    the user before sending.
+  - **ptmQtl 011 (LOGS-P7), not yet accepted:** residue rows go to every proteome file any aging deposit was
+    searched against, keyed by accession plus protein-sequence sha256, with the D35 15-residue window on each row.
+    A reason to accept: agingPTM-v4 to v8 change only modified-residue features (PXReprise 011, 015, 016), so a
+    key on the file's sha256 would repeat identical rows for each build. Also check whether mouse agingPTM-v2
+    (`7eee5e64`) has the same sequences as `fb52debf`.
+  - **Next build: `DEF-GENE-RESOLUTION v2`.** aging 022 said yes to "agrees or silent". Name the three states
+    apart, and version the definition. Run `/oracle mzLib` for the marker in `EnsemblGeneResolver` first.
+  - **After that, the residue-correspondence builder.** aging 024 will wait for it (medium-low priority). They
+    need the isoform and variant legs, one row per site per search database, and a typed refusal for each gap.
 
-  Both answers we waited on are in (read 2026-10-16):
-  - **ptmQtl 011 (LOGS-P7):** residue rows go to every proteome file any of aging's deposits was searched
-    against. They ask for rows keyed by accession plus protein-sequence sha256, with the D35 15-residue window
-    on each row. We have not accepted that yet. Check whether mouse agingPTM-v2 (`7eee5e64`) has the same
-    sequences as `fb52debf`.
-  - **aging 022 (REQ-AGING-9): yes** to "agrees or silent" under v2. Name the three states, and version the
-    definition. Next: `/oracle mzLib` for the marker in `EnsemblGeneResolver`.
-  - Still owed to us: **PXReprise PXR-O9** (snapshot hosting, with its licences) and **PXR-O10** (first
-    canonical bundle resolved: diff it against our canonical-v3 tables).
-
-  The only open logs PR is **1465** (`ComparaGeneTreeAlignment`). On 2026-10-16 it had both labels, green
-  checks including `integration`, nbollis approved and five referees pending. Check it with
-  `gh pr view 1465 --repo smith-chem-wisc/mzLib --json state,reviewDecision`. On merge: move its board #19
-  card to Shipped, delete the local branch `backup/compara-gene-tree-alignment-pre-rebase`, and tell PXReprise.
+  Done since 2026-10-16:
+  - #1465 merged on 2026-10-24 and is in mzLib 1.0.596.
+  - pyMzLib has `parse_accessions()` and `align()` (0.6.0) and `map_residues()` (0.7.0).
+  - PXReprise was told about both merges (013).
+  - PXR-O9, PXR-O10 and PXR-O11 are closed. 017: all 21 canonical artefacts in the store equal our rows
+    (`results/store_diff_canonical.md`).
 
   **Stacked PRs stay drafts in the fork until their base merges** (user, 2026-10-06).
   **Next build: the residue-correspondence builder** (`DEF-RESIDUE-CORRESPONDENCE v1`, 13 outcomes), on
@@ -146,6 +147,11 @@ This folder is a `/project`-managed research project. **You are de facto working
     `reviewDecision`. In a board audit, a referee who has already reviewed no longer shows in
     `reviewRequests`, so count `latestReviews` too.
 
+34. **Before comparing two numbers, check that they count the same set.** PXReprise 012 put rat's
+    `not_in_source` (3,042) beside our 3,445, and our 013 repeated the pairing. The 3,042 are Swiss-Prot entries
+    with no Ensembl dbReference. The 3,445 are TrEMBL entries the XML resolves but Ensembl's xref has never seen.
+    The two sets are disjoint (017).
+
 ## Running things
 
 ```powershell
@@ -157,7 +163,7 @@ python -m logs_orthology.resolve --reference          # -> results/resolution_hu
 python -m logs_orthology.resolve --accessions ids.tsv # accession[<TAB>contaminant] per line
 python tests/test_contracts.py         # 10 contract tests
 python tests/test_resolve.py           # 21 resolver contracts (last one reconciles on real data)
-python tests/test_reported_claims.py   # 31 claims already sent to a partner
+python tests/test_reported_claims.py   # 32 claims already sent to a partner
 python -m logs_orthology.manifest       # -> results/resolver_inputs_e116.{json,md}
 dotnet run --project tools/BuildGeneSet -c Release -- <gtf.gz> results/gene_sets/<Species>.116.genes.tsv.gz
 dotnet run --project tools/BuildOrthologySnapshot -c Release -- 116 data/compara results/gene_sets snapshots/compara-116 homo_sapiens mus_musculus rattus_norvegicus   # out dir "-" = check only
@@ -165,6 +171,7 @@ dotnet run --project tools/ResolveSearchDb -c Release -- <xml> <gtf.gz | genes.t
 python -m logs_orthology.search_db <out.tsv> [--species mus_musculus --out results/search_db_resolution_mouse] [--xml <search.xml>]
 python -m logs_orthology.engine_parity --out results/engine_parity_canonical-v3 <sp>=<xml>:<table> ...   # pyMzLib vs the C# rows
 python -m logs_orthology.alignment_check --databases canonical-v3   # leg 1 on the canonical v3 databases
+python -m logs_orthology.store_diff --out results/store_diff_canonical <sp>-<label>=<store artefact dir>:<our table | artefact dir> ...   # the store's rows vs ours (PXR-O10)
 ```
 
 Inputs live in `data/compara/` (gitignored, 673 MB, recorded in `data/PROVENANCE.md`).

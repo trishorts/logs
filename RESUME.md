@@ -129,51 +129,42 @@ Each of these cost real time on 2026-09-22.
 
 ## Pick up at
 
-**Next action (2026-10-16):** run the thread inbox, then finish #1382's on-merge steps. #1382
-(`VariantApplication.ParseAccession`) **merged on 2026-10-12** as `866d9d88` and is in mzLib 1.0.595. Its board
-card is already Shipped. Still to do:
-1. Run `/bridge-oracle pyMzLib` to project `ParseAccession`. pyMzLib #79 bumps the pin to 1.0.595, so check
-   `gh pr view 79 --repo smith-chem-wisc/pyMzLib --json state` first and stack on it if it is still open.
-2. Tell **dataRepo** (022 promised this) and **PXReprise** (user rule, 2026-10-07: merges that touch their
-   pipeline) that it has merged. Neither has been sent. Ask the user before posting.
+**Next action (2026-11-10):** run the thread inbox. Nobody is waiting on us, and no logs PR is open: all six cards
+on board #19 are Shipped. Open items, in order:
+1. **Tell dataRepo** that #1382 (mzLib 1.0.595) and #1465 (1.0.596) merged. Our 022 promised it, and it has not
+   been sent. Ask the user before posting.
+2. **Reply to ptmQtl on LOGS-P7 (their 011).** Residue rows go to every proteome file any aging deposit was
+   searched against, keyed by **accession + sha256 of the protein sequence**, with the **D35 15-residue window**
+   on each row. We have not accepted that yet: fold it into `DEF-RESIDUE-CORRESPONDENCE` and say so.
+   - A reason to accept: PXReprise has since built agingPTM-v4 to v8, and each changes only modified-residue
+     features (011, 015, 016). Keyed on the file's sha256, every build would repeat identical rows.
+   - Still to check: do mouse reviewed agingPTM-v2 (`7eee5e64…`) and `fb52debf` have the same sequences?
+3. **Build `DEF-GENE-RESOLUTION v2`** (aging 022: yes to "agrees or silent"). Name the three states apart in the
+   rows, and version the definition. Run `/oracle mzLib` for the marker in `EnsemblGeneResolver` first. Warn
+   PXReprise before it ships (013 and 017 promised that).
+4. **Then the residue-correspondence builder** (below). aging 024 will wait for it, at medium-low priority. It
+   needs the isoform and variant legs, one row per site per search database, and a typed refusal for each gap.
 
-Both answers we were waiting on came in on 2026-10-11 and were read on 2026-10-16. Each one unblocks a build:
-- **ptmQtl LOGS-P7 (011): a rule, not a list.** Residue rows go to every proteome file that any of aging's
-  deposits was searched against. ptmQtl asks for rows keyed by **accession + sha256 of the protein sequence**
-  (the database sha256 is provenance only), with the **D35 15-residue window** on each row. We have not
-  accepted those yet: fold them into `DEF-RESIDUE-CORRESPONDENCE` and say so in the reply. One file is new to
-  us: mouse reviewed agingPTM-v2, `7eee5e64…`, 17,277 entries. Check whether its sequences equal `fb52debf`'s.
-- **aging REQ-AGING-9 (022): yes.** "Agrees or silent" becomes aging's default under v2, and "disagrees" stays
-  out. Their conditions: name the three states apart in the rows, and version the definition. Next: run
-  `/oracle mzLib` for the marker in `EnsemblGeneResolver`, then write `DEF-GENE-RESOLUTION v2`.
-
-Still owed to us: **PXReprise PXR-O9** (009-logs: where the orthology snapshot is hosted under D41, with its
-licences) and **PXR-O10** (010-logs: tell us when the first canonical bundle is resolved). On O10, diff its rows
-against `results/search_db_<sp>_canonical-v3_e116.tsv`, which is machine-local. Rebuild it with the commands below.
-
-The one open logs PR:
-
-```powershell
-gh pr view 1465 --repo smith-chem-wisc/mzLib --json state,reviewDecision,reviewRequests,latestReviews   # ComparaGeneTreeAlignment (opened 2026-10-11)
-gh pr checks 1465 --repo smith-chem-wisc/mzLib
-```
-
-- **#1465** is #8's single commit rebased onto master (`c96fafee0`). On 2026-10-16 its card said In review. It
-  has both labels and all five checks green, including `integration`, so it gets no "Breaks Integration Tests"
-  label. nbollis has approved, and the other five referees are still requested. GitHub removes a request once
-  the referee reviews. The branch is behind master but mergeable.
-- logs has **no draft PRs**. Fork #8 closed when #1465 went upstream. The other fork drafts belong to other
-  projects. To list logs PRs: `gh search prs "project-of-origin logs" --owner smith-chem-wisc --state open`.
-
-**On #1465's merge:** move its board #19 card to Shipped, delete the local branch
-`backup/compara-gene-tree-alignment-pre-rebase` in `code/mzLib-gene-tree-alignment`, and tell PXReprise.
+**Done since 2026-10-16:**
+- **#1465 merged** on 2026-10-24 as `1b7d4986` and is in mzLib 1.0.596. Its card is Shipped, and the pre-rebase
+  backup branch was deleted (it pointed at `7e5920597`).
+- **pyMzLib** projects all three: `parse_accessions()` and `align()` in 0.6.0, and `map_residues()` in 0.7.0.
+- **The 2026-10-28 stock-take** (013 to PXReprise, 023 to aging) carried the merge notices. PXReprise answered
+  PXR-O11 (014): the search stage will check MetaMorpheus's database SHA-256 at its first post-1.1.12 pin.
+  aging answered AGING-O1 (024).
+- **PXR-O9 and PXR-O10 are closed** (PXReprise 012; our 017).
+  - Every canonical `logs.resolve_genes` artefact in the store equals our rows. That is 21 artefacts:
+    agingPTM-v3 to v8, on mzLib 1.0.593 and 1.0.595 (`results/store_diff_canonical.md`,
+    `logs_orthology.store_diff`).
+  - 017 also corrected our 013. Rat's 3,042 `not_in_source` and our 3,445 xref-silent TrEMBL entries are
+    disjoint sets, so there was no discrepancy.
 
 **Stacked PRs stay drafts in the fork until their base merges** (user, 2026-10-06).
 
 **The next build is the residue-correspondence builder** (`DEF-RESIDUE-CORRESPONDENCE v1`, 13 outcomes, in
 `design/DEFINITIONS.md`), written on smith/master. Its pieces:
 - legs 1 and 3 use `Omics.SequenceAlignment.PairwiseAligner` (#1428, merged);
-- leg 2 uses `ComparaGeneTreeAlignment` (#1465, in review). Stack on #1465's branch, or wait for it to merge;
+- leg 2 uses `ComparaGeneTreeAlignment` (#1465, merged in 1.0.596);
 - the `variant` edge reuses `VariantApplication.RestoreModificationIndex` (oracle).
 
 The oracle verdict and conventions are in `design/ORACLE_residue_correspondence.md`. Run `/oracle mzLib` again
@@ -185,7 +176,7 @@ with the first build. Pinned by-entry leg-1 rates: reviewed 91.6 / 86.5 / 57.2%,
 repository. Under D41 that is probably an engine keyed per search database and run at ingest, like
 `logs.resolve_genes`.
 
-**Waiting on others:** PXR-O9 and PXR-O10, and the reviews of #1465.
+**Waiting on others:** nothing (2026-11-10).
 
 **State on 2026-10-11.**
 - **#1381 merged** (2026-10-06, squash `11c85118`) and **#1428 merged** (2026-10-10, `8fc0840e`). Both cards are
@@ -314,7 +305,7 @@ Sanity-check before changing anything:
 
 ```powershell
 $env:PYTHONPATH = "E:\CodeReview\logs\src"
-python tests/test_reported_claims.py    # 31 claims already sent to a partner
+python tests/test_reported_claims.py    # 32 claims already sent to a partner
 python -m logs_orthology.manifest       # regenerate results/resolver_inputs_e116.{json,md}
 python tests/test_resolve.py            # 21 resolver contracts
 python tests/test_contracts.py          # 10 contract tests
@@ -337,11 +328,11 @@ python tests/test_contracts.py          # 10 contract tests
 
 <!-- BEGIN GENERATED -- render_resume.py owns this block; edit state.yaml, not here -->
 
-**logs** &middot; phase **BUILD** (4/10) &middot; created 2026-09-22 &middot; rendered 2026-10-16
+**logs** &middot; phase **BUILD** (4/10) &middot; created 2026-09-22 &middot; rendered 2026-11-10
 
 | | |
 |---|---|
-| Commits | 137 |
+| Commits | 149 |
 | Sync | [`trishorts/logs`](https://github.com/trishorts/logs) |
 | Locked decisions | 54 |
 | Open gaps | 10 |
@@ -357,5 +348,7 @@ python tests/test_contracts.py          # 10 contract tests
 | `code/mzLib-proteoform-accession` | feat/proteoform-accession | `5e323463` | `5e323463` | at pin |
 | `code/mzLib-residue-aligner` | feat/protein-pairwise-alignment | `2a5f418b` | `2a5f418b` | at pin |
 | `code/mzLib-gene-tree-alignment` | feat/compara-gene-tree-alignment | `c96fafee` | `c96fafee` | at pin |
+
+> **1 document(s) in `design/` not referenced above** -- `NOTE_FROM_USER_2026-10-21_github-actions-minutes.md`. Add a line for each, or say why not.
 
 <!-- END GENERATED -->

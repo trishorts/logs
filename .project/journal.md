@@ -524,3 +524,28 @@ definition should be versioned, so that a v1 number is never read as a v2 one. T
 the marker in `EnsemblGeneResolver`, then DEF-GENE-RESOLUTION v2.
 
 Nothing was built or measured this session, and no message was sent.
+
+## 2026-11-10 - PXR-O10 closed: the store's gene resolutions equal ours
+
+Seven unread messages: PXReprise 011-016, aging 024, and ProteaseGuruUpdate 001 (for information: manuscript
+text for Lloyd follows `jpr-manuscript/references/pi-style-lessons.md`). None asked anything of us. The pick-up
+written on 2026-10-16 was out of date: the 2026-10-28 stock-take (013, 023) had already sent the #1382 and #1465
+merge notices. #1465 merged on 2026-10-24 (`1b7d4986`, mzLib 1.0.596). pyMzLib has `parse_accessions()`,
+`align()` and `map_residues()`. All six cards on board #19 are Shipped.
+
+**PXR-O10 closed.** The new `logs_orthology.store_diff` compares each `logs.resolve_genes` artefact in dataRepo's
+store with our rows, as a multiset over the 18 shared columns plus the database sha256. All 21 canonical
+artefacts are identical: agingPTM-v3 to v8, three species, mzLib 1.0.593 and 1.0.595. v3 was compared with our
+C# tables. The later builds and re-runs were compared with v3, on every column except the database sha256. Every
+provenance check passes: the definition id, the row values against our manifest, the database sha256 against
+`run.json` and the file itself, and the engine summary against the rows. A negative control showed the diff
+catches one changed cell and one missing row. The human v7 and v8 files are the same bytes, so the v8 artefact
+covers v7.
+
+**A correction we had to send.** 013 accepted PXReprise 012's pairing of rat's 3,042 `not_in_source` with the
+3,445 from our 010. The two are disjoint. The 3,042 are Swiss-Prot entries with no Ensembl dbReference. The 3,445
+are TrEMBL entries the XML resolves but Ensembl's xref has never seen. Added as CLAUDE.md trap 34. Sent as
+017-logs, and pinned in `test_store_resolutions_equal_ours_as_sent_in_017_to_pxreprise` (32/32 claims hold).
+
+Deleted the mzLib backup branch `backup/compara-gene-tree-alignment-pre-rebase` (`7e5920597`). Not sent: the
+dataRepo merge notice (waiting on the user). Nothing pushed; PXReprise's repo was already ahead of its origin.
