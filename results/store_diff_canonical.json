@@ -1,0 +1,1521 @@
+{
+  "generated": "2026-11-10",
+  "runs": [
+    {
+      "label": "human-v3-mzlib1.0.593",
+      "species": "homo_sapiens",
+      "reference": "results/search_db_human_canonical-v3_e116.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 21139,
+      "reference_rows": 21139,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "fd80cf8839f8c1551bddc2d24905df6098188196934f4f43fa8c3e9a276eb14c"
+      ],
+      "reference_database": [
+        "fd80cf8839f8c1551bddc2d24905df6098188196934f4f43fa8c3e9a276eb14c"
+      ],
+      "same_database": true,
+      "identical": true,
+      "provenance": {
+        "artefact": "75344a8616a35136",
+        "written_utc": "2026-10-09T07:22:47Z",
+        "search_database": "UP000005640_all_genecentric_2026_03_agingPTM-v3.xml",
+        "search_database_sha256": "fd80cf8839f8c1551bddc2d24905df6098188196934f4f43fa8c3e9a276eb14c",
+        "mzlib": "1.0.593",
+        "datarepo": "1.3.0",
+        "requested_for": [
+          "PXD012213"
+        ],
+        "rows": 21139,
+        "entries": 20652,
+        "outcome_by_entry": {
+          "multi_gene": 352,
+          "not_in_source": 964,
+          "off_primary_only": 162,
+          "resolved": 19174
+        },
+        "checks": {
+          "definition_id": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "human-v3-mzlib1.0.595",
+      "species": "homo_sapiens",
+      "reference": "75344a8616a35136",
+      "reference_kind": "artefact",
+      "compared_on": [
+        "definition_id",
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256"
+      ],
+      "only_in_store_columns": [],
+      "only_in_reference_columns": [],
+      "store_rows": 21139,
+      "reference_rows": 21139,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "fd80cf8839f8c1551bddc2d24905df6098188196934f4f43fa8c3e9a276eb14c"
+      ],
+      "reference_database": [
+        "fd80cf8839f8c1551bddc2d24905df6098188196934f4f43fa8c3e9a276eb14c"
+      ],
+      "same_database": true,
+      "identical": true,
+      "provenance": {
+        "artefact": "e0cda413d1a4c8af",
+        "written_utc": "2026-10-29T13:57:28Z",
+        "search_database": "UP000005640_all_genecentric_2026_03_agingPTM-v3.xml",
+        "search_database_sha256": "fd80cf8839f8c1551bddc2d24905df6098188196934f4f43fa8c3e9a276eb14c",
+        "mzlib": "1.0.595",
+        "datarepo": "1.4.0",
+        "requested_for": [
+          "PXD012213",
+          "PXD019279",
+          "PXD026219",
+          "PXD008344",
+          "PXD017475",
+          "PXD045887",
+          "PXD058855",
+          "PXD008934",
+          "PXD032757",
+          "PXD022180",
+          "PXD030939",
+          "PXD035299",
+          "PXD015239",
+          "PXD011740",
+          "PXD030773",
+          "PXD024216",
+          "PXD021069"
+        ],
+        "rows": 21139,
+        "entries": 20652,
+        "outcome_by_entry": {
+          "multi_gene": 352,
+          "not_in_source": 964,
+          "off_primary_only": 162,
+          "resolved": 19174
+        },
+        "checks": {
+          "definition_id": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "human-v4-mzlib1.0.593",
+      "species": "homo_sapiens",
+      "reference": "75344a8616a35136",
+      "reference_kind": "artefact",
+      "compared_on": [
+        "definition_id",
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256"
+      ],
+      "only_in_store_columns": [],
+      "only_in_reference_columns": [],
+      "store_rows": 21139,
+      "reference_rows": 21139,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "c11a9bc3d6c5ab8e60b109243956cd4d8d1fef3de05a447600dd3f6780475646"
+      ],
+      "reference_database": [
+        "fd80cf8839f8c1551bddc2d24905df6098188196934f4f43fa8c3e9a276eb14c"
+      ],
+      "same_database": false,
+      "identical": true,
+      "provenance": {
+        "artefact": "7f7f2b684146b23e",
+        "written_utc": "2026-10-18T03:04:50Z",
+        "search_database": "UP000005640_all_genecentric_2026_03_agingPTM-v4.xml",
+        "search_database_sha256": "c11a9bc3d6c5ab8e60b109243956cd4d8d1fef3de05a447600dd3f6780475646",
+        "mzlib": "1.0.593",
+        "datarepo": "1.3.2",
+        "requested_for": [
+          "PXD007049"
+        ],
+        "rows": 21139,
+        "entries": 20652,
+        "outcome_by_entry": {
+          "multi_gene": 352,
+          "not_in_source": 964,
+          "off_primary_only": 162,
+          "resolved": 19174
+        },
+        "checks": {
+          "definition_id": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "human-v4-mzlib1.0.595",
+      "species": "homo_sapiens",
+      "reference": "75344a8616a35136",
+      "reference_kind": "artefact",
+      "compared_on": [
+        "definition_id",
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256"
+      ],
+      "only_in_store_columns": [],
+      "only_in_reference_columns": [],
+      "store_rows": 21139,
+      "reference_rows": 21139,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "c11a9bc3d6c5ab8e60b109243956cd4d8d1fef3de05a447600dd3f6780475646"
+      ],
+      "reference_database": [
+        "fd80cf8839f8c1551bddc2d24905df6098188196934f4f43fa8c3e9a276eb14c"
+      ],
+      "same_database": false,
+      "identical": true,
+      "provenance": {
+        "artefact": "47d9df50be4d3ca7",
+        "written_utc": "2026-10-29T13:57:05Z",
+        "search_database": "UP000005640_all_genecentric_2026_03_agingPTM-v4.xml",
+        "search_database_sha256": "c11a9bc3d6c5ab8e60b109243956cd4d8d1fef3de05a447600dd3f6780475646",
+        "mzlib": "1.0.595",
+        "datarepo": "1.4.0",
+        "requested_for": [
+          "PXD007049",
+          "PXD008050",
+          "PXD035412",
+          "PXD007906",
+          "PXD069093",
+          "PXD013240",
+          "PXD010820",
+          "PXD011314",
+          "PXD010115",
+          "PXD041139",
+          "PXD075372",
+          "PXD073999",
+          "PXD009430",
+          "PXD067622",
+          "PXD028975",
+          "PXD024803",
+          "PXD028852",
+          "PXD049018",
+          "PXD050351",
+          "PXD023381",
+          "PXD018655",
+          "PXD029116",
+          "PXD022128",
+          "PXD032046",
+          "PXD027734",
+          "PXD030776",
+          "PXD058156",
+          "PXD025280",
+          "PXD024478",
+          "PXD013640",
+          "PXD006898",
+          "PXD007188",
+          "PXD015079"
+        ],
+        "rows": 21139,
+        "entries": 20652,
+        "outcome_by_entry": {
+          "multi_gene": 352,
+          "not_in_source": 964,
+          "off_primary_only": 162,
+          "resolved": 19174
+        },
+        "checks": {
+          "definition_id": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "human-v6-mzlib1.0.595",
+      "species": "homo_sapiens",
+      "reference": "75344a8616a35136",
+      "reference_kind": "artefact",
+      "compared_on": [
+        "definition_id",
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256"
+      ],
+      "only_in_store_columns": [],
+      "only_in_reference_columns": [],
+      "store_rows": 21139,
+      "reference_rows": 21139,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "b87d37b574ff86831ee38b6d086a8d567f61db8ab5d847851c0edd244cc34c66"
+      ],
+      "reference_database": [
+        "fd80cf8839f8c1551bddc2d24905df6098188196934f4f43fa8c3e9a276eb14c"
+      ],
+      "same_database": false,
+      "identical": true,
+      "provenance": {
+        "artefact": "5b01c0f81e893087",
+        "written_utc": "2026-10-30T12:40:22Z",
+        "search_database": "UP000005640_all_genecentric_2026_03_agingPTM-v6.xml",
+        "search_database_sha256": "b87d37b574ff86831ee38b6d086a8d567f61db8ab5d847851c0edd244cc34c66",
+        "mzlib": "1.0.595",
+        "datarepo": "1.4.0",
+        "requested_for": [
+          "PXD073999"
+        ],
+        "rows": 21139,
+        "entries": 20652,
+        "outcome_by_entry": {
+          "multi_gene": 352,
+          "not_in_source": 964,
+          "off_primary_only": 162,
+          "resolved": 19174
+        },
+        "checks": {
+          "definition_id": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "human-v8-mzlib1.0.595",
+      "species": "homo_sapiens",
+      "reference": "75344a8616a35136",
+      "reference_kind": "artefact",
+      "compared_on": [
+        "definition_id",
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256"
+      ],
+      "only_in_store_columns": [],
+      "only_in_reference_columns": [],
+      "store_rows": 21139,
+      "reference_rows": 21139,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "c1a9e88f9af099af369de1a9981509e99afc84535579e399c3c24384ed328fb2"
+      ],
+      "reference_database": [
+        "fd80cf8839f8c1551bddc2d24905df6098188196934f4f43fa8c3e9a276eb14c"
+      ],
+      "same_database": false,
+      "identical": true,
+      "provenance": {
+        "artefact": "9bb4a3f829d9b9b3",
+        "written_utc": "2026-11-09T02:16:53Z",
+        "search_database": "UP000005640_all_genecentric_2026_03_agingPTM-v8.xml",
+        "search_database_sha256": "c1a9e88f9af099af369de1a9981509e99afc84535579e399c3c24384ed328fb2",
+        "mzlib": "1.0.595",
+        "datarepo": "1.4.3",
+        "requested_for": [
+          "PXD003111"
+        ],
+        "rows": 21139,
+        "entries": 20652,
+        "outcome_by_entry": {
+          "multi_gene": 352,
+          "not_in_source": 964,
+          "off_primary_only": 162,
+          "resolved": 19174
+        },
+        "checks": {
+          "definition_id": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "mouse-v3-mzlib1.0.593",
+      "species": "mus_musculus",
+      "reference": "results/search_db_mouse_canonical-v3_e116.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 22383,
+      "reference_rows": 22383,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "3c4ac3fb481e8ff1430d3f7a7aab4c2c83d44ae1de117ea942c8aefd5ffb4cc6"
+      ],
+      "reference_database": [
+        "3c4ac3fb481e8ff1430d3f7a7aab4c2c83d44ae1de117ea942c8aefd5ffb4cc6"
+      ],
+      "same_database": true,
+      "identical": true,
+      "provenance": {
+        "artefact": "d4f02774cd6fa77f",
+        "written_utc": "2026-10-09T06:13:09Z",
+        "search_database": "UP000000589_all_genecentric_2026_03_agingPTM-v3.xml",
+        "search_database_sha256": "3c4ac3fb481e8ff1430d3f7a7aab4c2c83d44ae1de117ea942c8aefd5ffb4cc6",
+        "mzlib": "1.0.593",
+        "datarepo": "1.3.0",
+        "requested_for": [
+          "PXD012307"
+        ],
+        "rows": 22383,
+        "entries": 21860,
+        "outcome_by_entry": {
+          "multi_gene": 273,
+          "not_in_source": 1645,
+          "resolved": 19942
+        },
+        "checks": {
+          "definition_id": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "mouse-v3-mzlib1.0.595",
+      "species": "mus_musculus",
+      "reference": "d4f02774cd6fa77f",
+      "reference_kind": "artefact",
+      "compared_on": [
+        "definition_id",
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256"
+      ],
+      "only_in_store_columns": [],
+      "only_in_reference_columns": [],
+      "store_rows": 22383,
+      "reference_rows": 22383,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "3c4ac3fb481e8ff1430d3f7a7aab4c2c83d44ae1de117ea942c8aefd5ffb4cc6"
+      ],
+      "reference_database": [
+        "3c4ac3fb481e8ff1430d3f7a7aab4c2c83d44ae1de117ea942c8aefd5ffb4cc6"
+      ],
+      "same_database": true,
+      "identical": true,
+      "provenance": {
+        "artefact": "c7af1b4d1e83c061",
+        "written_utc": "2026-10-29T13:26:37Z",
+        "search_database": "UP000000589_all_genecentric_2026_03_agingPTM-v3.xml",
+        "search_database_sha256": "3c4ac3fb481e8ff1430d3f7a7aab4c2c83d44ae1de117ea942c8aefd5ffb4cc6",
+        "mzlib": "1.0.595",
+        "datarepo": "1.4.0",
+        "requested_for": [
+          "PXD031223",
+          "PXD038718"
+        ],
+        "rows": 22383,
+        "entries": 21860,
+        "outcome_by_entry": {
+          "multi_gene": 273,
+          "not_in_source": 1645,
+          "resolved": 19942
+        },
+        "checks": {
+          "definition_id": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "mouse-v4-mzlib1.0.593",
+      "species": "mus_musculus",
+      "reference": "d4f02774cd6fa77f",
+      "reference_kind": "artefact",
+      "compared_on": [
+        "definition_id",
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256"
+      ],
+      "only_in_store_columns": [],
+      "only_in_reference_columns": [],
+      "store_rows": 22383,
+      "reference_rows": 22383,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "f9cdd188fd7fa65d97792cbf9225704c921727e8fa4b3e4c41c41ffcea7cabd5"
+      ],
+      "reference_database": [
+        "3c4ac3fb481e8ff1430d3f7a7aab4c2c83d44ae1de117ea942c8aefd5ffb4cc6"
+      ],
+      "same_database": false,
+      "identical": true,
+      "provenance": {
+        "artefact": "d1ea170e2d0a0bb4",
+        "written_utc": "2026-10-18T03:04:59Z",
+        "search_database": "UP000000589_all_genecentric_2026_03_agingPTM-v4.xml",
+        "search_database_sha256": "f9cdd188fd7fa65d97792cbf9225704c921727e8fa4b3e4c41c41ffcea7cabd5",
+        "mzlib": "1.0.593",
+        "datarepo": "1.3.2",
+        "requested_for": [
+          "PXD057545"
+        ],
+        "rows": 22383,
+        "entries": 21860,
+        "outcome_by_entry": {
+          "multi_gene": 273,
+          "not_in_source": 1645,
+          "resolved": 19942
+        },
+        "checks": {
+          "definition_id": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "mouse-v4-mzlib1.0.595",
+      "species": "mus_musculus",
+      "reference": "d4f02774cd6fa77f",
+      "reference_kind": "artefact",
+      "compared_on": [
+        "definition_id",
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256"
+      ],
+      "only_in_store_columns": [],
+      "only_in_reference_columns": [],
+      "store_rows": 22383,
+      "reference_rows": 22383,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "f9cdd188fd7fa65d97792cbf9225704c921727e8fa4b3e4c41c41ffcea7cabd5"
+      ],
+      "reference_database": [
+        "3c4ac3fb481e8ff1430d3f7a7aab4c2c83d44ae1de117ea942c8aefd5ffb4cc6"
+      ],
+      "same_database": false,
+      "identical": true,
+      "provenance": {
+        "artefact": "b37e102402514d33",
+        "written_utc": "2026-10-29T13:26:43Z",
+        "search_database": "UP000000589_all_genecentric_2026_03_agingPTM-v4.xml",
+        "search_database_sha256": "f9cdd188fd7fa65d97792cbf9225704c921727e8fa4b3e4c41c41ffcea7cabd5",
+        "mzlib": "1.0.595",
+        "datarepo": "1.4.0",
+        "requested_for": [
+          "PXD048877",
+          "PXD041766"
+        ],
+        "rows": 22383,
+        "entries": 21860,
+        "outcome_by_entry": {
+          "multi_gene": 273,
+          "not_in_source": 1645,
+          "resolved": 19942
+        },
+        "checks": {
+          "definition_id": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "mouse-v5-mzlib1.0.593",
+      "species": "mus_musculus",
+      "reference": "d4f02774cd6fa77f",
+      "reference_kind": "artefact",
+      "compared_on": [
+        "definition_id",
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256"
+      ],
+      "only_in_store_columns": [],
+      "only_in_reference_columns": [],
+      "store_rows": 22383,
+      "reference_rows": 22383,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "e4e510a553a216943b238a0692c6fefdb111529d817607df0fff63c7db68b363"
+      ],
+      "reference_database": [
+        "3c4ac3fb481e8ff1430d3f7a7aab4c2c83d44ae1de117ea942c8aefd5ffb4cc6"
+      ],
+      "same_database": false,
+      "identical": true,
+      "provenance": {
+        "artefact": "599c784722448a08",
+        "written_utc": "2026-10-29T01:00:27Z",
+        "search_database": "UP000000589_all_genecentric_2026_03_agingPTM-v5.xml",
+        "search_database_sha256": "e4e510a553a216943b238a0692c6fefdb111529d817607df0fff63c7db68b363",
+        "mzlib": "1.0.593",
+        "datarepo": "1.3.6",
+        "requested_for": [
+          "PXD034590"
+        ],
+        "rows": 22383,
+        "entries": 21860,
+        "outcome_by_entry": {
+          "multi_gene": 273,
+          "not_in_source": 1645,
+          "resolved": 19942
+        },
+        "checks": {
+          "definition_id": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "mouse-v5-mzlib1.0.595",
+      "species": "mus_musculus",
+      "reference": "d4f02774cd6fa77f",
+      "reference_kind": "artefact",
+      "compared_on": [
+        "definition_id",
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256"
+      ],
+      "only_in_store_columns": [],
+      "only_in_reference_columns": [],
+      "store_rows": 22383,
+      "reference_rows": 22383,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "e4e510a553a216943b238a0692c6fefdb111529d817607df0fff63c7db68b363"
+      ],
+      "reference_database": [
+        "3c4ac3fb481e8ff1430d3f7a7aab4c2c83d44ae1de117ea942c8aefd5ffb4cc6"
+      ],
+      "same_database": false,
+      "identical": true,
+      "provenance": {
+        "artefact": "aa212cd1f4b94e27",
+        "written_utc": "2026-10-29T13:57:44Z",
+        "search_database": "UP000000589_all_genecentric_2026_03_agingPTM-v5.xml",
+        "search_database_sha256": "e4e510a553a216943b238a0692c6fefdb111529d817607df0fff63c7db68b363",
+        "mzlib": "1.0.595",
+        "datarepo": "1.4.0",
+        "requested_for": [
+          "PXD034590"
+        ],
+        "rows": 22383,
+        "entries": 21860,
+        "outcome_by_entry": {
+          "multi_gene": 273,
+          "not_in_source": 1645,
+          "resolved": 19942
+        },
+        "checks": {
+          "definition_id": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "mouse-v6-mzlib1.0.595",
+      "species": "mus_musculus",
+      "reference": "d4f02774cd6fa77f",
+      "reference_kind": "artefact",
+      "compared_on": [
+        "definition_id",
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256"
+      ],
+      "only_in_store_columns": [],
+      "only_in_reference_columns": [],
+      "store_rows": 22383,
+      "reference_rows": 22383,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "db47863bb689dcd50341bf257da93637ad25d5051b4b26096541408abb731fef"
+      ],
+      "reference_database": [
+        "3c4ac3fb481e8ff1430d3f7a7aab4c2c83d44ae1de117ea942c8aefd5ffb4cc6"
+      ],
+      "same_database": false,
+      "identical": true,
+      "provenance": {
+        "artefact": "34a6a17d4cd77e4d",
+        "written_utc": "2026-10-30T05:49:29Z",
+        "search_database": "UP000000589_all_genecentric_2026_03_agingPTM-v6.xml",
+        "search_database_sha256": "db47863bb689dcd50341bf257da93637ad25d5051b4b26096541408abb731fef",
+        "mzlib": "1.0.595",
+        "datarepo": "1.4.0",
+        "requested_for": [
+          "PXD061654"
+        ],
+        "rows": 22383,
+        "entries": 21860,
+        "outcome_by_entry": {
+          "multi_gene": 273,
+          "not_in_source": 1645,
+          "resolved": 19942
+        },
+        "checks": {
+          "definition_id": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "mouse-v7-mzlib1.0.595",
+      "species": "mus_musculus",
+      "reference": "d4f02774cd6fa77f",
+      "reference_kind": "artefact",
+      "compared_on": [
+        "definition_id",
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256"
+      ],
+      "only_in_store_columns": [],
+      "only_in_reference_columns": [],
+      "store_rows": 22383,
+      "reference_rows": 22383,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "23470872c8b2f6622ebe203bc8c7cd5616621e97e1f20b2c23cd1d94236899ad"
+      ],
+      "reference_database": [
+        "3c4ac3fb481e8ff1430d3f7a7aab4c2c83d44ae1de117ea942c8aefd5ffb4cc6"
+      ],
+      "same_database": false,
+      "identical": true,
+      "provenance": {
+        "artefact": "70e547e92fc7729f",
+        "written_utc": "2026-11-06T08:02:54Z",
+        "search_database": "UP000000589_all_genecentric_2026_03_agingPTM-v7.xml",
+        "search_database_sha256": "23470872c8b2f6622ebe203bc8c7cd5616621e97e1f20b2c23cd1d94236899ad",
+        "mzlib": "1.0.595",
+        "datarepo": "1.4.3",
+        "requested_for": [
+          "PXD042428"
+        ],
+        "rows": 22383,
+        "entries": 21860,
+        "outcome_by_entry": {
+          "multi_gene": 273,
+          "not_in_source": 1645,
+          "resolved": 19942
+        },
+        "checks": {
+          "definition_id": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "mouse-v8-mzlib1.0.595",
+      "species": "mus_musculus",
+      "reference": "d4f02774cd6fa77f",
+      "reference_kind": "artefact",
+      "compared_on": [
+        "definition_id",
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256"
+      ],
+      "only_in_store_columns": [],
+      "only_in_reference_columns": [],
+      "store_rows": 22383,
+      "reference_rows": 22383,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "a57e0e81e057c4613aed1431c27cf6be504a70b941fe0145473f27f8c4d2a6c8"
+      ],
+      "reference_database": [
+        "3c4ac3fb481e8ff1430d3f7a7aab4c2c83d44ae1de117ea942c8aefd5ffb4cc6"
+      ],
+      "same_database": false,
+      "identical": true,
+      "provenance": {
+        "artefact": "45b3ce0c75057c5e",
+        "written_utc": "2026-11-07T19:18:59Z",
+        "search_database": "UP000000589_all_genecentric_2026_03_agingPTM-v8.xml",
+        "search_database_sha256": "a57e0e81e057c4613aed1431c27cf6be504a70b941fe0145473f27f8c4d2a6c8",
+        "mzlib": "1.0.595",
+        "datarepo": "1.4.3",
+        "requested_for": [
+          "PXD035577"
+        ],
+        "rows": 22383,
+        "entries": 21860,
+        "outcome_by_entry": {
+          "multi_gene": 273,
+          "not_in_source": 1645,
+          "resolved": 19942
+        },
+        "checks": {
+          "definition_id": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "rat-v3-mzlib1.0.593",
+      "species": "rattus_norvegicus",
+      "reference": "results/search_db_rat_canonical-v3_e116.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 22464,
+      "reference_rows": 22464,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "7f08fd3c9eac4efe0e0402b305aa5af43f155644094b6df93643afa3baeafe93"
+      ],
+      "reference_database": [
+        "7f08fd3c9eac4efe0e0402b305aa5af43f155644094b6df93643afa3baeafe93"
+      ],
+      "same_database": true,
+      "identical": true,
+      "provenance": {
+        "artefact": "ffadfcf207ba3037",
+        "written_utc": "2026-10-09T17:40:01Z",
+        "search_database": "UP000002494_all_genecentric_2026_03_agingPTM-v3.xml",
+        "search_database_sha256": "7f08fd3c9eac4efe0e0402b305aa5af43f155644094b6df93643afa3baeafe93",
+        "mzlib": "1.0.593",
+        "datarepo": "1.3.0",
+        "requested_for": [
+          "PXD027971"
+        ],
+        "rows": 22464,
+        "entries": 21471,
+        "outcome_by_entry": {
+          "multi_gene": 153,
+          "not_in_source": 3042,
+          "off_primary_only": 955,
+          "resolved": 17321
+        },
+        "checks": {
+          "definition_id": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "rat-v3-mzlib1.0.595",
+      "species": "rattus_norvegicus",
+      "reference": "ffadfcf207ba3037",
+      "reference_kind": "artefact",
+      "compared_on": [
+        "definition_id",
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256"
+      ],
+      "only_in_store_columns": [],
+      "only_in_reference_columns": [],
+      "store_rows": 22464,
+      "reference_rows": 22464,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "7f08fd3c9eac4efe0e0402b305aa5af43f155644094b6df93643afa3baeafe93"
+      ],
+      "reference_database": [
+        "7f08fd3c9eac4efe0e0402b305aa5af43f155644094b6df93643afa3baeafe93"
+      ],
+      "same_database": true,
+      "identical": true,
+      "provenance": {
+        "artefact": "1a850d2e796bbb07",
+        "written_utc": "2026-10-29T13:57:58Z",
+        "search_database": "UP000002494_all_genecentric_2026_03_agingPTM-v3.xml",
+        "search_database_sha256": "7f08fd3c9eac4efe0e0402b305aa5af43f155644094b6df93643afa3baeafe93",
+        "mzlib": "1.0.595",
+        "datarepo": "1.4.0",
+        "requested_for": [
+          "PXD027971",
+          "PXD048720",
+          "PXD026608",
+          "PXD057490",
+          "PXD057499",
+          "PXD002467",
+          "PXD009212",
+          "PXD008990",
+          "PXD068498",
+          "PXD051203",
+          "PXD058248",
+          "PXD059520",
+          "PXD027754"
+        ],
+        "rows": 22464,
+        "entries": 21471,
+        "outcome_by_entry": {
+          "multi_gene": 153,
+          "not_in_source": 3042,
+          "off_primary_only": 955,
+          "resolved": 17321
+        },
+        "checks": {
+          "definition_id": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "rat-v4-mzlib1.0.593",
+      "species": "rattus_norvegicus",
+      "reference": "ffadfcf207ba3037",
+      "reference_kind": "artefact",
+      "compared_on": [
+        "definition_id",
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256"
+      ],
+      "only_in_store_columns": [],
+      "only_in_reference_columns": [],
+      "store_rows": 22464,
+      "reference_rows": 22464,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "0f606b275fc62d6f4bcf1ac4cb69179de4c2d1ed59a552657e7964530bbe05f4"
+      ],
+      "reference_database": [
+        "7f08fd3c9eac4efe0e0402b305aa5af43f155644094b6df93643afa3baeafe93"
+      ],
+      "same_database": false,
+      "identical": true,
+      "provenance": {
+        "artefact": "b69ca7d3fafc27d7",
+        "written_utc": "2026-10-18T03:05:05Z",
+        "search_database": "UP000002494_all_genecentric_2026_03_agingPTM-v4.xml",
+        "search_database_sha256": "0f606b275fc62d6f4bcf1ac4cb69179de4c2d1ed59a552657e7964530bbe05f4",
+        "mzlib": "1.0.593",
+        "datarepo": "1.3.2",
+        "requested_for": [
+          "PXD051644"
+        ],
+        "rows": 22464,
+        "entries": 21471,
+        "outcome_by_entry": {
+          "multi_gene": 153,
+          "not_in_source": 3042,
+          "off_primary_only": 955,
+          "resolved": 17321
+        },
+        "checks": {
+          "definition_id": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "rat-v4-mzlib1.0.595",
+      "species": "rattus_norvegicus",
+      "reference": "ffadfcf207ba3037",
+      "reference_kind": "artefact",
+      "compared_on": [
+        "definition_id",
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256"
+      ],
+      "only_in_store_columns": [],
+      "only_in_reference_columns": [],
+      "store_rows": 22464,
+      "reference_rows": 22464,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "0f606b275fc62d6f4bcf1ac4cb69179de4c2d1ed59a552657e7964530bbe05f4"
+      ],
+      "reference_database": [
+        "7f08fd3c9eac4efe0e0402b305aa5af43f155644094b6df93643afa3baeafe93"
+      ],
+      "same_database": false,
+      "identical": true,
+      "provenance": {
+        "artefact": "ccbcc0c1e724ddba",
+        "written_utc": "2026-10-29T13:57:53Z",
+        "search_database": "UP000002494_all_genecentric_2026_03_agingPTM-v4.xml",
+        "search_database_sha256": "0f606b275fc62d6f4bcf1ac4cb69179de4c2d1ed59a552657e7964530bbe05f4",
+        "mzlib": "1.0.595",
+        "datarepo": "1.4.0",
+        "requested_for": [
+          "PXD051644",
+          "PXD047293",
+          "PXD047292",
+          "PXD047289",
+          "PXD056458",
+          "PXD028157",
+          "PXD056433",
+          "PXD034432",
+          "PXD058253",
+          "PXD047288",
+          "PXD032044",
+          "PXD022737"
+        ],
+        "rows": 22464,
+        "entries": 21471,
+        "outcome_by_entry": {
+          "multi_gene": 153,
+          "not_in_source": 3042,
+          "off_primary_only": 955,
+          "resolved": 17321
+        },
+        "checks": {
+          "definition_id": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "rat-v6-mzlib1.0.595",
+      "species": "rattus_norvegicus",
+      "reference": "ffadfcf207ba3037",
+      "reference_kind": "artefact",
+      "compared_on": [
+        "definition_id",
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256"
+      ],
+      "only_in_store_columns": [],
+      "only_in_reference_columns": [],
+      "store_rows": 22464,
+      "reference_rows": 22464,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "9bbfd9ed282f70fd4f499fb1242b5ebaea813eb4f0c2b132790e5c46959bc2ee"
+      ],
+      "reference_database": [
+        "7f08fd3c9eac4efe0e0402b305aa5af43f155644094b6df93643afa3baeafe93"
+      ],
+      "same_database": false,
+      "identical": true,
+      "provenance": {
+        "artefact": "903bc694bc8448de",
+        "written_utc": "2026-11-01T00:07:10Z",
+        "search_database": "UP000002494_all_genecentric_2026_03_agingPTM-v6.xml",
+        "search_database_sha256": "9bbfd9ed282f70fd4f499fb1242b5ebaea813eb4f0c2b132790e5c46959bc2ee",
+        "mzlib": "1.0.595",
+        "datarepo": "1.4.0",
+        "requested_for": [
+          "PXD016793"
+        ],
+        "rows": 22464,
+        "entries": 21471,
+        "outcome_by_entry": {
+          "multi_gene": 153,
+          "not_in_source": 3042,
+          "off_primary_only": 955,
+          "resolved": 17321
+        },
+        "checks": {
+          "definition_id": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "rat-v8-mzlib1.0.595",
+      "species": "rattus_norvegicus",
+      "reference": "ffadfcf207ba3037",
+      "reference_kind": "artefact",
+      "compared_on": [
+        "definition_id",
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256"
+      ],
+      "only_in_store_columns": [],
+      "only_in_reference_columns": [],
+      "store_rows": 22464,
+      "reference_rows": 22464,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "b79e85c2e62003f36738320c528405ee123522e6a3121e9b6040d5607e13b240"
+      ],
+      "reference_database": [
+        "7f08fd3c9eac4efe0e0402b305aa5af43f155644094b6df93643afa3baeafe93"
+      ],
+      "same_database": false,
+      "identical": true,
+      "provenance": {
+        "artefact": "40176de704370439",
+        "written_utc": "2026-11-09T08:17:25Z",
+        "search_database": "UP000002494_all_genecentric_2026_03_agingPTM-v8.xml",
+        "search_database_sha256": "b79e85c2e62003f36738320c528405ee123522e6a3121e9b6040d5607e13b240",
+        "mzlib": "1.0.595",
+        "datarepo": "1.4.3",
+        "requested_for": [
+          "PXD010383"
+        ],
+        "rows": 22464,
+        "entries": 21471,
+        "outcome_by_entry": {
+          "multi_gene": 153,
+          "not_in_source": 3042,
+          "off_primary_only": 955,
+          "resolved": 17321
+        },
+        "checks": {
+          "definition_id": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    }
+  ]
+}

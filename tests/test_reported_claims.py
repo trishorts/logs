@@ -481,6 +481,34 @@ def test_canonical_v3_resolution_as_sent_in_010_to_pxreprise():
         "human": ("0.2.0", 21139, True), "mouse": ("0.2.0", 22383, True), "rat": ("0.2.0", 22464, True)}
 
 
+def test_store_resolutions_equal_ours_as_sent_in_017_to_pxreprise():
+    """017-logs closed PXR-O10: every canonical (agingPTM v3-v8) ``logs.resolve_genes`` artefact in the
+    store equals our rows. v3 is compared with our C# tables; every later build and every mzLib 1.0.595
+    re-run is compared with v3, on all columns except the database sha256. Each passes every provenance
+    check. It also corrected 013: rat's 3,042 is the XML view's ``not_in_source``, a different set from
+    the 3,445 xref-silent TrEMBL entries 013 compared it with."""
+    runs = {r["label"]: r for r in json.loads(
+        (RESULTS / "store_diff_canonical.json").read_text(encoding="utf-8"))["runs"]}
+    assert len(runs) == 21
+    assert all(r["identical"] and r["only_store"] == r["only_reference"] == 0 for r in runs.values())
+    assert all(v is True for r in runs.values() for v in r["provenance"]["checks"].values())
+    assert {k for k, r in runs.items() if r["same_database"]} == {
+        f"{sp}-v3-mzlib1.0.59{v}" for sp in ("human", "mouse", "rat") for v in (3, 5)}
+    assert sorted({r["provenance"]["mzlib"] for r in runs.values()}) == ["1.0.593", "1.0.595"]
+    assert runs["rat-v3-mzlib1.0.593"]["provenance"]["outcome_by_entry"] == {
+        "multi_gene": 153, "not_in_source": 3042, "off_primary_only": 955, "resolved": 17321}
+    rat = _search_db_species("_rat_canonical-v3")["by_dataset"]
+    assert rat["Swiss-Prot"]["no_ensembl_dbreference"]["entries"] == 3042
+    assert rat["TrEMBL"]["no_ensembl_dbreference"]["entries"] == 0
+    assert rat["TrEMBL"]["xref_silent_xml_resolves"]["entries"] == 3445
+    v8 = runs["human-v8-mzlib1.0.595"]["provenance"]["search_database_sha256"]
+    assert v8.startswith("c1a9e88f9af099af"), "human v8 is byte-identical to v7 (PXReprise 016)"
+    v7 = Path("F:/aging_data/db/UP000005640_all_genecentric_2026_03_agingPTM-v7.xml")
+    if v7.exists():
+        import hashlib
+        assert hashlib.sha256(v7.read_bytes()).hexdigest() == v8, "the v8 artefact covers human v7"
+
+
 def test_leg1_on_canonical_v3_as_sent_in_010_to_ptmqtl():
     """009 warned ptmQtl that rat refuses more often at leg 1 (57.2% of reviewed entries identical to
     their tree protein). 010 corrected it for the canonical agingPTM-v3 databases: rat's TrEMBL
