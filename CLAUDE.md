@@ -8,26 +8,24 @@ This folder is a `/project`-managed research project. **You are de facto working
 - **Goal:** A generic, versioned, gene-centric cross-species orthology layer that lets any
   multi-organism proteomics project join protein identifications across species without collapsing
   one-to-many orthology.
-- **Pick up at (2026-11-10):** run the thread inbox. Nobody is waiting on us, and no logs PR is open
-  (board #19: all six Shipped). Open items:
-  - **dataRepo has not been told** that #1382 (1.0.595) and #1465 (1.0.596) merged. Our 022 promised it. Ask
-    the user before sending.
-  - **ptmQtl 011 (LOGS-P7), not yet accepted:** residue rows go to every proteome file any aging deposit was
-    searched against, keyed by accession plus protein-sequence sha256, with the D35 15-residue window on each row.
-    A reason to accept: agingPTM-v4 to v8 change only modified-residue features (PXReprise 011, 015, 016), so a
-    key on the file's sha256 would repeat identical rows for each build. Also check whether mouse agingPTM-v2
-    (`7eee5e64`) has the same sequences as `fb52debf`.
+- **Pick up at (2026-11-10, evening):** run the thread inbox. Nothing is owed by us. We wait on **ptmQtl
+  LOGS-P8** (012: when do they need the first residue rows, and should they wait for v2?). No logs PR is open
+  (board #19: all six Shipped). mzLib is at **1.0.597** and pyMzLib at **0.8.0**.
   - **Next build: `DEF-GENE-RESOLUTION v2`.** aging 022 said yes to "agrees or silent". Name the three states
-    apart, and version the definition. Run `/oracle mzLib` for the marker in `EnsemblGeneResolver` first.
-  - **After that, the residue-correspondence builder.** aging 024 will wait for it (medium-low priority). They
-    need the isoform and variant legs, one row per site per search database, and a typed refusal for each gap.
+    apart, and version the definition. Run `/oracle mzLib` for the marker in `EnsemblGeneResolver` first. Warn
+    PXReprise and dataRepo before it ships.
+  - **After that, the residue-correspondence builder.** LOGS-P8 may change the order. aging 024 calls it
+    medium-low priority. It needs the isoform and variant legs and a typed refusal for each gap. **Its key is
+    now `(accession, sequence_sha256, position)`, with a 15-residue `window` and a membership table** (DEFINITIONS.md,
+    amended 2026-11-10 before build, as ptmQtl 011 asked).
 
-  Done since 2026-10-16:
-  - #1465 merged on 2026-10-24 and is in mzLib 1.0.596.
-  - pyMzLib has `parse_accessions()` and `align()` (0.6.0) and `map_residues()` (0.7.0).
-  - PXReprise was told about both merges (013).
-  - PXR-O9, PXR-O10 and PXR-O11 are closed. 017: all 21 canonical artefacts in the store equal our rows
-    (`results/store_diff_canonical.md`).
+  Done on 2026-11-10:
+  - PXR-O10 closed (PXReprise 017): all 21 canonical store artefacts equal our rows.
+  - dataRepo told about every merge (033): pyMzLib 0.8.0 (mzLib 1.0.597, whose #1501 changes dbReference reading)
+    resolves identically on all 19 columns, and the snapshot release is final.
+  - LOGS-P7 accepted in full (ptmQtl 012). Mouse agingPTM-v2 `7eee5e64` holds the same proteins as `fb52debf`.
+  - Earlier: #1465 merged on 2026-10-24 (1.0.596), and the 10-28 stock-take (PXReprise 013, aging 023) told
+    PXReprise and aging.
 
   **Stacked PRs stay drafts in the fork until their base merges** (user, 2026-10-06).
   **Next build: the residue-correspondence builder** (`DEF-RESIDUE-CORRESPONDENCE v1`, 13 outcomes), on
@@ -139,8 +137,9 @@ This folder is a `/project`-managed research project. **You are de facto working
     the xref view's `not_in_source` (`search_db.py`'s `agree_or_silent_covered`).
 31. **A squash-merged base leaves its old commits on a stacked branch.** #1381 merged as one commit, so #8
     still carried its history. Move only your own: `git rebase --onto smith/master <old base>`.
-32. **`tools/ResolveSearchDb` builds against the old `code/mzLib-ensembl-genes` pin**, which still matches the
-    resolver in 1.0.594 (checked 2026-10-11). After a resolver change, re-check this, or the measurement
+32. **`tools/ResolveSearchDb` builds against the old `code/mzLib-ensembl-genes` pin**, whose rows still match
+    pyMzLib 0.8.0 / mzLib 1.0.597 on all 19 columns (checked 2026-11-10; 1.0.597's #1501 changed dbReference
+    reading without moving a row). After a resolver change, re-check this, or the measurement
     silently uses old code. `engine_parity.py` compares it with pyMzLib.
 33. **A merge is not the end of a PR's work.** #1382 merged on 2026-10-12, and four days later its card still
     said In review and nobody had been told. Check `state` for every PR on board #19 at pickup, not only

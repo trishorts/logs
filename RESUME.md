@@ -129,21 +129,29 @@ Each of these cost real time on 2026-09-22.
 
 ## Pick up at
 
-**Next action (2026-11-10):** run the thread inbox. Nobody is waiting on us, and no logs PR is open: all six cards
-on board #19 are Shipped. Open items, in order:
-1. **Tell dataRepo** that #1382 (mzLib 1.0.595) and #1465 (1.0.596) merged. Our 022 promised it, and it has not
-   been sent. Ask the user before posting.
-2. **Reply to ptmQtl on LOGS-P7 (their 011).** Residue rows go to every proteome file any aging deposit was
-   searched against, keyed by **accession + sha256 of the protein sequence**, with the **D35 15-residue window**
-   on each row. We have not accepted that yet: fold it into `DEF-RESIDUE-CORRESPONDENCE` and say so.
-   - A reason to accept: PXReprise has since built agingPTM-v4 to v8, and each changes only modified-residue
-     features (011, 015, 016). Keyed on the file's sha256, every build would repeat identical rows.
-   - Still to check: do mouse reviewed agingPTM-v2 (`7eee5e64…`) and `fb52debf` have the same sequences?
-3. **Build `DEF-GENE-RESOLUTION v2`** (aging 022: yes to "agrees or silent"). Name the three states apart in the
+**Next action (2026-11-10, evening):** run the thread inbox. We owe nobody. We wait on **ptmQtl LOGS-P8** (their
+012: when they need the first residue rows, and whether those should wait for v2). No logs PR is open, and all six
+cards on board #19 are Shipped. mzLib is at 1.0.597 and pyMzLib at 0.8.0.
+1. **Build `DEF-GENE-RESOLUTION v2`** (aging 022: yes to "agrees or silent"). Name the three states apart in the
    rows, and version the definition. Run `/oracle mzLib` for the marker in `EnsemblGeneResolver` first. Warn
-   PXReprise before it ships (013 and 017 promised that).
-4. **Then the residue-correspondence builder** (below). aging 024 will wait for it, at medium-low priority. It
-   needs the isoform and variant legs, one row per site per search database, and a typed refusal for each gap.
+   PXReprise and dataRepo before it ships (013, 017 and 033 promised that).
+2. **Then the residue-correspondence builder** (below). LOGS-P8 may move it first. aging 024 will wait for it, at
+   medium-low priority. It needs the isoform and variant legs and a typed refusal for each gap. **Its key changed on
+   2026-11-10**, as ptmQtl 011 asked:
+   - the key is `(accession, sequence_sha256, position)`;
+   - each row carries a 15-residue `window`;
+   - `search_database_sha256` moves to a membership table;
+   - rows cover every file any aging deposit was searched against.
+
+   See `design/DEFINITIONS.md`.
+
+**Done on 2026-11-10 (evening):**
+- **dataRepo 033** reported every merge. pyMzLib 0.8.0 (mzLib 1.0.597) gives our gene-resolution rows on all 19
+  columns (`results/engine_parity_canonical-v3_pymzlib-0.8.0.json`), although 1.0.597's #1501 changes how
+  dbReferences are read. The snapshot release is final with unchanged files. `parse_accessions()` refuses
+  `P12345_2`, as 022 promised.
+- **ptmQtl 012** accepted LOGS-P7 in full. Mouse reviewed agingPTM-v2 (`7eee5e64…`) holds the same proteins as
+  `fb52debf…` (`results/search_db_equivalence_mouse-agingPTM-v2.md`).
 
 **Done since 2026-10-16:**
 - **#1465 merged** on 2026-10-24 as `1b7d4986` and is in mzLib 1.0.596. Its card is Shipped, and the pre-rebase
@@ -332,7 +340,7 @@ python tests/test_contracts.py          # 10 contract tests
 
 | | |
 |---|---|
-| Commits | 149 |
+| Commits | 154 |
 | Sync | [`trishorts/logs`](https://github.com/trishorts/logs) |
 | Locked decisions | 54 |
 | Open gaps | 10 |

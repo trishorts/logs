@@ -549,3 +549,37 @@ are TrEMBL entries the XML resolves but Ensembl's xref has never seen. Added as 
 
 Deleted the mzLib backup branch `backup/compara-gene-tree-alignment-pre-rebase` (`7e5920597`). Not sent: the
 dataRepo merge notice (waiting on the user). Nothing pushed; PXReprise's repo was already ahead of its origin.
+
+## 2026-11-10 (evening) - dataRepo told; LOGS-P7 accepted; mzLib 1.0.597 checked
+
+The user said yes to all three: push logs, message dataRepo, reply to ptmQtl. They also said mzLib is now
+1.0.597.
+
+**mzLib 1.0.597 was checked before telling dataRepo anything.** Its #1501 (the user's PR) adds `Molecule` to
+`DatabaseReference` and changes `Equals` and `Merge`. Gene resolution reads exactly those references. pyMzLib
+0.8.0, built from 1.0.597 (`4a183123`), gives our C# rows on all 19 columns for the three canonical v3 databases,
+and returns the same 21 record fields. `engine_parity` now compares every column, not seven. A trap found on the
+way: `Path.with_suffix(".json")` turned `--out ...-0.8.0` into `...-0.8.json`.
+
+**dataRepo 033** closes three of our promises:
+- 031: #1381 merged, and the release is final with the tar and manifest unchanged.
+- 022 and 024: the proteoform rule shipped, without the notice we promised. pyMzLib 0.8.0 shows `P12345_2`,
+  `DECOY_` and `CON_` names come back unrecognized and verbatim.
+- 022: no new pyMzLib column.
+
+033 also advises joining a variant through `parent_accession`, because the stored isoform rows are keyed
+`P04637-2`.
+
+**ptmQtl 012 accepts LOGS-P7 in full**, and `DEF-RESIDUE-CORRESPONDENCE v1` is amended before build:
+- the key is `(accession, sequence_sha256, position)`;
+- each row carries a 15-residue `window`, `_`-padded;
+- `search_database_sha256` moves to a membership table;
+- the rows follow a rule, not a list.
+
+Mouse reviewed agingPTM-v2 `7eee5e64` holds the same proteins as `fb52debf` (17,277 entries; only modified
+residues differ, 50,617 -> 56,937). `db_equivalence` gained `--pair` and `--out`.
+
+012 also asked **LOGS-P8**: when ptmQtl needs the first rows, and whether they should wait for v2.
+
+Claims: 33/33. logs pushed. The peer copies are committed in dataRepo, PXReprise and ptmQtl, none pushed: each
+was already ahead of its origin with its own work.
