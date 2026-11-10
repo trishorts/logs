@@ -1,5 +1,10 @@
 """Does an agingPTM-v1 search database hold the same proteins as the proteome it was built from?
 
+SUPERSEDED for decisions (user, 2026-11-10): this re-parses UniProt XML in Python. A decision about our
+C# code, here "may one alignment serve both files", is made from mzLib's own reader:
+``tools/CompareSearchDbs`` (mzLib 1.0.597), whose results agree with this module's on every pair checked.
+Keep this module for quick checks only.
+
 ptmQtl 008 (LOGS-P5) asks for residue correspondence on six search databases: aging's three
 reviewed proteomes and the three ``_agingPTM-v1`` builds of them, which add GPTMD-found
 ``modified residue`` features (aging ``results/ptm_db_2026-09-27``). A residue key is

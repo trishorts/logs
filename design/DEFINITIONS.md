@@ -253,10 +253,15 @@ been written, so the amendment stays v1. Three changes:
   sequence.
 - **Each row carries the site's 15-residue `window`**, as in ptmQtl's D35.
 
-Measured for the rule (2026-11-10, `results/search_db_equivalence_mouse-agingPTM-v2.md`): mouse reviewed
-agingPTM-v2 (`7eee5e64…`) holds the same proteins as its base `fb52debf…`. That is 17,277 entries, with identical
-sequences and sequence variants; only `modified residue` features differ (50,617 -> 56,937). PXReprise reports the
-same for canonical agingPTM-v4 to v8 against v3 (their 011, 015, 016). Under this key, they add no rows.
+Measured for the rule (2026-11-10). The comparison used mzLib 1.0.597's own reader, `tools/CompareSearchDbs`
+(`results/search_db_equivalence_mouse-agingPTM-v2_mzlib.json`), not a Python parse (user, 2026-11-10). Mouse
+reviewed agingPTM-v2 (`7eee5e64…`) holds the same proteins as its base `fb52debf…`:
+- 17,277 entries and 706 variant proteoforms;
+- identical sequences, candidate variants, gene names and Ensembl dbReferences;
+- only modifications differ: mzLib recognizes 50,777 -> 57,097, on 2,140 entries.
+
+PXReprise reports the same for canonical agingPTM-v4 to v8 against v3 (their 011, 015, 016). Under this key,
+they add no rows.
 
 **Status:** proposed 2026-10-05 and sent to ptmQtl (007) before anything was built, as 005 promised.
 On 2026-10-06 `/oracle mzLib` ran (`design/ORACLE_residue_correspondence.md`: no aligner and no MSA
@@ -291,6 +296,11 @@ the aligner, and it is reported with the first build.
   `results/search_db_equivalence.md`): **all three builds qualify.** Each holds the same entries as its
   base (20,416 / 17,277 / 8,228), with identical sequences and sequence variants, and differs only in
   `modified residue` features (human 56,282 -> 59,564, mouse 50,617 -> 51,372, rat 27,265 -> 30,134). aging's isoform databases give the `isoform` edges.
+  **Re-checked 2026-11-10 with mzLib 1.0.597's own reader** (`tools/CompareSearchDbs`,
+  `results/search_db_equivalence_<sp>-agingPTM-v1_mzlib.json`), because the first check was a Python XML parse.
+  All three builds have the same proteins as their bases:
+  - the same entries and the same variant proteoforms (human 31,936, mouse 706, rat 198);
+  - identical sequences, candidate variants, gene names and Ensembl dbReferences.
 - **LOGS-P6, `substituted` rows:** kept, with both residues.
 
 | species | search database | `search_database_sha256` |
