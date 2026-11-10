@@ -11,9 +11,18 @@ This folder is a `/project`-managed research project. **You are de facto working
 - **Pick up at (2026-11-10, evening):** run the thread inbox. Nothing is owed by us. We wait on **ptmQtl
   LOGS-P8** (012: when do they need the first residue rows, and should they wait for v2?). No logs PR is open
   (board #19: all six Shipped). mzLib is at **1.0.597** and pyMzLib at **0.8.0**.
-  - **Next build: `DEF-GENE-RESOLUTION v2`.** aging 022 said yes to "agrees or silent". Name the three states
-    apart, and version the definition. Run `/oracle mzLib` for the marker in `EnsemblGeneResolver` first. Warn
-    PXReprise and dataRepo before it ships.
+  - **`DEF-GENE-RESOLUTION v2` is built, not shipped.** It is drafted in DEFINITIONS.md, and the oracle ran.
+    The code is mzLib branch `feat/ensembl-xref-agreement` (`code/mzLib-xref-agreement`, `049dd76a9`, local only):
+    `EnsemblXrefAgreement` (Agrees / Silent / Disagrees), appended as the last positional parameter and written
+    as the last column `ensembl_xref_agreement`. The user chose the shape and the name on 2026-11-10. Its 7 new
+    tests and the existing 80 pass, and the test-name check is clean.
+    - Measured with mzLib (`tools/XrefAgreementCounts`): it reproduces 010's numbers, with 0 rows inconsistent
+      with the v1 boolean.
+    - Still to do: push the branch and open the smith PR (ask the user first). Then the pyMzLib bridge PR, after
+      the mzLib release: its column list in `pkg/bridge/Proteins.cs:62-68`, the test `ProteinsTests.cs:316`, and
+      the spec `docs/specs/genes.resolve.yaml`. Run `/bridge-oracle pyMzLib` first.
+    - Warn dataRepo before the release, since they refuse a new column until their schema takes it (our 022).
+      Tell PXReprise and aging when it ships.
   - **After that, the residue-correspondence builder.** LOGS-P8 may change the order. aging 024 calls it
     medium-low priority. It needs the isoform and variant legs and a typed refusal for each gap. **Its key is
     now `(accession, sequence_sha256, position)`, with a 15-residue `window` and a membership table** (DEFINITIONS.md,
