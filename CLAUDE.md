@@ -9,7 +9,8 @@ This folder is a `/project`-managed research project. **You are de facto working
   multi-organism proteomics project join protein identifications across species without collapsing
   one-to-many orthology.
 - **Pick up at (2026-11-10, evening):** run the thread inbox. Nothing is owed by us. We wait on **ptmQtl
-  LOGS-P8** (012: when do they need the first residue rows, and should they wait for v2?). No logs PR is open
+  LOGS-P8** (012: when do they need the first residue rows, and should they wait for v2?) and **dataRepo LOGS-D5**
+  (034), and on the reviews of **mzLib #1578**. No logs PR is open
   (board #19: all six Shipped). mzLib is at **1.0.597** and pyMzLib at **0.8.0**.
   - **`DEF-GENE-RESOLUTION v2` is in review as mzLib [#1578](https://github.com/smith-chem-wisc/mzLib/pull/1578)**
     (opened 2026-11-10, board #19 In review). Check it with `gh pr view 1578 --repo smith-chem-wisc/mzLib --json
@@ -24,8 +25,9 @@ This folder is a `/project`-managed research project. **You are de facto working
       with the v1 boolean.
     - Still to do: the pyMzLib bridge PR, after the mzLib release: its column list in `pkg/bridge/Proteins.cs:62-68`, the test `ProteinsTests.cs:316`, and
       the spec `docs/specs/genes.resolve.yaml`. Run `/bridge-oracle pyMzLib` first.
-    - Warn dataRepo before the release, since they refuse a new column until their schema takes it (our 022).
-      Tell PXReprise and aging when it ships.
+    - dataRepo got its advance warning in 034 (2026-11-10), with LOGS-D5 open: will their schema take the column,
+      and will such runs record `logs:DEF-GENE-RESOLUTION v2`? We promised to tell them when #1578 merges, when
+      it is released, and when pyMzLib carries it. Tell PXReprise and aging when it ships.
   - **After that, the residue-correspondence builder.** LOGS-P8 may change the order. aging 024 calls it
     medium-low priority. It needs the isoform and variant legs and a typed refusal for each gap. **Its key is
     now `(accession, sequence_sha256, position)`, with a 15-residue `window` and a membership table** (DEFINITIONS.md,
