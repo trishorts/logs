@@ -244,6 +244,20 @@ The data is CC-BY-4.0 and `views.sql` is mzLib's LGPL-3.0 (`LICENSING.md`).
 
 ## `logs:DEF-RESIDUE-CORRESPONDENCE v1`: residue to homologous residue (PROPOSED, BEING BUILT)
 
+**Amended 2026-11-10, before anything was built (ptmQtl 011, LOGS-P7; accepted in 012-logs).** No row has
+been written, so the amendment stays v1. Three changes:
+- **Databases: a rule, not a list.** Rows cover every proteome file that any deposit in aging's store was
+  searched against, now and later. The six-file table below is the 2026-10-05 list, kept as history.
+- **The key is the protein, not the file:** `(accession, sequence_sha256, position)` (below).
+  `search_database_sha256` moves to a membership table, because one row now serves every file that holds that
+  sequence.
+- **Each row carries the site's 15-residue `window`**, as in ptmQtl's D35.
+
+Measured for the rule (2026-11-10, `results/search_db_equivalence_mouse-agingPTM-v2.md`): mouse reviewed
+agingPTM-v2 (`7eee5e64…`) holds the same proteins as its base `fb52debf…`. That is 17,277 entries, with identical
+sequences and sequence variants; only `modified residue` features differ (50,617 -> 56,937). PXReprise reports the
+same for canonical agingPTM-v4 to v8 against v3 (their 011, 015, 016). Under this key, they add no rows.
+
 **Status:** proposed 2026-10-05 and sent to ptmQtl (007) before anything was built, as 005 promised.
 On 2026-10-06 `/oracle mzLib` ran (`design/ORACLE_residue_correspondence.md`: no aligner and no MSA
 reader in mzLib), and the two building blocks were written:
@@ -295,11 +309,25 @@ it, through **one** stated relationship and **one** stated alignment, or, if non
 chain stopped**. The store's rules all apply: source and release on every row, one relationship per
 row, no transitive closure, one-to-many kept, and a refusal is typed, never the nearest residue.
 
-### The residue key (003-logs, 005-logs)
+### The residue key (003-logs, 005-logs; amended 2026-11-10, ptmQtl 011)
 
-`(search_database_sha256, accession, position)`, with `position` 1-based on that entry's own sequence
-as that database holds it. An isoform that a database holds as its own entry (`P02751-8`) is keyed on
-its own sequence; nothing is moved to the canonical to store it (aging 018 agrees: positions differ).
+`(accession, sequence_sha256, position)`:
+- `position` is 1-based on that entry's own sequence.
+- `sequence_sha256` is the lowercase hex SHA-256 of that sequence: the one-letter amino-acid string, with no
+  whitespace, as the database holds it. A sequence-variant proteoform (`P12345_S70N`) is keyed on its sequence
+  after the variant is applied.
+- The same accession and sequence in several files is **one** set of rows.
+- An isoform that a database holds as its own entry (`P02751-8`) is keyed on its own sequence. Nothing is moved
+  to the canonical to store it (aging 018 agrees: positions differ).
+
+**Provenance, not key:** a membership table `(search_database_sha256, accession, sequence_sha256)` lists every
+file each keyed protein was read from. ptmQtl does not join on it (011). It is what lets a consumer that holds
+only a file go from that file to the rows.
+
+**The `window`** (ptmQtl D35): the residue at `position` with the 7 residues on each side, read from the sequence
+`sequence_sha256` names, with `_` for each position before 1 or after the end. That is always 15 characters.
+ptmQtl joins on accession and position, and keeps a row only when its window equals the site's. A mismatch loses
+a row; it can never map a site to the wrong residue. The window is null only for `position_out_of_range`.
 
 ### Edges (`edge_kind`)
 
@@ -322,9 +350,10 @@ are carried, so a consumer can see which leg failed.
 
 | column | meaning |
 |---|---|
-| `search_database_sha256`, `accession`, `position`, `residue` | the source residue (the key, plus the residue read from the database) |
+| `accession`, `sequence_sha256`, `position`, `residue` | the source residue (the key, plus the residue read from the sequence) |
+| `window` | the source residue's 15-residue window (above) |
 | `edge_kind` | `homolog`, `isoform` or `variant` |
-| `target_search_database_sha256`, `target_accession` | the target entry |
+| `target_accession`, `target_sequence_sha256` | the target entry, keyed the same way; its files are in the membership table |
 | `target_position`, `target_residue` | null exactly when `outcome` is a refusal |
 | `outcome` | exactly one value (below) |
 | `gene_id`, `target_gene_id` | the genes, from `DEF-GENE-RESOLUTION` rows under the agrees view |
@@ -348,7 +377,7 @@ are carried, so a consumer can see which leg failed.
 | `no_shared_alignment` | leg 2: the store relates G and H, but their proteins are in different Compara alignments (different gene trees), so no column joins them. Always true of `other_paralog`; true of 760 ortholog rows in 116 |
 | `gap_in_target` | leg 2: the alignment column is a gap in H's protein |
 | `not_on_target_entry` | leg 3: H's Ensembl residue has no counterpart in that UniProt entry |
-| `target_gene_not_in_database` | H has no entry in the target database |
+| `target_gene_not_in_database` | H has no entry in any of the target species' files under the rule above |
 | `isoform_specific` | an `isoform` edge: the residue is in a region the canonical entry does not have (fibronectin EDA/EDB/IIICS, lamin C's C-terminus) |
 | `variant_changed_span` | a `variant` edge: the residue is inside the changed span of an indel |
 
