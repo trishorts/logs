@@ -26,6 +26,7 @@ from .fetch import project_root
 csv.field_size_limit(10_000_000)
 
 GENE_SETS = {"human": "Homo_sapiens.GRCh38", "mouse": "Mus_musculus.GRCm39", "rat": "Rattus_norvegicus.GRCr8"}
+# The 2026-10-11 run compared these seven. Since 2026-11-10 every column of the C# table is compared (all 19).
 KEY = ("accession", "outcome", "gene_id", "source", "ensembl_xref_agrees", "search_database_sha256", "gene_set_sha256")
 
 
@@ -42,14 +43,16 @@ def compare(species: str, xml: Path, cs_table: Path) -> dict:
                                  xref=root / f"data/compara/{gs}.116.uniprot.tsv.gz")
     recs = list(res.records)
     get = (lambda r, k: r[k]) if recs and isinstance(recs[0], dict) else (lambda r, k: getattr(r, k))
-    py = collections.Counter(tuple(_cell(get(r, k)) for k in KEY) for r in recs)
     cs: collections.Counter = collections.Counter()
     with open(cs_table, encoding="utf-8", newline="") as fh:
-        for r in csv.DictReader(fh, delimiter="\t"):
+        rd = csv.DictReader(fh, delimiter="\t")
+        cols = list(rd.fieldnames or KEY)
+        for r in rd:
             if r["accession"] == r["entry_accession"]:
-                cs[tuple(r[k] for k in KEY)] += 1
+                cs[tuple(r[k] for k in cols)] += 1
+    py = collections.Counter(tuple(_cell(get(r, k)) for k in cols) for r in recs)
     return {
-        "species": species, "search_xml": xml.name, "reference_table": cs_table.name,
+        "species": species, "search_xml": xml.name, "reference_table": cs_table.name, "compared_on": cols,
         "pymzlib": pymzlib.__version__, "mzlib": str(pymzlib.bridge_version()["mzlib"]),
         "pymzlib_rows": sum(py.values()), "reference_entry_rows": sum(cs.values()),
         "entries": len({k[0] for k in py}),
@@ -63,13 +66,15 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("runs", nargs="+", help="species=<search.xml>:<ResolveSearchDb table>")
     ap.add_argument("--out", required=True)
     args = ap.parse_args(argv)
-    out = {"generated": _dt.date.today().isoformat(), "compared_on": list(KEY), "species": []}
+    out = {"generated": _dt.date.today().isoformat(), "compared_on": "every column of the C# table (per species)",
+           "species": []}
     for run in args.runs:
         species, paths = run.split("=", 1)
         xml, table = paths.rsplit(":", 1)
         out["species"].append(compare(species, Path(xml), project_root() / table))
         print(json.dumps(out["species"][-1]))
-    (project_root() / args.out).with_suffix(".json").write_text(json.dumps(out, indent=2), encoding="utf-8")
+    # Append, never with_suffix(): an --out ending "pymzlib-0.8.0" would lose its ".0".
+    (project_root() / f"{args.out}.json").write_text(json.dumps(out, indent=2), encoding="utf-8")
     return 0 if all(s["identical"] for s in out["species"]) else 1
 
 

@@ -509,6 +509,15 @@ def test_store_resolutions_equal_ours_as_sent_in_017_to_pxreprise():
         assert hashlib.sha256(v7.read_bytes()).hexdigest() == v8, "the v8 artefact covers human v7"
 
 
+def test_pymzlib_080_resolves_as_before_as_sent_in_033_to_datarepo():
+    """033-logs told dataRepo that pyMzLib 0.8.0 (mzLib 1.0.597, whose #1501 changes how dbReferences are read)
+    gives ``logs.resolve_genes`` the same rows: every column of our C# tables, all three canonical v3 databases."""
+    runs = json.loads((RESULTS / "engine_parity_canonical-v3_pymzlib-0.8.0.json").read_text(encoding="utf-8"))["species"]
+    assert {r["species"]: (r["pymzlib"], r["pymzlib_rows"], len(r["compared_on"]), r["identical"]) for r in runs} == {
+        "human": ("0.8.0", 21139, 19, True), "mouse": ("0.8.0", 22383, 19, True), "rat": ("0.8.0", 22464, 19, True)}
+    assert all(r["mzlib"].endswith("4a183123ab41ed341361099d1ad93a281ea678fb") for r in runs), "mzLib 1.0.597's tag"
+
+
 def test_leg1_on_canonical_v3_as_sent_in_010_to_ptmqtl():
     """009 warned ptmQtl that rat refuses more often at leg 1 (57.2% of reviewed entries identical to
     their tree protein). 010 corrected it for the canonical agingPTM-v3 databases: rat's TrEMBL
