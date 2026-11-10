@@ -1,0 +1,256 @@
+{
+  "tool": "tools/XrefAgreementCounts",
+  "mzlib_branch": "feat/ensembl-xref-agreement",
+  "runs": [
+    {
+      "label": "human",
+      "search_database": "UP000005640_all_genecentric_2026_03_agingPTM-v3.xml",
+      "search_database_sha256": "fd80cf8839f8c1551bddc2d24905df6098188196934f4f43fa8c3e9a276eb14c",
+      "gene_set": "Homo_sapiens.GRCh38.116.genes.tsv.gz",
+      "xref": "Homo_sapiens.GRCh38.116.uniprot.tsv.gz",
+      "xref_sha256": "f1e26db23b0771f7a5778067af20683de63d863b1c0834aa564d5d036ec85864",
+      "rows": 21139,
+      "rows_by_source_and_agreement": {
+        "ensembl_xref|agrees": 6,
+        "search_database_dbreference|agrees": 19621,
+        "search_database_dbreference|disagrees": 359,
+        "search_database_dbreference|none": 1126,
+        "search_database_dbreference|silent": 27
+      },
+      "rows_where_agreement_contradicts_the_v1_boolean": 0,
+      "outcome_by_entry": {
+        "multi_gene": 352,
+        "not_in_source": 964,
+        "off_primary_only": 162,
+        "resolved": 19174
+      },
+      "all": {
+        "entries": 20652,
+        "agrees": 19505,
+        "agrees_or_silent": 19532,
+        "with_a_silent_row": 27,
+        "with_a_disagrees_row": 283,
+        "disagrees_only": 0,
+        "silent_by_created_year": {
+          "2002": 2,
+          "2003": 1,
+          "2006": 3,
+          "2007": 3,
+          "2008": 5,
+          "2017": 1,
+          "2025": 3,
+          "2026": 9
+        }
+      },
+      "by_dataset": {
+        "Swiss-Prot": {
+          "entries": 20329,
+          "agrees": 19291,
+          "agrees_or_silent": 19307,
+          "with_a_silent_row": 16,
+          "with_a_disagrees_row": 283,
+          "disagrees_only": 0,
+          "silent_by_created_year": {
+            "2002": 2,
+            "2003": 1,
+            "2006": 3,
+            "2007": 3,
+            "2008": 5,
+            "2017": 1,
+            "2026": 1
+          }
+        },
+        "TrEMBL": {
+          "entries": 323,
+          "agrees": 214,
+          "agrees_or_silent": 225,
+          "with_a_silent_row": 11,
+          "with_a_disagrees_row": 0,
+          "disagrees_only": 0,
+          "silent_by_created_year": {
+            "2025": 3,
+            "2026": 8
+          }
+        }
+      }
+    },
+    {
+      "label": "mouse",
+      "search_database": "UP000000589_all_genecentric_2026_03_agingPTM-v3.xml",
+      "search_database_sha256": "3c4ac3fb481e8ff1430d3f7a7aab4c2c83d44ae1de117ea942c8aefd5ffb4cc6",
+      "gene_set": "Mus_musculus.GRCm39.116.genes.tsv.gz",
+      "xref": "Mus_musculus.GRCm39.116.uniprot.tsv.gz",
+      "xref_sha256": "19b91eefd8cc3946a47c092a69ec065f1f2304a08927d91efd1f61c7840c6f91",
+      "rows": 22383,
+      "rows_by_source_and_agreement": {
+        "ensembl_xref|agrees": 42,
+        "search_database_dbreference|agrees": 19511,
+        "search_database_dbreference|disagrees": 2,
+        "search_database_dbreference|none": 1645,
+        "search_database_dbreference|silent": 1183
+      },
+      "rows_where_agreement_contradicts_the_v1_boolean": 0,
+      "outcome_by_entry": {
+        "multi_gene": 273,
+        "not_in_source": 1645,
+        "resolved": 19942
+      },
+      "all": {
+        "entries": 21860,
+        "agrees": 19130,
+        "agrees_or_silent": 20254,
+        "with_a_silent_row": 1124,
+        "with_a_disagrees_row": 2,
+        "disagrees_only": 0,
+        "silent_by_created_year": {
+          "1994": 3,
+          "1995": 2,
+          "1996": 1,
+          "2000": 1,
+          "2001": 1,
+          "2003": 1,
+          "2005": 1,
+          "2006": 3,
+          "2007": 2,
+          "2008": 3,
+          "2025": 45,
+          "2026": 1061
+        }
+      },
+      "by_dataset": {
+        "Swiss-Prot": {
+          "entries": 17219,
+          "agrees": 15594,
+          "agrees_or_silent": 15613,
+          "with_a_silent_row": 19,
+          "with_a_disagrees_row": 2,
+          "disagrees_only": 0,
+          "silent_by_created_year": {
+            "1994": 3,
+            "1995": 2,
+            "1996": 1,
+            "2000": 1,
+            "2001": 1,
+            "2003": 1,
+            "2005": 1,
+            "2006": 3,
+            "2007": 2,
+            "2008": 3,
+            "2026": 1
+          }
+        },
+        "TrEMBL": {
+          "entries": 4641,
+          "agrees": 3536,
+          "agrees_or_silent": 4641,
+          "with_a_silent_row": 1105,
+          "with_a_disagrees_row": 0,
+          "disagrees_only": 0,
+          "silent_by_created_year": {
+            "2025": 45,
+            "2026": 1060
+          }
+        }
+      }
+    },
+    {
+      "label": "rat",
+      "search_database": "UP000002494_all_genecentric_2026_03_agingPTM-v3.xml",
+      "search_database_sha256": "7f08fd3c9eac4efe0e0402b305aa5af43f155644094b6df93643afa3baeafe93",
+      "gene_set": "Rattus_norvegicus.GRCr8.116.genes.tsv.gz",
+      "xref": "Rattus_norvegicus.GRCr8.116.uniprot.tsv.gz",
+      "xref_sha256": "8b1c91f3d88bfafe2d4bb67a43f2a79d1f494bb56d48690a0cbd736a44030eda",
+      "rows": 22464,
+      "rows_by_source_and_agreement": {
+        "ensembl_xref|agrees": 783,
+        "search_database_dbreference|agrees": 14036,
+        "search_database_dbreference|disagrees": 67,
+        "search_database_dbreference|none": 3997,
+        "search_database_dbreference|silent": 3581
+      },
+      "rows_where_agreement_contradicts_the_v1_boolean": 0,
+      "outcome_by_entry": {
+        "multi_gene": 153,
+        "not_in_source": 3042,
+        "off_primary_only": 955,
+        "resolved": 17321
+      },
+      "all": {
+        "entries": 21471,
+        "agrees": 14714,
+        "agrees_or_silent": 18203,
+        "with_a_silent_row": 3489,
+        "with_a_disagrees_row": 61,
+        "disagrees_only": 0,
+        "silent_by_created_year": {
+          "1986": 1,
+          "1989": 2,
+          "1990": 2,
+          "1992": 1,
+          "1993": 1,
+          "1994": 3,
+          "1995": 1,
+          "1996": 2,
+          "1997": 1,
+          "1998": 1,
+          "2000": 1,
+          "2001": 2,
+          "2004": 6,
+          "2005": 5,
+          "2006": 7,
+          "2007": 4,
+          "2008": 3,
+          "2009": 1,
+          "2016": 2,
+          "2025": 2713,
+          "2026": 730
+        }
+      },
+      "by_dataset": {
+        "Swiss-Prot": {
+          "entries": 8213,
+          "agrees": 4901,
+          "agrees_or_silent": 4945,
+          "with_a_silent_row": 44,
+          "with_a_disagrees_row": 31,
+          "disagrees_only": 0,
+          "silent_by_created_year": {
+            "1986": 1,
+            "1989": 2,
+            "1990": 2,
+            "1992": 1,
+            "1993": 1,
+            "1994": 3,
+            "1995": 1,
+            "1996": 2,
+            "1997": 1,
+            "1998": 1,
+            "2000": 1,
+            "2001": 2,
+            "2004": 3,
+            "2005": 5,
+            "2006": 7,
+            "2007": 4,
+            "2008": 3,
+            "2009": 1,
+            "2016": 2,
+            "2026": 1
+          }
+        },
+        "TrEMBL": {
+          "entries": 13258,
+          "agrees": 9813,
+          "agrees_or_silent": 13258,
+          "with_a_silent_row": 3445,
+          "with_a_disagrees_row": 30,
+          "disagrees_only": 0,
+          "silent_by_created_year": {
+            "2004": 3,
+            "2025": 2713,
+            "2026": 729
+          }
+        }
+      }
+    }
+  ]
+}

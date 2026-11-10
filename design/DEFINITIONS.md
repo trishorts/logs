@@ -86,6 +86,60 @@ UniProt it is the text before the first `_`. That rule does not hold for RefSeq 
 
 ---
 
+## `logs:DEF-GENE-RESOLUTION v2`: v1's rows, with the xref's agreement named, and a new default view
+
+**Status:** drafted 2026-11-10. Agreed in principle by aging (022, REQ-AGING-9), which asked for two things: name
+the three states apart, and version the definition. **Implementation:** mzLib `EnsemblXrefAgreement`, on branch
+`feat/ensembl-xref-agreement` (`code/mzLib-xref-agreement`), not yet a PR and not released. Until it ships, every
+run is v1.
+
+### What changes from v1
+
+- **One column is added, and nothing else changes.** The new column is `ensembl_xref_agreement`, written last.
+  Every v1 column keeps its name, position and values, and that includes `ensembl_xref_agrees`. So a v2 row,
+  read without its last column, is a v1 row.
+- **The default view changes.** v1's default was `ensembl_xref_agrees = true`. v2's is
+  `ensembl_xref_agreement in (agrees, silent)`: Ensembl agrees, or Ensembl has never heard of the accession and the
+  search database links a gene. "Disagrees" stays out of the default (aging 022: "a disagreement is still a reason
+  to doubt a gene"). v1's view is still `ensembl_xref_agreement = agrees`.
+
+### The agreement (`ensembl_xref_agreement`, at most one value per row)
+
+| value | meaning |
+|---|---|
+| `agrees` | Ensembl's xref links this accession to this gene. It is exactly the rows where `ensembl_xref_agrees = true` |
+| `silent` | the xref has no row for the accession or for its entry. Ensembl has not heard of it, so it neither confirms nor contradicts the link. These are often UniProt accessions newer than the Ensembl release |
+| `disagrees` | the xref knows the accession but links it to other genes, not this one. The other genes may be in the gene set, in which case each has its own `source = ensembl_xref` row. Or they may be outside it, in which case no row shows them |
+| (empty) | the row has no gene, so there is nothing to agree about. A run without the xref input also leaves it empty everywhere, and such a run is not a v2 run |
+
+- **The keys are the ones `agrees` uses.** An isoform accession with xref rows of its own is judged on those rows
+  only. Otherwise its entry's rows are used. A sequence-variant proteoform (`P12345_S70N`) uses its entry's.
+- **`agrees` exactly where `ensembl_xref_agrees = true`; `silent` or `disagrees` exactly where it is false;
+  empty exactly where it is empty.** mzLib's tests pin this, and so does every real run below.
+
+### Versioning
+
+The table carries no format version, and adding a header line would break every reader that takes the first line
+as column names. So the version lives with the run: dataRepo's `run.json` records `definition_id`. Any number
+quoted from the default view must say whether it is v1 (agrees) or v2 (agrees or silent).
+
+### Measured on the canonical agingPTM-v3 databases (mzLib, `tools/XrefAgreementCounts`)
+
+Counts are entries. The table is `results/xref_agreement_canonical-v3_e116.json`, pinned in
+`tests/test_reported_claims.py`.
+
+| | entries | v1 default (agrees) | v2 default (agrees or silent) | entries with a silent row (TrEMBL) | entries left out only because Ensembl disagrees |
+|---|---:|---:|---:|---:|---:|
+| human | 20,652 | 19,505 (94.4%) | 19,532 (94.6%) | 27 (11) | 0 |
+| mouse | 21,860 | 19,130 (87.5%) | 20,254 (92.7%) | 1,124 (1,105) | 0 |
+| rat | 21,471 | 14,714 (68.5%) | 18,203 (84.8%) | 3,489 (3,445) | 0 |
+
+- On these databases, every entry with a disagreeing gene also has a gene that agrees or is silent. So v2's gain
+  comes entirely from silent accessions.
+- These counts reproduce the ones our 010 sent, which a Python re-reading of the xref had computed.
+
+---
+
 ## `logs:DEF-ORTHOLOGY v1`: the orthology store
 
 **Status:** proposed 2026-09-27 and sent to dataRepo (025) before it was built; built the same day.

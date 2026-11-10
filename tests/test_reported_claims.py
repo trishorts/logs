@@ -518,6 +518,28 @@ def test_pymzlib_080_resolves_as_before_as_sent_in_033_to_datarepo():
     assert all(r["mzlib"].endswith("4a183123ab41ed341361099d1ad93a281ea678fb") for r in runs), "mzLib 1.0.597's tag"
 
 
+def test_canonical_v3_views_as_sent_in_010_reproduced_by_mzlib():
+    """010-logs's agrees, agrees-or-silent and TrEMBL-silent counts came from a Python re-reading of the
+    xref (search_db.py). On 2026-11-10 mzLib's own resolver (branch feat/ensembl-xref-agreement,
+    tools/XrefAgreementCounts) reproduced every one. This pins the C# counts, so a decision rests on them."""
+    runs = {r["label"]: r for r in json.loads(
+        (RESULTS / "xref_agreement_canonical-v3_e116.json").read_text(encoding="utf-8"))["runs"]}
+    expected = {  # sha, entries, agrees, agrees-or-silent, TrEMBL silent
+        "human": ("fd80cf88", 20652, 19505, 19532, 11),
+        "mouse": ("3c4ac3fb", 21860, 19130, 20254, 1105),
+        "rat": ("7f08fd3c", 21471, 14714, 18203, 3445),
+    }
+    for sp, (sha, n, agrees, aos, silent) in expected.items():
+        r = runs[sp]
+        assert r["search_database_sha256"].startswith(sha), sp
+        assert (r["all"]["entries"], r["all"]["agrees"], r["all"]["agrees_or_silent"]) == (n, agrees, aos), sp
+        assert r["by_dataset"]["TrEMBL"]["with_a_silent_row"] == silent, sp
+        assert r["rows_where_agreement_contradicts_the_v1_boolean"] == 0, sp
+        assert r["all"]["disagrees_only"] == 0, f"{sp}: no entry is left out only because Ensembl disagrees"
+    created = runs["rat"]["by_dataset"]["TrEMBL"]["silent_by_created_year"]
+    assert created.get("2025", 0) + created.get("2026", 0) == 3442
+
+
 def test_leg1_on_canonical_v3_as_sent_in_010_to_ptmqtl():
     """009 warned ptmQtl that rat refuses more often at leg 1 (57.2% of reviewed entries identical to
     their tree protein). 010 corrected it for the canonical agingPTM-v3 databases: rat's TrEMBL
