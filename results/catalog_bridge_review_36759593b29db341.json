@@ -1,0 +1,246 @@
+{
+ "pr": "smith-chem-wisc/PXReprise#26",
+ "pr_head": "a3195c166ad7feb522bc8f01c26bbda183efd3af",
+ "catalog": "catalog-36759593b29db341.duckdb",
+ "catalog_id": "36759593b29db341",
+ "snapshot": {
+  "artefact_id": "53618fead1317848",
+  "release": {
+   "logs": "orthology-compara-116-b63a3331"
+  },
+  "manifest_matches_registration": true
+ },
+ "bridge": {
+  "species": [
+   "homo_sapiens",
+   "mus_musculus",
+   "rattus_norvegicus"
+  ],
+  "bridge_seconds": 1.07,
+  "tables": {
+   "orthology_genes": 200649,
+   "gene_orthologs": 171792,
+   "gene_ortholog_status": 401298
+  },
+  "rows": 182552,
+  "accessions": 64198,
+  "rows_equal_distinct_keys": true,
+  "protein_index_duplicate_accessions": 0,
+  "status": {
+   "has_ortholog": {
+    "rows": 155056,
+    "accessions": 54746
+   },
+   "no_gene": {
+    "rows": 13748,
+    "accessions": 6874
+   },
+   "tree_lacks_target_species": {
+    "rows": 7183,
+    "accessions": 5148
+   },
+   "no_edge_in_shared_tree": {
+    "rows": 5535,
+    "accessions": 4111
+   },
+   "not_in_any_tree": {
+    "rows": 1030,
+    "accessions": 510
+   }
+  },
+  "gfap": [
+   [
+    "mus_musculus",
+    "has_ortholog",
+    "ortholog_one2one",
+    true,
+    "ENSMUSG00000020932",
+    "P03995"
+   ],
+   [
+    "rattus_norvegicus",
+    "has_ortholog",
+    "ortholog_one2one",
+    true,
+    "ENSRNOG00000002919",
+    "P47819"
+   ]
+  ],
+  "bridge_pairs_no_gene_and_a_gene": 1622,
+  "held_accessions_no_gene_row_and_gene_row": 811,
+  "their_gene_rows_by_source": {
+   "ensembl_xref": 811
+  },
+  "their_outcomes": {
+   "not_in_source": 282,
+   "off_primary_only": 529
+  },
+  "examples": [
+   [
+    "A0A096MIX6",
+    "off_primary_only",
+    null,
+    "search_database_dbreference"
+   ],
+   [
+    "A0A096MIX6",
+    "off_primary_only",
+    "ENSRNOG00000083187",
+    "ensembl_xref"
+   ],
+   [
+    "A0A0G2JTY4",
+    "off_primary_only",
+    null,
+    "search_database_dbreference"
+   ],
+   [
+    "A0A0G2JTY4",
+    "off_primary_only",
+    "ENSRNOG00000054264",
+    "ensembl_xref"
+   ],
+   [
+    "A0A0G2K2P5",
+    "not_in_source",
+    null,
+    "search_database_dbreference"
+   ],
+   [
+    "A0A0G2K2P5",
+    "not_in_source",
+    "ENSRNOG00000011077",
+    "ensembl_xref"
+   ]
+  ],
+  "no_gene_outcomes_by_status": {
+   "not_in_source|has_ortholog": 651,
+   "not_in_source|no_edge_in_shared_tree": 4,
+   "not_in_source|no_gene": 11520,
+   "not_in_source|tree_lacks_target_species": 8,
+   "off_primary_only|has_ortholog": 1104,
+   "off_primary_only|no_edge_in_shared_tree": 20,
+   "off_primary_only|no_gene": 2228,
+   "off_primary_only|tree_lacks_target_species": 14
+  },
+  "partner_rows_by_outcome": {
+   "multi_gene": 7363,
+   "not_in_source": 608,
+   "off_primary_only": 1058,
+   "resolved": 127355
+  },
+  "gene_resolutions_has_ensembl_xref_agreement": true,
+  "definition_ids": {
+   "logs:DEF-GENE-RESOLUTION v2": 41
+  },
+  "ortholog_rows_no_partner_accession": 18672,
+  "of_which_a_searched_database_holds_an_accession": {
+   "rows": 23,
+   "partner_genes": 14
+  },
+  "not_in_gene_set_rows": 0,
+  "genes_in_every_direction": true
+ },
+ "served_pr_head": "ca61ffbaa0912daa0f53d2f3a9f74096f35e97e7",
+ "served": {
+  "rows": 180930,
+  "accessions": 64198,
+  "recomputed_rows": 180930,
+  "only_served": 0,
+  "only_recomputed": 0,
+  "definition_columns": [
+   [
+    "logs:DEF-GENE-RESOLUTION v2",
+    "logs:DEF-ORTHOLOGY v1",
+    180930
+   ]
+  ],
+  "status": {
+   "has_ortholog": 155056,
+   "no_gene": 12126,
+   "tree_lacks_target_species": 7183,
+   "no_edge_in_shared_tree": 5535,
+   "not_in_any_tree": 1030
+  },
+  "pairs_no_gene_and_a_gene": 0,
+  "gfap": [
+   [
+    "mus_musculus",
+    "P03995",
+    "ortholog_one2one",
+    "search_database_dbreference",
+    "agrees",
+    "search_database_dbreference",
+    "agrees"
+   ],
+   [
+    "rattus_norvegicus",
+    "P47819",
+    "ortholog_one2one",
+    "search_database_dbreference",
+    "agrees",
+    "search_database_dbreference",
+    "agrees"
+   ]
+  ],
+  "orthology_checks": {
+   "true": 15
+  },
+  "rows_by_resolution_agreement": {
+   "agrees": 144352,
+   "disagrees": 1278,
+   "silent": 23174,
+   "None": 12126
+  },
+  "accessions_with_a_disagreeing_gene": 346,
+  "accessions_no_gene_in_v2_default_view": [
+   [
+    "P60484-2",
+    "homo_sapiens",
+    [
+     "ENSG00000171862"
+    ],
+    [
+     "disagrees"
+    ]
+   ]
+  ],
+  "their_entries": [
+   [
+    "P60484",
+    "P60484",
+    "ENSG00000171862",
+    "agrees"
+   ]
+  ],
+  "accessions_no_gene_in_search_database_view": 811,
+  "partner_rows_by_agreement": {
+   "agrees": 117016,
+   "disagrees": 678,
+   "silent": 18690
+  },
+  "orthologs_whose_partners_all_disagree": 138
+ },
+ "snapshot_facts": {
+  "pair_rows_by_dump": {
+   "homo_sapiens__mus_musculus": {
+    "mus_musculus.protein_default.homologies.tsv.gz": 23764
+   },
+   "homo_sapiens__rattus_norvegicus": {
+    "homo_sapiens.protein_default.homologies.tsv.gz": 22105
+   },
+   "mus_musculus__rattus_norvegicus": {
+    "mus_musculus.protein_default.homologies.tsv.gz": 40027
+   }
+  },
+  "pten": {
+   "gene": "ENSG00000171862",
+   "name": "PTEN",
+   "status": {
+    "mus_musculus": "no_edge_in_shared_tree",
+    "rattus_norvegicus": "no_edge_in_shared_tree"
+   },
+   "rodent_pair_rows": 0
+  }
+ }
+}

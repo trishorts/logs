@@ -88,10 +88,10 @@ UniProt it is the text before the first `_`. That rule does not hold for RefSeq 
 
 ## `logs:DEF-GENE-RESOLUTION v2`: v1's rows, with the xref's agreement named, and a new default view
 
-**Status:** drafted 2026-11-10. Agreed in principle by aging (022, REQ-AGING-9), which asked for two things: name
-the three states apart, and version the definition. **Implementation:** mzLib `EnsemblXrefAgreement`, on branch
-`feat/ensembl-xref-agreement` (`code/mzLib-xref-agreement`), not yet a PR and not released. Until it ships, every
-run is v1.
+**Status:** drafted 2026-11-10; **shipped 2026-11-12 in mzLib 1.0.598** (#1578). Agreed in principle by aging (022,
+REQ-AGING-9), which asked for two things: name the three states apart, and version the definition.
+**Implementation:** mzLib `EnsemblXrefAgreement`. dataRepo's `logs.resolve_genes` writes v2 from datarepo 1.5.0; its
+first 41 artefacts equal our own mzLib 1.0.598 run on every column (our 037 to dataRepo). Runs before 1.0.598 are v1.
 
 ### What changes from v1
 
@@ -136,6 +136,10 @@ Counts are entries. The table is `results/xref_agreement_canonical-v3_e116.json`
 
 - On these databases, every entry with a disagreeing gene also has a gene that agrees or is silent. So v2's gain
   comes entirely from silent accessions.
+- **An isoform can lose its only gene to the default view.** On aging's isoform databases, P60484-2's own xref rows
+  link it only to ENSG00000284792, which is not in the GRCh38 primary gene set. Its only gene,
+  ENSG00000171862, therefore `disagrees`, while its entry P60484 `agrees`. A consumer filtering on the default view
+  must keep such an accession as a refusal, not drop it (aging's 1.5.0 catalog; our 024 to PXReprise).
 - These counts reproduce the ones our 010 sent, which a Python re-reading of the xref had computed.
 
 ---

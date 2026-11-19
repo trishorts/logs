@@ -677,6 +677,45 @@ def test_pxreprise_26_bridge_as_sent_in_023_to_pxreprise():
     assert b["of_which_a_searched_database_holds_an_accession"] == {"rows": 21, "partner_genes": 13}
 
 
+def test_pxreprise_26_fixes_on_v2_catalog_as_sent_in_024_to_pxreprise():
+    """024-logs checked #26's fixes (ca61ffb) on PXReprise's 1.5.0 catalog 36759593b29db341 (41 v2 artefacts). The
+    served protein_orthologs equals our independent recomputation row for row; no pair is both no_gene and with a gene;
+    the old SQL still gives 1,622 such pairs there. Under v2's default view, P60484-2 loses its only gene and 138
+    ortholog rows lose every partner accession. Compara 116 names no rodent partner for human PTEN."""
+    import gzip
+    r = json.loads((RESULTS / "catalog_bridge_review_36759593b29db341.json").read_text(encoding="utf-8"))
+    b, s, f = r["bridge"], r["served"], r["snapshot_facts"]
+    assert (r["served_pr_head"][:9], r["snapshot"]["release"]["logs"], r["snapshot"]["manifest_matches_registration"]) == (
+        "ca61ffbaa", "orthology-compara-116-b63a3331", True)
+    assert b["definition_ids"] == {"logs:DEF-GENE-RESOLUTION v2": 41}
+    assert (b["rows"], b["accessions"], b["bridge_pairs_no_gene_and_a_gene"], b["held_accessions_no_gene_row_and_gene_row"]) == (
+        182552, 64198, 1622, 811), "the old SQL (a3195c166) on the v2 catalog"
+    assert (s["rows"], s["accessions"], s["recomputed_rows"], s["only_served"], s["only_recomputed"]) == (180930, 64198, 180930, 0, 0)
+    assert s["pairs_no_gene_and_a_gene"] == 0
+    assert s["definition_columns"] == [["logs:DEF-GENE-RESOLUTION v2", "logs:DEF-ORTHOLOGY v1", 180930]]
+    assert s["orthology_checks"] == {"true": 15}
+    assert [(g[0], g[1], g[4], g[6]) for g in s["gfap"]] == [
+        ("mus_musculus", "P03995", "agrees", "agrees"), ("rattus_norvegicus", "P47819", "agrees", "agrees")]
+    assert s["rows_by_resolution_agreement"] == {"agrees": 144352, "disagrees": 1278, "silent": 23174, "None": 12126}
+    assert s["accessions_with_a_disagreeing_gene"] == 346
+    assert s["accessions_no_gene_in_v2_default_view"] == [["P60484-2", "homo_sapiens", ["ENSG00000171862"], ["disagrees"]]]
+    assert s["their_entries"] == [["P60484", "P60484", "ENSG00000171862", "agrees"]]
+    genes = {ln.split("\t")[0] for ln in gzip.open(RESULTS / "gene_sets" / "Homo_sapiens.GRCh38.116.genes.tsv.gz", "rt")}
+    assert "ENSG00000171862" in genes and "ENSG00000284792" not in genes, "P60484-2's xref gene is off the gene set"
+    xref = ROOT / "data" / "compara" / "Homo_sapiens.GRCh38.116.uniprot.tsv.gz"
+    if xref.exists():  # Ensembl's xref links the isoform only to ENSG00000284792
+        with gzip.open(xref, "rt") as fh:
+            linked = {ln.split("\t")[0] for ln in fh if ln.split("\t")[3] == "P60484-2"}
+        assert linked == {"ENSG00000284792"}
+    assert s["accessions_no_gene_in_search_database_view"] == 811
+    assert s["partner_rows_by_agreement"] == {"agrees": 117016, "disagrees": 678, "silent": 18690}
+    assert s["orthologs_whose_partners_all_disagree"] == 138
+    assert f["pair_rows_by_dump"]["homo_sapiens__rattus_norvegicus"] == {"homo_sapiens.protein_default.homologies.tsv.gz": 22105}
+    assert f["pair_rows_by_dump"]["homo_sapiens__mus_musculus"] == {"mus_musculus.protein_default.homologies.tsv.gz": 23764}
+    assert (f["pten"]["name"], f["pten"]["rodent_pair_rows"]) == ("PTEN", 0)
+    assert set(f["pten"]["status"].values()) == {"no_edge_in_shared_tree"}
+
+
 if __name__ == "__main__":
     import traceback
 
