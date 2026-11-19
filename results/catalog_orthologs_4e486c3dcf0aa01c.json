@@ -1,0 +1,758 @@
+{
+ "catalog": "F:/aging_data/repo/catalogs/catalog-4e486c3dcf0aa01c.duckdb",
+ "catalog_id": "4e486c3dcf0aa01c",
+ "catalog_schema_version": "0.0.16",
+ "datarepo": "1.4.5",
+ "n_datasets": 210,
+ "snapshot": {
+  "artefact_id": "0fe30fe8d4edc728",
+  "definition_id": "logs:DEF-ORTHOLOGY v1",
+  "root": "F:/aging_data/repo/store/_engine/logs.register_orthology/0fe30fe8d4edc728/snapshot",
+  "release": {
+   "logs": "orthology-compara-116-b63a3331"
+  },
+  "inputs": {
+   "snapshot_manifest": "fd0a9d8f5d211a91bdafd4c843ee4f0085be8cf0d7ff4fc779c5e6ebda5074aa",
+   "snapshot_tar": "b1d682a51e7e5759cd72719713d4a00a03b07b9ee033b8bdf8f0f54fd7fb747b"
+  },
+  "manifest_sha256": "fd0a9d8f5d211a91bdafd4c843ee4f0085be8cf0d7ff4fc779c5e6ebda5074aa",
+  "snapshot_id": "b63a3331eb87c93eee02d7ec26c9bdcc7a1479e0003b041bb33382d6810bc3c7",
+  "manifest_matches_registration": true
+ },
+ "engine_artefacts": {
+  "go.annotate_groups": 150,
+  "logs.register_orthology": 1,
+  "logs.resolve_genes": 42
+ },
+ "measured_utc": "2026-11-19T16:59:09Z",
+ "duckdb": "1.5.5",
+ "one_accession": {
+  "accession": "P14136",
+  "steps": [
+   {
+    "step": "accession -> gene",
+    "ms": 1050.6,
+    "rows": [
+     [
+      "ENSG00000131095",
+      "GFAP",
+      "resolved",
+      "search_database_dbreference",
+      true
+     ]
+    ]
+   },
+   {
+    "step": "gene -> orthologs in mus_musculus",
+    "ms": 6.1,
+    "rows": [
+     [
+      "ENSG00000131095",
+      "ENSMUSG00000020932",
+      "ortholog_one2one",
+      true
+     ]
+    ],
+    "pair_status": [
+     [
+      "ENSG00000131095",
+      "has_ortholog"
+     ]
+    ],
+    "pair_status_ms": 24.7
+   },
+   {
+    "step": "gene -> orthologs in rattus_norvegicus",
+    "ms": 5.3,
+    "rows": [
+     [
+      "ENSG00000131095",
+      "ENSRNOG00000002919",
+      "ortholog_one2one",
+      true
+     ]
+    ],
+    "pair_status": [
+     [
+      "ENSG00000131095",
+      "has_ortholog"
+     ]
+    ],
+    "pair_status_ms": 21.5
+   },
+   {
+    "step": "partner genes -> accessions",
+    "ms": 53.0,
+    "rows": [
+     [
+      "ENSMUSG00000020932",
+      "P03995",
+      "resolved",
+      true,
+      7
+     ],
+     [
+      "ENSRNOG00000002919",
+      "P47819",
+      "resolved",
+      true,
+      4
+     ]
+    ]
+   }
+  ]
+ },
+ "symbol_vs_orthology": {
+  "denominator": {
+   "human_accessions": 16306,
+   "human_genes": 16196,
+   "rule": "protein_index, organism human, gene name present, n_datasets_1pct > 0, exactly one gene in gene_resolutions"
+  },
+  "species": {
+   "mus_musculus": {
+    "classes": {
+     "disjoint": 91,
+     "neither": 824,
+     "only_orthology": 676,
+     "only_symbol": 1366,
+     "same": 13141,
+     "symbol_adds_non_orthologs": 10,
+     "symbol_subset_of_orthologs": 198
+    },
+    "symbol_partners_by_reason": {
+     "human_gene_has_no_ortholog:no_edge_in_shared_tree": {
+      "pairs": 94,
+      "human_accessions": 87
+     },
+     "human_gene_has_no_ortholog:not_in_any_tree": {
+      "pairs": 4,
+      "human_accessions": 4
+     },
+     "human_gene_has_no_ortholog:tree_lacks_target_species": {
+      "pairs": 186,
+      "human_accessions": 186
+     },
+     "is_ortholog": {
+      "pairs": 13481,
+      "human_accessions": 13349
+     },
+     "partner_gene_not_an_ortholog": {
+      "pairs": 70,
+      "human_accessions": 70
+     },
+     "partner_has_no_gene:not_in_source": {
+      "pairs": 1126,
+      "human_accessions": 1120
+     }
+    },
+    "with_orthologs": 14116,
+    "with_orthologs_not_one2one": 804,
+    "examples": {
+     "disjoint": [
+      [
+       "A0A075B6H7",
+       "IGKV3-7",
+       [
+        "A0A075B5N9"
+       ],
+       [
+        "A0A0G2JEE1"
+       ],
+       [
+        "ortholog_one2many"
+       ]
+      ],
+      [
+       "A0A075B6T8",
+       "TRAV9-1",
+       [
+        "A0A075B601"
+       ],
+       [
+        "A0A075B5Z8",
+        "A0A075B603",
+        "A0A075B623",
+        "A0A075B639",
+        "A0A075B6A6",
+        "A0A075B6B0",
+        "A0A075B6B4",
+        "A0A075B6D0",
+        "A0A075B6D3",
+        "Q5R1I0",
+        "Q5R1I4"
+       ],
+       [
+        "ortholog_many2many"
+       ]
+      ],
+      [
+       "A0A075B6X5",
+       "TRAV18",
+       [
+        "A0A075B656"
+       ],
+       [
+        "A0A075B648",
+        "A0A075B6A4",
+        "A0A0G2JF09",
+        "A0N8N6",
+        "A0N8R0",
+        "A0N8R1"
+       ],
+       [
+        "ortholog_one2many"
+       ]
+      ]
+     ],
+     "only_orthology": [
+      [
+       "A0A024R1R8",
+       "TMA7B",
+       [],
+       [
+        "Q8K003"
+       ],
+       [
+        "ortholog_one2many"
+       ]
+      ],
+      [
+       "A0A075B6K6",
+       "IGLV4-3",
+       [],
+       [
+        "A0A0B4J1K5"
+       ],
+       [
+        "ortholog_one2one"
+       ]
+      ],
+      [
+       "A0A075B6L2",
+       "TRGV11",
+       [],
+       [
+        "A0A0B4J1J8"
+       ],
+       [
+        "ortholog_one2one"
+       ]
+      ]
+     ],
+     "only_symbol": [
+      [
+       "A0A075B6W8",
+       "TRAJ17",
+       [
+        "A0A0G2JEC1"
+       ],
+       [],
+       []
+      ],
+      [
+       "A0A087X0K7",
+       "TRBV17",
+       [
+        "A0A140T8P8"
+       ],
+       [],
+       []
+      ],
+      [
+       "A0A0D9SF12",
+       "CCDC163",
+       [
+        "A2AGD7"
+       ],
+       [],
+       []
+      ]
+     ],
+     "symbol_adds_non_orthologs": [
+      [
+       "O00213",
+       "APBB1",
+       [
+        "A0A0R4J2C1",
+        "Q9QXJ1"
+       ],
+       [
+        "A0A0R4J2C1"
+       ],
+       [
+        "ortholog_one2one"
+       ]
+      ],
+      [
+       "O96007",
+       "MOCS2",
+       [
+        "Q9Z223",
+        "Q9Z224"
+       ],
+       [
+        "Q9Z224"
+       ],
+       [
+        "ortholog_one2one"
+       ]
+      ],
+      [
+       "O96033",
+       "MOCS2",
+       [
+        "Q9Z223",
+        "Q9Z224"
+       ],
+       [
+        "Q9Z224"
+       ],
+       [
+        "ortholog_one2one"
+       ]
+      ]
+     ],
+     "symbol_subset_of_orthologs": [
+      [
+       "A0A087WWS6",
+       "IFNA13",
+       [
+        "Q80SU4"
+       ],
+       [
+        "L7MTU6",
+        "P01572",
+        "P07351",
+        "P09235",
+        "Q61716",
+        "Q61718",
+        "Q80SS5",
+        "Q80SU4",
+        "Q810G1",
+        "Q810G3"
+       ],
+       [
+        "ortholog_many2many"
+       ]
+      ],
+      [
+       "A0A0C4DH31",
+       "IGHV1-18",
+       [
+        "A0A0A6YXN4"
+       ],
+       [
+        "A0A075B5R4",
+        "A0A075B5R7",
+        "A0A075B5R9",
+        "A0A075B5S3",
+        "A0A075B5T4",
+        "A0A075B5T5",
+        "A0A075B5T7",
+        "A0A075B5U0",
+        "A0A075B5U1",
+        "A0A075B5U7",
+        "A0A075B5U9",
+        "A0A075B5V0",
+        "A0A075B5V1",
+        "A0A075B5V2",
+        "A0A075B5V5",
+        "A0A075B5V6",
+        "A0A075B5V7",
+        "A0A075B5V8",
+        "A0A075B5V9",
+        "A0A075B5W1",
+        "A0A075B5W3",
+        "A0A075B5W5",
+        "A0A075B5W6",
+        "A0A075B5W7",
+        "A0A075B5W9",
+        "A0A075B5X2",
+        "A0A075B5X3",
+        "A0A075B5X5",
+        "A0A075B5X6",
+        "A0A075B5Y2",
+        "A0A075B5Y3",
+        "A0A075B5Y4",
+        "A0A075B5Y6",
+        "A0A075B674",
+        "A0A075B680",
+        "A0A075B684",
+        "A0A0A6YVW3",
+        "A0A0A6YW32",
+        "A0A0A6YW37",
+        "A0A0A6YWI9",
+        "A0A0A6YWX0",
+        "A0A0A6YX66",
+        "A0A0A6YX72",
+        "A0A0A6YXA5",
+        "A0A0A6YXC3",
+        "A0A0A6YXE0",
+        "A0A0A6YXN4",
+        "A0A0A6YXT2",
+        "A0A0B4J1J7",
+        "A0A0B4J1M0",
+        "A0A0B4J1N0",
+        "A0A0G2JFS5",
+        "A0A0G2JGK2",
+        "P01749",
+        "P01754",
+        "P06327",
+        "P06328"
+       ],
+       [
+        "ortholog_many2many"
+       ]
+      ],
+      [
+       "A0A0C4DH33",
+       "IGHV1-24",
+       [
+        "A0A075B5U9"
+       ],
+       [
+        "A0A075B5R4",
+        "A0A075B5R7",
+        "A0A075B5R9",
+        "A0A075B5S3",
+        "A0A075B5T4",
+        "A0A075B5T5",
+        "A0A075B5T7",
+        "A0A075B5U0",
+        "A0A075B5U1",
+        "A0A075B5U7",
+        "A0A075B5U9",
+        "A0A075B5V0",
+        "A0A075B5V1",
+        "A0A075B5V2",
+        "A0A075B5V5",
+        "A0A075B5V6",
+        "A0A075B5V7",
+        "A0A075B5V8",
+        "A0A075B5V9",
+        "A0A075B5W1",
+        "A0A075B5W3",
+        "A0A075B5W5",
+        "A0A075B5W6",
+        "A0A075B5W7",
+        "A0A075B5W9",
+        "A0A075B5X2",
+        "A0A075B5X3",
+        "A0A075B5X5",
+        "A0A075B5X6",
+        "A0A075B5Y2",
+        "A0A075B5Y3",
+        "A0A075B5Y4",
+        "A0A075B5Y6",
+        "A0A075B674",
+        "A0A075B680",
+        "A0A075B684",
+        "A0A0A6YVW3",
+        "A0A0A6YW32",
+        "A0A0A6YW37",
+        "A0A0A6YWI9",
+        "A0A0A6YWX0",
+        "A0A0A6YX66",
+        "A0A0A6YX72",
+        "A0A0A6YXA5",
+        "A0A0A6YXC3",
+        "A0A0A6YXE0",
+        "A0A0A6YXN4",
+        "A0A0A6YXT2",
+        "A0A0B4J1J7",
+        "A0A0B4J1M0",
+        "A0A0B4J1N0",
+        "A0A0G2JFS5",
+        "A0A0G2JGK2",
+        "P01749",
+        "P01754",
+        "P06327",
+        "P06328"
+       ],
+       [
+        "ortholog_many2many"
+       ]
+      ]
+     ]
+    }
+   },
+   "rattus_norvegicus": {
+    "classes": {
+     "disjoint": 167,
+     "neither": 1074,
+     "only_orthology": 773,
+     "only_symbol": 2960,
+     "overlapping_different": 1,
+     "same": 11036,
+     "symbol_adds_non_orthologs": 11,
+     "symbol_subset_of_orthologs": 284
+    },
+    "symbol_partners_by_reason": {
+     "human_gene_has_no_ortholog:no_edge_in_shared_tree": {
+      "pairs": 84,
+      "human_accessions": 81
+     },
+     "human_gene_has_no_ortholog:not_in_any_tree": {
+      "pairs": 1,
+      "human_accessions": 1
+     },
+     "human_gene_has_no_ortholog:tree_lacks_target_species": {
+      "pairs": 175,
+      "human_accessions": 175
+     },
+     "is_ortholog": {
+      "pairs": 11375,
+      "human_accessions": 11332
+     },
+     "partner_gene_not_an_ortholog": {
+      "pairs": 115,
+      "human_accessions": 115
+     },
+     "partner_has_no_gene:not_in_source": {
+      "pairs": 2490,
+      "human_accessions": 2424
+     },
+     "partner_has_no_gene:off_primary_only": {
+      "pairs": 344,
+      "human_accessions": 344
+     }
+    },
+    "with_orthologs": 12272,
+    "with_orthologs_not_one2one": 956,
+    "examples": {
+     "disjoint": [
+      [
+       "B4DYI2",
+       "SPATA31C2",
+       [
+        "M0R4P6"
+       ],
+       [
+        "B6VQA5"
+       ],
+       [
+        "ortholog_one2many"
+       ]
+      ],
+      [
+       "O00534",
+       "VWA5A",
+       [
+        "Q75WE7"
+       ],
+       [
+        "D4A1U8"
+       ],
+       [
+        "ortholog_one2many"
+       ]
+      ],
+      [
+       "O00602",
+       "FCN1",
+       [
+        "Q9WTS8"
+       ],
+       [
+        "P57756"
+       ],
+       [
+        "ortholog_one2one"
+       ]
+      ]
+     ],
+     "only_orthology": [
+      [
+       "A0A075B6H7",
+       "IGKV3-7",
+       [],
+       [
+        "A0A8I5Y806",
+        "A0ABK0LSK5"
+       ],
+       [
+        "ortholog_many2many"
+       ]
+      ],
+      [
+       "A0A075B6H8",
+       "IGKV1D-42",
+       [],
+       [
+        "A0A8I5ZXY4",
+        "A0ABK0LGR8",
+        "A0ABK0LI92"
+       ],
+       [
+        "ortholog_many2many"
+       ]
+      ],
+      [
+       "A0A075B6K0",
+       "IGLV3-16",
+       [],
+       [
+        "A0A0G2JZS9",
+        "A0ABK0L3S9",
+        "A0ABK0LF01",
+        "A0ABK0LMJ9",
+        "A0ABK0M0X0"
+       ],
+       [
+        "ortholog_many2many"
+       ]
+      ]
+     ],
+     "only_symbol": [
+      [
+       "A0A024R1R8",
+       "TMA7B",
+       [
+        "A0ABK0LYW7"
+       ],
+       [],
+       []
+      ],
+      [
+       "A0A0D9SF12",
+       "CCDC163",
+       [
+        "F7F1L4"
+       ],
+       [],
+       []
+      ],
+      [
+       "A0A0R4J2E8",
+       "MATR3",
+       [
+        "P43244"
+       ],
+       [],
+       []
+      ]
+     ],
+     "overlapping_different": [
+      [
+       "P0DY56",
+       "IFNA1",
+       [
+        "A0A7R8C3L7",
+        "P05011"
+       ],
+       [
+        "A0A7R8C3J7",
+        "A0A7R8C3L7",
+        "A0A8I5ZQR5",
+        "A0A8I6AN84",
+        "A0A8I6GMD9",
+        "A0ABK0LFV4",
+        "A0ABK0LLC1",
+        "A0ABK0LXT6",
+        "A0ABK0M530",
+        "D3Z919",
+        "D3ZFH0"
+       ],
+       [
+        "ortholog_many2many"
+       ]
+      ]
+     ],
+     "symbol_adds_non_orthologs": [
+      [
+       "O43497",
+       "CACNA1G",
+       [
+        "A0A8I5ZVK1",
+        "O54898"
+       ],
+       [
+        "A0A8I5ZVK1"
+       ],
+       [
+        "ortholog_one2one"
+       ]
+      ],
+      [
+       "O75380",
+       "NDUFS6",
+       [
+        "D3ZCZ9",
+        "P52504"
+       ],
+       [
+        "D3ZCZ9"
+       ],
+       [
+        "ortholog_one2many"
+       ]
+      ],
+      [
+       "P0DPB6",
+       "POLR1D",
+       [
+        "A0A8I6AK96",
+        "A0A8I6GK67"
+       ],
+       [
+        "A0A8I6AK96"
+       ],
+       [
+        "ortholog_one2one"
+       ]
+      ]
+     ],
+     "symbol_subset_of_orthologs": [
+      [
+       "A0A0A0MT36",
+       "IGKV6D-21",
+       [
+        "A0A8I5ZJM6"
+       ],
+       [
+        "A0A8I5ZJM6",
+        "A0A8I6AB22",
+        "A0ABK0LHB5",
+        "A0ABK0LRI9",
+        "A0ABK0LTS1",
+        "A0ABK0LVY4"
+       ],
+       [
+        "ortholog_many2many"
+       ]
+      ],
+      [
+       "A0A0J9YWL9",
+       "TEX13C",
+       [
+        "M0R8I1"
+       ],
+       [
+        "A0A0G2JWC5",
+        "M0R8I1"
+       ],
+       [
+        "ortholog_many2many"
+       ]
+      ],
+      [
+       "A1A4Y4",
+       "IRGM",
+       [
+        "Q6AYC2"
+       ],
+       [
+        "A0A8I5ZSB0",
+        "A0ABK0LBB2",
+        "Q6AYC2"
+       ],
+       [
+        "ortholog_one2many"
+       ]
+      ]
+     ]
+    }
+   }
+  }
+ }
+}

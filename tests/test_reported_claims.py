@@ -571,6 +571,54 @@ def test_leg1_on_canonical_v3_as_sent_in_010_to_ptmqtl():
     assert cites == {("TrEMBL", True): 13258, ("Swiss-Prot", False): 8213}, "010-logs to ptmQtl"
 
 
+def test_orthologs_on_aging_catalog_as_sent_in_020_to_pxreprise():
+    """020-logs answered PXR-O13 on aging's catalog 4e486c3dcf0aa01c, which registers our snapshot as artefact
+    0fe30fe8d4edc728 (019 said it held none). The real orthology join gives GFAP's partners, and a gene symbol
+    matched across organisms (019's stand-in) gives the same partner accessions for 80.6% (mouse) and 67.7%
+    (rat) of 16,306 human accessions. Most symbol partners that orthology cannot reach resolve to no gene."""
+    r = json.loads((RESULTS / "catalog_orthologs_4e486c3dcf0aa01c.json").read_text(encoding="utf-8"))
+    snap = r["snapshot"]
+    assert (snap["artefact_id"], snap["release"]["logs"], snap["manifest_matches_registration"]) == (
+        "0fe30fe8d4edc728", "orthology-compara-116-b63a3331", True)
+    steps = {s["step"]: s["rows"] for s in r["one_accession"]["steps"]}
+    assert [g[0] for g in steps["accession -> gene"]] == ["ENSG00000131095"]
+    assert [(o[1], o[2]) for o in steps["gene -> orthologs in mus_musculus"]] == [("ENSMUSG00000020932", "ortholog_one2one")]
+    assert [(o[1], o[2]) for o in steps["gene -> orthologs in rattus_norvegicus"]] == [("ENSRNOG00000002919", "ortholog_one2one")]
+    assert [a[1] for a in steps["partner genes -> accessions"]] == ["P03995", "P47819"]
+    sv = r["symbol_vs_orthology"]
+    assert (sv["denominator"]["human_accessions"], sv["denominator"]["human_genes"]) == (16306, 16196)
+    m, rt = sv["species"]["mus_musculus"], sv["species"]["rattus_norvegicus"]
+    assert sum(m["classes"].values()) == sum(rt["classes"].values()) == 16306
+    assert (m["classes"]["same"], rt["classes"]["same"]) == (13141, 11036)
+    gained = lambda c: c["only_orthology"] + c["symbol_subset_of_orthologs"]  # noqa: E731
+    assert (gained(m["classes"]), gained(rt["classes"])) == (874, 1057), "partners only orthology finds"
+
+    def why(sp, prefix):
+        return sum(v["pairs"] for k, v in sp["symbol_partners_by_reason"].items() if k.startswith(prefix))
+    assert (why(m, "partner_has_no_gene"), why(rt, "partner_has_no_gene")) == (1126, 2834)
+    assert rt["symbol_partners_by_reason"]["partner_has_no_gene:off_primary_only"]["pairs"] == 344
+    assert (why(m, "human_gene_has_no_ortholog"), why(rt, "human_gene_has_no_ortholog")) == (284, 260)
+    assert (why(m, "partner_gene_not_an_ortholog"), why(rt, "partner_gene_not_an_ortholog")) == (70, 115)
+    beyond = lambda c: c["only_symbol"] + c["symbol_adds_non_orthologs"]  # noqa: E731
+    other = lambda c: c["disjoint"] + c.get("overlapping_different", 0)  # noqa: E731
+    assert (beyond(m["classes"]), beyond(rt["classes"])) == (1376, 2971), "partners only the symbol adds"
+    assert (other(m["classes"]), other(rt["classes"])) == (91, 168)
+    assert (m["classes"]["neither"], rt["classes"]["neither"]) == (824, 1074)
+    ifna13 = next(e for e in m["examples"]["symbol_subset_of_orthologs"] if e[1] == "IFNA13")
+    assert (len(ifna13[2]), len(ifna13[3])) == (1, 10), "IFNA13: 1 mouse partner by name, 10 by orthology"
+    assert r["engine_artefacts"]["logs.resolve_genes"] == 42
+    catalog = Path(r["catalog"])
+    if catalog.exists():  # the two examples 020 named: reviewed mouse entries that resolve to no gene
+        import duckdb
+        con = duckdb.connect()
+        con.execute(f"ATTACH '{catalog.as_posix()}' AS cat (READ_ONLY)")
+        got = dict(con.execute("""select accession, list(distinct outcome order by outcome) from cat.gene_resolutions
+            where accession in ('Q9QXJ1', 'Q9Z223') and gene_id is null group by 1""").fetchall())
+        assert got == {"Q9QXJ1": ["not_in_source"], "Q9Z223": ["not_in_source"]}
+        assert con.execute("select count(*) from cat.gene_resolutions where accession in ('Q9QXJ1', 'Q9Z223') "
+                           "and gene_id is not null").fetchone()[0] == 0
+
+
 if __name__ == "__main__":
     import traceback
 
