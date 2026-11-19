@@ -648,6 +648,35 @@ def test_orthologs_on_aging_catalog_as_sent_in_020_to_pxreprise():
                            "and gene_id is not null").fetchone()[0] == 0
 
 
+def test_pxreprise_26_bridge_as_sent_in_023_to_pxreprise():
+    """023-logs reviewed smith-chem-wisc/PXReprise#26 (PXR-O14) by re-running its protein_orthologs SQL, word for word
+    at a3195c166, on aging's catalog 4e486c3dcf0aa01c (v1 resolutions). 811 held accessions have a no-gene row and an
+    Ensembl-xref gene row, so the bridge answers 1,622 (accession, target species) pairs both `no_gene` and with a gene.
+    Widening partners to every searched database's accessions would fill 21 of 18,670 empty partner rows."""
+    r = json.loads((RESULTS / "catalog_bridge_review_4e486c3dcf0aa01c.json").read_text(encoding="utf-8"))
+    b = r["bridge"]
+    assert (r["pr_head"][:9], r["snapshot"]["artefact_id"], r["snapshot"]["manifest_matches_registration"]) == (
+        "a3195c166", "0fe30fe8d4edc728", True)
+    assert b["definition_ids"] == {"logs:DEF-GENE-RESOLUTION v1": 42}
+    assert (b["rows"], b["accessions"], b["rows_equal_distinct_keys"], b["protein_index_duplicate_accessions"]) == (
+        182580, 64211, True, 0)
+    assert {k: v["rows"] for k, v in b["status"].items()} == {
+        "has_ortholog": 155058, "no_gene": 13754, "tree_lacks_target_species": 7185,
+        "no_edge_in_shared_tree": 5535, "not_in_any_tree": 1048}
+    assert (b["not_in_gene_set_rows"], b["genes_in_every_direction"]) == (0, True)
+    assert [(g[0], g[5], g[2]) for g in b["gfap"]] == [
+        ("mus_musculus", "P03995", "ortholog_one2one"), ("rattus_norvegicus", "P47819", "ortholog_one2one")]
+    assert (b["held_accessions_no_gene_row_and_gene_row"], b["bridge_pairs_no_gene_and_a_gene"]) == (811, 1622)
+    assert b["their_gene_rows_by_source"] == {"ensembl_xref": 811}
+    assert b["their_outcomes"] == {"not_in_source": 282, "off_primary_only": 529}
+    assert ["A0A0G2K2P5", "not_in_source", "ENSRNOG00000011077", "ensembl_xref"] in b["examples"]
+    with_gene = {k: v for k, v in b["no_gene_outcomes_by_status"].items() if not k.endswith("|no_gene")}
+    assert sum(with_gene.values()) == 1801, "rows whose outcome links no gene, followed through Ensembl's gene"
+    assert (b["partner_rows_by_outcome"]["not_in_source"], b["partner_rows_by_outcome"]["off_primary_only"]) == (608, 1058)
+    assert b["ortholog_rows_no_partner_accession"] == 18670
+    assert b["of_which_a_searched_database_holds_an_accession"] == {"rows": 21, "partner_genes": 13}
+
+
 if __name__ == "__main__":
     import traceback
 

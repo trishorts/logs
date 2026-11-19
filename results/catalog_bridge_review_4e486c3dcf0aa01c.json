@@ -1,0 +1,144 @@
+{
+ "pr": "smith-chem-wisc/PXReprise#26",
+ "pr_head": "a3195c166ad7feb522bc8f01c26bbda183efd3af",
+ "catalog": "F:/aging_data/repo/catalogs/catalog-4e486c3dcf0aa01c.duckdb",
+ "catalog_id": "4e486c3dcf0aa01c",
+ "snapshot": {
+  "artefact_id": "0fe30fe8d4edc728",
+  "release": {
+   "logs": "orthology-compara-116-b63a3331"
+  },
+  "manifest_matches_registration": true
+ },
+ "bridge": {
+  "species": [
+   "homo_sapiens",
+   "mus_musculus",
+   "rattus_norvegicus"
+  ],
+  "bridge_seconds": 0.85,
+  "tables": {
+   "orthology_genes": 200649,
+   "gene_orthologs": 171792,
+   "gene_ortholog_status": 401298
+  },
+  "rows": 182580,
+  "accessions": 64211,
+  "rows_equal_distinct_keys": true,
+  "protein_index_duplicate_accessions": 0,
+  "status": {
+   "has_ortholog": {
+    "rows": 155058,
+    "accessions": 54747
+   },
+   "no_gene": {
+    "rows": 13754,
+    "accessions": 6877
+   },
+   "tree_lacks_target_species": {
+    "rows": 7185,
+    "accessions": 5149
+   },
+   "no_edge_in_shared_tree": {
+    "rows": 5535,
+    "accessions": 4111
+   },
+   "not_in_any_tree": {
+    "rows": 1048,
+    "accessions": 518
+   }
+  },
+  "gfap": [
+   [
+    "mus_musculus",
+    "has_ortholog",
+    "ortholog_one2one",
+    true,
+    "ENSMUSG00000020932",
+    "P03995"
+   ],
+   [
+    "rattus_norvegicus",
+    "has_ortholog",
+    "ortholog_one2one",
+    true,
+    "ENSRNOG00000002919",
+    "P47819"
+   ]
+  ],
+  "bridge_pairs_no_gene_and_a_gene": 1622,
+  "held_accessions_no_gene_row_and_gene_row": 811,
+  "their_gene_rows_by_source": {
+   "ensembl_xref": 811
+  },
+  "their_outcomes": {
+   "not_in_source": 282,
+   "off_primary_only": 529
+  },
+  "examples": [
+   [
+    "A0A096MIX6",
+    "off_primary_only",
+    null,
+    "search_database_dbreference"
+   ],
+   [
+    "A0A096MIX6",
+    "off_primary_only",
+    "ENSRNOG00000083187",
+    "ensembl_xref"
+   ],
+   [
+    "A0A0G2JTY4",
+    "off_primary_only",
+    null,
+    "search_database_dbreference"
+   ],
+   [
+    "A0A0G2JTY4",
+    "off_primary_only",
+    "ENSRNOG00000054264",
+    "ensembl_xref"
+   ],
+   [
+    "A0A0G2K2P5",
+    "not_in_source",
+    null,
+    "search_database_dbreference"
+   ],
+   [
+    "A0A0G2K2P5",
+    "not_in_source",
+    "ENSRNOG00000011077",
+    "ensembl_xref"
+   ]
+  ],
+  "no_gene_outcomes_by_status": {
+   "not_in_source|has_ortholog": 651,
+   "not_in_source|no_edge_in_shared_tree": 4,
+   "not_in_source|no_gene": 11526,
+   "not_in_source|tree_lacks_target_species": 8,
+   "off_primary_only|has_ortholog": 1104,
+   "off_primary_only|no_edge_in_shared_tree": 20,
+   "off_primary_only|no_gene": 2228,
+   "off_primary_only|tree_lacks_target_species": 14
+  },
+  "partner_rows_by_outcome": {
+   "multi_gene": 7363,
+   "not_in_source": 608,
+   "off_primary_only": 1058,
+   "resolved": 127359
+  },
+  "gene_resolutions_has_ensembl_xref_agreement": false,
+  "definition_ids": {
+   "logs:DEF-GENE-RESOLUTION v1": 42
+  },
+  "ortholog_rows_no_partner_accession": 18670,
+  "of_which_a_searched_database_holds_an_accession": {
+   "rows": 21,
+   "partner_genes": 13
+  },
+  "not_in_gene_set_rows": 0,
+  "genes_in_every_direction": true
+ }
+}
