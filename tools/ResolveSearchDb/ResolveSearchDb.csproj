@@ -1,5 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <!-- Runs the mzLib resolver (code/mzLib-ensembl-genes, see code/PINNED.md) over a search database. -->
+  <!-- Runs the mzLib resolver over a search database. By default it builds against the historical pin
+       (code/mzLib-ensembl-genes, see code/PINNED.md); with -p:MzLibVersion=<x.y.z> it builds against that released
+       mzLib package instead (1.0.598 is the first with DEF-GENE-RESOLUTION v2's ensembl_xref_agreement column).
+       Build each into its own output directory (-o), since the two restore different references. -->
   <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><Nullable>disable</Nullable></PropertyGroup>
-  <ItemGroup><ProjectReference Include="..\..\code\mzLib-ensembl-genes\mzLib\UsefulProteomicsDatabases\UsefulProteomicsDatabases.csproj" /></ItemGroup>
+  <ItemGroup Condition="'$(MzLibVersion)' == ''"><ProjectReference Include="..\..\code\mzLib-ensembl-genes\mzLib\UsefulProteomicsDatabases\UsefulProteomicsDatabases.csproj" /></ItemGroup>
+  <ItemGroup Condition="'$(MzLibVersion)' != ''"><PackageReference Include="mzLib" Version="$(MzLibVersion)" /></ItemGroup>
 </Project>

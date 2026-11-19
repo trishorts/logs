@@ -19,6 +19,7 @@ Run:  python tests/test_reported_claims.py
 
 from __future__ import annotations
 
+import collections
 import json
 import sys
 from pathlib import Path
@@ -569,6 +570,34 @@ def test_leg1_on_canonical_v3_as_sent_in_010_to_ptmqtl():
             elif s.startswith("</entry>"):
                 cites[(ds, ens)] += 1
     assert cites == {("TrEMBL", True): 13258, ("Swiss-Prot", False): 8213}, "010-logs to ptmQtl"
+
+
+def test_v2_artefacts_equal_ours_as_sent_in_037_to_datarepo():
+    """037-logs did the diff dataRepo 036 asked for: its 41 first v2 artefacts (mzLib 1.0.598, one per searched
+    database, human 15, mouse 17, rat 9). (A) Each equals aging's v1 artefact for the same database on every v1
+    column (all but definition_id). (B) Each equals our own mzLib 1.0.598 run on the same file, with our gene sets
+    and xrefs, on every column, ensembl_xref_agreement included. 036's outcome-by-agreement table is reproduced."""
+    a = json.loads((RESULTS / "store_diff_v2_against_v1.json").read_text(encoding="utf-8"))["runs"]
+    b = json.loads((RESULTS / "store_diff_v2_against_mzlib-1.0.598.json").read_text(encoding="utf-8"))["runs"]
+    for runs in (a, b):
+        assert len(runs) == 41
+        assert all(r["identical"] and r["only_store"] == r["only_reference"] == 0 for r in runs)
+        assert all(v is True for r in runs for v in r["provenance"]["checks"].values())
+        assert {r["provenance"]["mzlib"] for r in runs} == {"1.0.598"}
+        assert sorted(collections.Counter(r["species"] for r in runs).values()) == [9, 15, 17]
+    assert all(r["ignored_columns"] == ["definition_id"] and "ensembl_xref_agreement" not in r["compared_on"]
+               and len(r["compared_on"]) == 18 and r["same_database"] for r in a)
+    assert all(len(r["compared_on"]) == 19 for r in b)
+    assert all(r["same_database"] and "ensembl_xref_agreement" in r["compared_on"] for r in b)
+    total: collections.Counter = collections.Counter()
+    for r in a:
+        total.update(r["agreement_by_outcome"])
+    assert dict(total) == {
+        "resolved|agrees": 285567, "resolved|silent": 16969, "resolved|disagrees": 71,
+        "multi_gene|agrees": 7638, "multi_gene|silent": 1053, "multi_gene|disagrees": 2303,
+        "off_primary_only|agrees": 1589, "off_primary_only|null": 3637,
+        "not_in_source|agrees": 1079, "not_in_source|null": 26794}, "dataRepo 036's table"
+    assert sum(total.values()) == sum(r["store_rows"] for r in b) == 346700
 
 
 def test_orthologs_on_aging_catalog_as_sent_in_020_to_pxreprise():

@@ -1,0 +1,3780 @@
+{
+  "generated": "2026-11-19",
+  "title": "dataRepo's v2 gene resolutions against our own mzLib 1.0.598 run (same files)",
+  "definition": "logs:DEF-GENE-RESOLUTION v2",
+  "runs": [
+    {
+      "label": "mouse-UP000000589_all_genecentric_2026_03_agingPTM-v8",
+      "species": "mus_musculus",
+      "reference": "019f43a553cd1843.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 22383,
+      "reference_rows": 22383,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "a57e0e81e057c4613aed1431c27cf6be504a70b941fe0145473f27f8c4d2a6c8"
+      ],
+      "reference_database": [
+        "a57e0e81e057c4613aed1431c27cf6be504a70b941fe0145473f27f8c4d2a6c8"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 19553,
+        "null": 1645,
+        "silent": 1183,
+        "disagrees": 2
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 18857,
+        "not_in_source|null": 1645,
+        "not_in_source|agrees": 39,
+        "multi_gene|agrees": 657,
+        "resolved|silent": 1087,
+        "multi_gene|disagrees": 2,
+        "multi_gene|silent": 96
+      },
+      "provenance": {
+        "artefact": "019f43a553cd1843",
+        "written_utc": "2026-11-13T05:54:37Z",
+        "search_database": "UP000000589_all_genecentric_2026_03_agingPTM-v8.xml",
+        "search_database_sha256": "a57e0e81e057c4613aed1431c27cf6be504a70b941fe0145473f27f8c4d2a6c8",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD035577"
+        ],
+        "rows": 22383,
+        "entries": 21860,
+        "outcome_by_entry": {
+          "multi_gene": 273,
+          "not_in_source": 1645,
+          "resolved": 19942
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "rat-aging_isoforms_peroxisome_rat",
+      "species": "rattus_norvegicus",
+      "reference": "0243c0db137890d0.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 1,
+      "reference_rows": 1,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "860896cb56cb7c937ad788438a6996d2149df4c807a3eeb54e8c38b9fa12808c"
+      ],
+      "reference_database": [
+        "860896cb56cb7c937ad788438a6996d2149df4c807a3eeb54e8c38b9fa12808c"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 1
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 1
+      },
+      "provenance": {
+        "artefact": "0243c0db137890d0",
+        "written_utc": "2026-11-13T05:55:09Z",
+        "search_database": "aging_isoforms_peroxisome_rat.xml",
+        "search_database_sha256": "860896cb56cb7c937ad788438a6996d2149df4c807a3eeb54e8c38b9fa12808c",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD008990",
+          "PXD028157",
+          "PXD047289",
+          "PXD047292",
+          "PXD047293",
+          "PXD051203",
+          "PXD051644",
+          "PXD056458",
+          "PXD058248",
+          "PXD068498"
+        ],
+        "rows": 1,
+        "entries": 1,
+        "outcome_by_entry": {
+          "resolved": 1
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "rat-UP000002494_all_genecentric_2026_03_agingPTM-v4",
+      "species": "rattus_norvegicus",
+      "reference": "0af7d9ff9cf9cbef.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 22464,
+      "reference_rows": 22464,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "0f606b275fc62d6f4bcf1ac4cb69179de4c2d1ed59a552657e7964530bbe05f4"
+      ],
+      "reference_database": [
+        "0f606b275fc62d6f4bcf1ac4cb69179de4c2d1ed59a552657e7964530bbe05f4"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 14819,
+        "null": 3997,
+        "silent": 3581,
+        "disagrees": 67
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 13924,
+        "off_primary_only|null": 955,
+        "off_primary_only|agrees": 527,
+        "not_in_source|null": 3042,
+        "resolved|silent": 3422,
+        "not_in_source|agrees": 202,
+        "multi_gene|agrees": 166,
+        "multi_gene|disagrees": 45,
+        "resolved|disagrees": 22,
+        "multi_gene|silent": 159
+      },
+      "provenance": {
+        "artefact": "0af7d9ff9cf9cbef",
+        "written_utc": "2026-11-13T05:55:04Z",
+        "search_database": "UP000002494_all_genecentric_2026_03_agingPTM-v4.xml",
+        "search_database_sha256": "0f606b275fc62d6f4bcf1ac4cb69179de4c2d1ed59a552657e7964530bbe05f4",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD022737",
+          "PXD028157",
+          "PXD032044",
+          "PXD034432",
+          "PXD047288",
+          "PXD047289",
+          "PXD047292",
+          "PXD047293",
+          "PXD051644",
+          "PXD056433",
+          "PXD056458",
+          "PXD058253"
+        ],
+        "rows": 22464,
+        "entries": 21471,
+        "outcome_by_entry": {
+          "multi_gene": 153,
+          "not_in_source": 3042,
+          "off_primary_only": 955,
+          "resolved": 17321
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "human-aging_isoforms_tier1-2_human_agingPTM-v1",
+      "species": "homo_sapiens",
+      "reference": "13048465ff835ae8.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 53,
+      "reference_rows": 53,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "2a0de7bc4e47437ec917cd908f6e28eef8ca70863dceae2ada637c70ee0c6b2e"
+      ],
+      "reference_database": [
+        "2a0de7bc4e47437ec917cd908f6e28eef8ca70863dceae2ada637c70ee0c6b2e"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 49,
+        "null": 4
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 45,
+        "not_in_source|null": 4,
+        "not_in_source|agrees": 4
+      },
+      "provenance": {
+        "artefact": "13048465ff835ae8",
+        "written_utc": "2026-11-13T05:55:15Z",
+        "search_database": "aging_isoforms_tier1-2_human_agingPTM-v1.xml",
+        "search_database_sha256": "2a0de7bc4e47437ec917cd908f6e28eef8ca70863dceae2ada637c70ee0c6b2e",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD018969"
+        ],
+        "rows": 53,
+        "entries": 49,
+        "outcome_by_entry": {
+          "not_in_source": 4,
+          "resolved": 45
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "human-UP000005640_all_genecentric_2026_03_agingPTM-v8",
+      "species": "homo_sapiens",
+      "reference": "1b2ee314f677fe99.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 21139,
+      "reference_rows": 21139,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "c1a9e88f9af099af369de1a9981509e99afc84535579e399c3c24384ed328fb2"
+      ],
+      "reference_database": [
+        "c1a9e88f9af099af369de1a9981509e99afc84535579e399c3c24384ed328fb2"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "null": 1126,
+        "agrees": 19627,
+        "silent": 27,
+        "disagrees": 359
+      },
+      "agreement_by_outcome": {
+        "not_in_source|null": 964,
+        "resolved|agrees": 19147,
+        "off_primary_only|null": 162,
+        "resolved|silent": 27,
+        "multi_gene|agrees": 474,
+        "multi_gene|disagrees": 359,
+        "not_in_source|agrees": 4,
+        "off_primary_only|agrees": 2
+      },
+      "provenance": {
+        "artefact": "1b2ee314f677fe99",
+        "written_utc": "2026-11-13T05:55:49Z",
+        "search_database": "UP000005640_all_genecentric_2026_03_agingPTM-v8.xml",
+        "search_database_sha256": "c1a9e88f9af099af369de1a9981509e99afc84535579e399c3c24384ed328fb2",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD003111"
+        ],
+        "rows": 21139,
+        "entries": 20652,
+        "outcome_by_entry": {
+          "multi_gene": 352,
+          "not_in_source": 964,
+          "off_primary_only": 162,
+          "resolved": 19174
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "human-aging_isoforms_tier3_compartment_human_agingPTM-v4",
+      "species": "homo_sapiens",
+      "reference": "1e472a92ecba503a.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 35,
+      "reference_rows": 35,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "30b8d7ca54dfdf763499f0cbf8e4d83a8fda3f0c992e24bbe6d6816d2bfcc8f5"
+      ],
+      "reference_database": [
+        "30b8d7ca54dfdf763499f0cbf8e4d83a8fda3f0c992e24bbe6d6816d2bfcc8f5"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 27,
+        "null": 7,
+        "disagrees": 1
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 20,
+        "not_in_source|null": 7,
+        "not_in_source|agrees": 7,
+        "resolved|disagrees": 1
+      },
+      "provenance": {
+        "artefact": "1e472a92ecba503a",
+        "written_utc": "2026-11-13T05:55:15Z",
+        "search_database": "aging_isoforms_tier3_compartment_human_agingPTM-v4.xml",
+        "search_database_sha256": "30b8d7ca54dfdf763499f0cbf8e4d83a8fda3f0c992e24bbe6d6816d2bfcc8f5",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD007049",
+          "PXD008050"
+        ],
+        "rows": 35,
+        "entries": 28,
+        "outcome_by_entry": {
+          "not_in_source": 7,
+          "resolved": 21
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "rat-UP000002494_all_genecentric_2026_03_agingPTM-v8",
+      "species": "rattus_norvegicus",
+      "reference": "20c3aebf3812befd.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 22464,
+      "reference_rows": 22464,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "b79e85c2e62003f36738320c528405ee123522e6a3121e9b6040d5607e13b240"
+      ],
+      "reference_database": [
+        "b79e85c2e62003f36738320c528405ee123522e6a3121e9b6040d5607e13b240"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 14819,
+        "null": 3997,
+        "silent": 3581,
+        "disagrees": 67
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 13924,
+        "off_primary_only|null": 955,
+        "off_primary_only|agrees": 527,
+        "not_in_source|null": 3042,
+        "resolved|silent": 3422,
+        "not_in_source|agrees": 202,
+        "multi_gene|agrees": 166,
+        "multi_gene|disagrees": 45,
+        "resolved|disagrees": 22,
+        "multi_gene|silent": 159
+      },
+      "provenance": {
+        "artefact": "20c3aebf3812befd",
+        "written_utc": "2026-11-13T05:55:13Z",
+        "search_database": "UP000002494_all_genecentric_2026_03_agingPTM-v8.xml",
+        "search_database_sha256": "b79e85c2e62003f36738320c528405ee123522e6a3121e9b6040d5607e13b240",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD010383"
+        ],
+        "rows": 22464,
+        "entries": 21471,
+        "outcome_by_entry": {
+          "multi_gene": 153,
+          "not_in_source": 3042,
+          "off_primary_only": 955,
+          "resolved": 17321
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "rat-aging_isoforms_rat_agingPTM-v7",
+      "species": "rattus_norvegicus",
+      "reference": "23e1bf9c09befc9e.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 43,
+      "reference_rows": 43,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "bd6880566fa42fcb959a793949359efdec85367929993a138a81236d9d44c929"
+      ],
+      "reference_database": [
+        "bd6880566fa42fcb959a793949359efdec85367929993a138a81236d9d44c929"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "null": 22,
+        "agrees": 20,
+        "silent": 1
+      },
+      "agreement_by_outcome": {
+        "not_in_source|null": 22,
+        "not_in_source|agrees": 9,
+        "resolved|agrees": 11,
+        "resolved|silent": 1
+      },
+      "provenance": {
+        "artefact": "23e1bf9c09befc9e",
+        "written_utc": "2026-11-13T05:55:14Z",
+        "search_database": "aging_isoforms_rat_agingPTM-v7.xml",
+        "search_database_sha256": "bd6880566fa42fcb959a793949359efdec85367929993a138a81236d9d44c929",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD010383"
+        ],
+        "rows": 43,
+        "entries": 34,
+        "outcome_by_entry": {
+          "not_in_source": 22,
+          "resolved": 12
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "mouse-aging_isoforms_mouse",
+      "species": "mus_musculus",
+      "reference": "24d2e5d5088b4958.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 72,
+      "reference_rows": 72,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "4d3ac6446e3a76b95ab99782b952f0d7683a552eec97c9eecc6294101bb62778"
+      ],
+      "reference_database": [
+        "4d3ac6446e3a76b95ab99782b952f0d7683a552eec97c9eecc6294101bb62778"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 51,
+        "null": 17,
+        "silent": 4
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 35,
+        "not_in_source|null": 17,
+        "not_in_source|agrees": 16,
+        "resolved|silent": 4
+      },
+      "provenance": {
+        "artefact": "24d2e5d5088b4958",
+        "written_utc": "2026-11-13T05:54:31Z",
+        "search_database": "aging_isoforms_mouse.xml",
+        "search_database_sha256": "4d3ac6446e3a76b95ab99782b952f0d7683a552eec97c9eecc6294101bb62778",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD001054",
+          "PXD005014",
+          "PXD006815",
+          "PXD010091",
+          "PXD012753",
+          "PXD012754",
+          "PXD015729",
+          "PXD017058",
+          "PXD017505",
+          "PXD018999",
+          "PXD025321",
+          "PXD028590",
+          "PXD035107",
+          "PXD035149",
+          "PXD035171",
+          "PXD035446",
+          "PXD043964",
+          "PXD051715",
+          "PXD052797",
+          "PXD053288",
+          "PXD057409",
+          "PXD073846",
+          "PXD077298"
+        ],
+        "rows": 72,
+        "entries": 56,
+        "outcome_by_entry": {
+          "not_in_source": 17,
+          "resolved": 39
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "human-UP000005640_all_genecentric_2026_03_agingPTM-v3",
+      "species": "homo_sapiens",
+      "reference": "368bb52ad817eee8.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 21139,
+      "reference_rows": 21139,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "fd80cf8839f8c1551bddc2d24905df6098188196934f4f43fa8c3e9a276eb14c"
+      ],
+      "reference_database": [
+        "fd80cf8839f8c1551bddc2d24905df6098188196934f4f43fa8c3e9a276eb14c"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "null": 1126,
+        "agrees": 19627,
+        "silent": 27,
+        "disagrees": 359
+      },
+      "agreement_by_outcome": {
+        "not_in_source|null": 964,
+        "resolved|agrees": 19147,
+        "off_primary_only|null": 162,
+        "resolved|silent": 27,
+        "multi_gene|agrees": 474,
+        "multi_gene|disagrees": 359,
+        "not_in_source|agrees": 4,
+        "off_primary_only|agrees": 2
+      },
+      "provenance": {
+        "artefact": "368bb52ad817eee8",
+        "written_utc": "2026-11-13T05:56:10Z",
+        "search_database": "UP000005640_all_genecentric_2026_03_agingPTM-v3.xml",
+        "search_database_sha256": "fd80cf8839f8c1551bddc2d24905df6098188196934f4f43fa8c3e9a276eb14c",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD008344",
+          "PXD008934",
+          "PXD011740",
+          "PXD012213",
+          "PXD015239",
+          "PXD017475",
+          "PXD019279",
+          "PXD021069",
+          "PXD024216",
+          "PXD026219",
+          "PXD032757",
+          "PXD035299",
+          "PXD045861",
+          "PXD045887",
+          "PXD058855"
+        ],
+        "rows": 21139,
+        "entries": 20652,
+        "outcome_by_entry": {
+          "multi_gene": 352,
+          "not_in_source": 964,
+          "off_primary_only": 162,
+          "resolved": 19174
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "mouse-aging_isoforms_mouse_agingPTM-v7",
+      "species": "mus_musculus",
+      "reference": "393df3091d621178.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 72,
+      "reference_rows": 72,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "f36fa7cfddbd83b6cb713146013aeb9d1c8920f46d2abe26168a64c2bacc7c57"
+      ],
+      "reference_database": [
+        "f36fa7cfddbd83b6cb713146013aeb9d1c8920f46d2abe26168a64c2bacc7c57"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 51,
+        "null": 17,
+        "silent": 4
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 35,
+        "not_in_source|null": 17,
+        "not_in_source|agrees": 16,
+        "resolved|silent": 4
+      },
+      "provenance": {
+        "artefact": "393df3091d621178",
+        "written_utc": "2026-11-13T05:54:51Z",
+        "search_database": "aging_isoforms_mouse_agingPTM-v7.xml",
+        "search_database_sha256": "f36fa7cfddbd83b6cb713146013aeb9d1c8920f46d2abe26168a64c2bacc7c57",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD035577"
+        ],
+        "rows": 72,
+        "entries": 56,
+        "outcome_by_entry": {
+          "not_in_source": 17,
+          "resolved": 39
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "mouse-aging_isoforms_tier3_compartment_mouse",
+      "species": "mus_musculus",
+      "reference": "421d05d396b4c972.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 17,
+      "reference_rows": 17,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "be08bf25b790420dc1976b77fc29bb13e70e554b1c049330978c3caaf388d084"
+      ],
+      "reference_database": [
+        "be08bf25b790420dc1976b77fc29bb13e70e554b1c049330978c3caaf388d084"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 11,
+        "null": 6
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 5,
+        "not_in_source|null": 6,
+        "not_in_source|agrees": 6
+      },
+      "provenance": {
+        "artefact": "421d05d396b4c972",
+        "written_utc": "2026-11-13T05:54:38Z",
+        "search_database": "aging_isoforms_tier3_compartment_mouse.xml",
+        "search_database_sha256": "be08bf25b790420dc1976b77fc29bb13e70e554b1c049330978c3caaf388d084",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD004916",
+          "PXD007999",
+          "PXD012307",
+          "PXD014274",
+          "PXD014416",
+          "PXD015170",
+          "PXD016430",
+          "PXD018399",
+          "PXD018545",
+          "PXD022196",
+          "PXD024685",
+          "PXD026335",
+          "PXD028865",
+          "PXD033430",
+          "PXD034465",
+          "PXD037230",
+          "PXD038328",
+          "PXD039172",
+          "PXD041376",
+          "PXD042301",
+          "PXD043001",
+          "PXD043644",
+          "PXD044453",
+          "PXD044996",
+          "PXD048393",
+          "PXD057502",
+          "PXD057544",
+          "PXD057554",
+          "PXD058611",
+          "PXD058775",
+          "PXD058971",
+          "PXD067102",
+          "PXD071171"
+        ],
+        "rows": 17,
+        "entries": 11,
+        "outcome_by_entry": {
+          "not_in_source": 6,
+          "resolved": 5
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "human-UP000005640_all_genecentric_2026_03_agingPTM-v6",
+      "species": "homo_sapiens",
+      "reference": "42659048f199d9ab.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 21139,
+      "reference_rows": 21139,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "b87d37b574ff86831ee38b6d086a8d567f61db8ab5d847851c0edd244cc34c66"
+      ],
+      "reference_database": [
+        "b87d37b574ff86831ee38b6d086a8d567f61db8ab5d847851c0edd244cc34c66"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "null": 1126,
+        "agrees": 19627,
+        "silent": 27,
+        "disagrees": 359
+      },
+      "agreement_by_outcome": {
+        "not_in_source|null": 964,
+        "resolved|agrees": 19147,
+        "off_primary_only|null": 162,
+        "resolved|silent": 27,
+        "multi_gene|agrees": 474,
+        "multi_gene|disagrees": 359,
+        "not_in_source|agrees": 4,
+        "off_primary_only|agrees": 2
+      },
+      "provenance": {
+        "artefact": "42659048f199d9ab",
+        "written_utc": "2026-11-13T06:32:01Z",
+        "search_database": "UP000005640_all_genecentric_2026_03_agingPTM-v6.xml",
+        "search_database_sha256": "b87d37b574ff86831ee38b6d086a8d567f61db8ab5d847851c0edd244cc34c66",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD005123",
+          "PXD006578",
+          "PXD006589"
+        ],
+        "rows": 21139,
+        "entries": 20652,
+        "outcome_by_entry": {
+          "multi_gene": 352,
+          "not_in_source": 964,
+          "off_primary_only": 162,
+          "resolved": 19174
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "human-aging_isoforms_human_agingPTM-v6",
+      "species": "homo_sapiens",
+      "reference": "519416a532202b3f.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 116,
+      "reference_rows": 116,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "d1e037ca887b2affeb297443f9be2f86fed5f717c37243f14675d7627dabc01f"
+      ],
+      "reference_database": [
+        "d1e037ca887b2affeb297443f9be2f86fed5f717c37243f14675d7627dabc01f"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 102,
+        "null": 12,
+        "disagrees": 1,
+        "silent": 1
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 90,
+        "not_in_source|null": 12,
+        "not_in_source|agrees": 12,
+        "resolved|disagrees": 1,
+        "resolved|silent": 1
+      },
+      "provenance": {
+        "artefact": "519416a532202b3f",
+        "written_utc": "2026-11-13T05:55:49Z",
+        "search_database": "aging_isoforms_human_agingPTM-v6.xml",
+        "search_database_sha256": "d1e037ca887b2affeb297443f9be2f86fed5f717c37243f14675d7627dabc01f",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD045861"
+        ],
+        "rows": 116,
+        "entries": 104,
+        "outcome_by_entry": {
+          "not_in_source": 12,
+          "resolved": 92
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "mouse-UP000000589_all_genecentric_2026_03_agingPTM-v7",
+      "species": "mus_musculus",
+      "reference": "523e69f5d4388735.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 22383,
+      "reference_rows": 22383,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "23470872c8b2f6622ebe203bc8c7cd5616621e97e1f20b2c23cd1d94236899ad"
+      ],
+      "reference_database": [
+        "23470872c8b2f6622ebe203bc8c7cd5616621e97e1f20b2c23cd1d94236899ad"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 19553,
+        "null": 1645,
+        "silent": 1183,
+        "disagrees": 2
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 18857,
+        "not_in_source|null": 1645,
+        "not_in_source|agrees": 39,
+        "multi_gene|agrees": 657,
+        "resolved|silent": 1087,
+        "multi_gene|disagrees": 2,
+        "multi_gene|silent": 96
+      },
+      "provenance": {
+        "artefact": "523e69f5d4388735",
+        "written_utc": "2026-11-13T06:32:10Z",
+        "search_database": "UP000000589_all_genecentric_2026_03_agingPTM-v7.xml",
+        "search_database_sha256": "23470872c8b2f6622ebe203bc8c7cd5616621e97e1f20b2c23cd1d94236899ad",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD005035",
+          "PXD025315",
+          "PXD027895"
+        ],
+        "rows": 22383,
+        "entries": 21860,
+        "outcome_by_entry": {
+          "multi_gene": 273,
+          "not_in_source": 1645,
+          "resolved": 19942
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "rat-aging_isoforms_tier3_compartment_rat",
+      "species": "rattus_norvegicus",
+      "reference": "52f03bb38dd213be.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 12,
+      "reference_rows": 12,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "bce8d883fb6f886d0e6e72173047766cb93bb460c84da9696d1245a9dd3c1986"
+      ],
+      "reference_database": [
+        "bce8d883fb6f886d0e6e72173047766cb93bb460c84da9696d1245a9dd3c1986"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "null": 6,
+        "agrees": 6
+      },
+      "agreement_by_outcome": {
+        "not_in_source|null": 6,
+        "not_in_source|agrees": 4,
+        "resolved|agrees": 2
+      },
+      "provenance": {
+        "artefact": "52f03bb38dd213be",
+        "written_utc": "2026-11-13T05:55:14Z",
+        "search_database": "aging_isoforms_tier3_compartment_rat.xml",
+        "search_database_sha256": "bce8d883fb6f886d0e6e72173047766cb93bb460c84da9696d1245a9dd3c1986",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD002467",
+          "PXD008990",
+          "PXD009212",
+          "PXD026608",
+          "PXD027971",
+          "PXD028157",
+          "PXD047289",
+          "PXD047292",
+          "PXD047293",
+          "PXD048720",
+          "PXD051203",
+          "PXD051644",
+          "PXD056458",
+          "PXD057490",
+          "PXD057499",
+          "PXD058248",
+          "PXD068498"
+        ],
+        "rows": 12,
+        "entries": 8,
+        "outcome_by_entry": {
+          "not_in_source": 6,
+          "resolved": 2
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "human-aging_isoforms_tier1-2_human_agingPTM-v4",
+      "species": "homo_sapiens",
+      "reference": "593e5851cf081b19.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 53,
+      "reference_rows": 53,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "94736cd8077fab1250d79ad41e70f53320056c966eb72dcd3ab33c3b8d33578b"
+      ],
+      "reference_database": [
+        "94736cd8077fab1250d79ad41e70f53320056c966eb72dcd3ab33c3b8d33578b"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 49,
+        "null": 4
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 45,
+        "not_in_source|null": 4,
+        "not_in_source|agrees": 4
+      },
+      "provenance": {
+        "artefact": "593e5851cf081b19",
+        "written_utc": "2026-11-13T05:55:28Z",
+        "search_database": "aging_isoforms_tier1-2_human_agingPTM-v4.xml",
+        "search_database_sha256": "94736cd8077fab1250d79ad41e70f53320056c966eb72dcd3ab33c3b8d33578b",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD007049",
+          "PXD008050"
+        ],
+        "rows": 53,
+        "entries": 49,
+        "outcome_by_entry": {
+          "not_in_source": 4,
+          "resolved": 45
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "human-uniprotkb_proteome_UP000005640_AND_revi_2026_09_18_agingPTM-v1",
+      "species": "homo_sapiens",
+      "reference": "5fc9bdba38f07094.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 20899,
+      "reference_rows": 20899,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "eaefbb7e6914bddae2a190a08d9a25101cf070ded8af539edc5d558b69ff476d"
+      ],
+      "reference_database": [
+        "eaefbb7e6914bddae2a190a08d9a25101cf070ded8af539edc5d558b69ff476d"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "null": 1078,
+        "agrees": 19446,
+        "silent": 16,
+        "disagrees": 359
+      },
+      "agreement_by_outcome": {
+        "not_in_source|null": 1016,
+        "resolved|agrees": 18972,
+        "off_primary_only|null": 62,
+        "resolved|silent": 16,
+        "multi_gene|agrees": 470,
+        "multi_gene|disagrees": 359,
+        "not_in_source|agrees": 4
+      },
+      "provenance": {
+        "artefact": "5fc9bdba38f07094",
+        "written_utc": "2026-11-13T05:55:59Z",
+        "search_database": "uniprotkb_proteome_UP000005640_AND_revi_2026_09_18_agingPTM-v1.xml",
+        "search_database_sha256": "eaefbb7e6914bddae2a190a08d9a25101cf070ded8af539edc5d558b69ff476d",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD018969"
+        ],
+        "rows": 20899,
+        "entries": 20416,
+        "outcome_by_entry": {
+          "multi_gene": 350,
+          "not_in_source": 1016,
+          "off_primary_only": 62,
+          "resolved": 18988
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "mouse-aging_isoforms_tier1-2_mouse_agingPTM-v1",
+      "species": "mus_musculus",
+      "reference": "6dfc7dea2c4e4ff7.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 22,
+      "reference_rows": 22,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "d1f6be915b69310debca2ef66885e84db17aeb2caf75a1d4bb60cdff315db5c1"
+      ],
+      "reference_database": [
+        "d1f6be915b69310debca2ef66885e84db17aeb2caf75a1d4bb60cdff315db5c1"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 17,
+        "null": 5
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 13,
+        "not_in_source|null": 5,
+        "not_in_source|agrees": 4
+      },
+      "provenance": {
+        "artefact": "6dfc7dea2c4e4ff7",
+        "written_utc": "2026-11-13T05:54:38Z",
+        "search_database": "aging_isoforms_tier1-2_mouse_agingPTM-v1.xml",
+        "search_database_sha256": "d1f6be915b69310debca2ef66885e84db17aeb2caf75a1d4bb60cdff315db5c1",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD007999",
+          "PXD042301",
+          "PXD052189",
+          "PXD058775"
+        ],
+        "rows": 22,
+        "entries": 18,
+        "outcome_by_entry": {
+          "not_in_source": 5,
+          "resolved": 13
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "mouse-UP000000589_all_genecentric_2026_03_agingPTM-v4",
+      "species": "mus_musculus",
+      "reference": "6f0de085cef695ea.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 22383,
+      "reference_rows": 22383,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "f9cdd188fd7fa65d97792cbf9225704c921727e8fa4b3e4c41c41ffcea7cabd5"
+      ],
+      "reference_database": [
+        "f9cdd188fd7fa65d97792cbf9225704c921727e8fa4b3e4c41c41ffcea7cabd5"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 19553,
+        "null": 1645,
+        "silent": 1183,
+        "disagrees": 2
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 18857,
+        "not_in_source|null": 1645,
+        "not_in_source|agrees": 39,
+        "multi_gene|agrees": 657,
+        "resolved|silent": 1087,
+        "multi_gene|disagrees": 2,
+        "multi_gene|silent": 96
+      },
+      "provenance": {
+        "artefact": "6f0de085cef695ea",
+        "written_utc": "2026-11-13T05:54:58Z",
+        "search_database": "UP000000589_all_genecentric_2026_03_agingPTM-v4.xml",
+        "search_database_sha256": "f9cdd188fd7fa65d97792cbf9225704c921727e8fa4b3e4c41c41ffcea7cabd5",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD001054",
+          "PXD005014",
+          "PXD006815",
+          "PXD010091",
+          "PXD012753",
+          "PXD012754",
+          "PXD015729",
+          "PXD017058",
+          "PXD018999",
+          "PXD025321",
+          "PXD028590",
+          "PXD035107",
+          "PXD035149",
+          "PXD035171",
+          "PXD035446",
+          "PXD043964",
+          "PXD051715",
+          "PXD052797",
+          "PXD053288",
+          "PXD054290",
+          "PXD057409",
+          "PXD057545",
+          "PXD073846",
+          "PXD077298"
+        ],
+        "rows": 22383,
+        "entries": 21860,
+        "outcome_by_entry": {
+          "multi_gene": 273,
+          "not_in_source": 1645,
+          "resolved": 19942
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "mouse-aging_isoforms_peroxisome_mouse",
+      "species": "mus_musculus",
+      "reference": "7017678f987260c5.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 1,
+      "reference_rows": 1,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "5332711b2e3e058a5d8081598923d8779f29cea116b6976901377fa8c7e1dfaa"
+      ],
+      "reference_database": [
+        "5332711b2e3e058a5d8081598923d8779f29cea116b6976901377fa8c7e1dfaa"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 1
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 1
+      },
+      "provenance": {
+        "artefact": "7017678f987260c5",
+        "written_utc": "2026-11-13T05:54:31Z",
+        "search_database": "aging_isoforms_peroxisome_mouse.xml",
+        "search_database_sha256": "5332711b2e3e058a5d8081598923d8779f29cea116b6976901377fa8c7e1dfaa",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD007035",
+          "PXD014416",
+          "PXD015170",
+          "PXD016430",
+          "PXD018399",
+          "PXD018545",
+          "PXD022196",
+          "PXD028865",
+          "PXD034465",
+          "PXD037230",
+          "PXD039172",
+          "PXD041376",
+          "PXD041660",
+          "PXD043644",
+          "PXD045821",
+          "PXD048393",
+          "PXD052631",
+          "PXD054290",
+          "PXD056276",
+          "PXD057407",
+          "PXD057502",
+          "PXD057545",
+          "PXD057554",
+          "PXD058971",
+          "PXD060832",
+          "PXD071171"
+        ],
+        "rows": 1,
+        "entries": 1,
+        "outcome_by_entry": {
+          "resolved": 1
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "human-aging_isoforms_human",
+      "species": "homo_sapiens",
+      "reference": "72edc8cbdfad3be0.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 116,
+      "reference_rows": 116,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "6fdf086563aa7d4e54a3b094a5c94cc3d03bf5e376493702a0adcc62dd4e5b9d"
+      ],
+      "reference_database": [
+        "6fdf086563aa7d4e54a3b094a5c94cc3d03bf5e376493702a0adcc62dd4e5b9d"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 102,
+        "null": 12,
+        "disagrees": 1,
+        "silent": 1
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 90,
+        "not_in_source|null": 12,
+        "not_in_source|agrees": 12,
+        "resolved|disagrees": 1,
+        "resolved|silent": 1
+      },
+      "provenance": {
+        "artefact": "72edc8cbdfad3be0",
+        "written_utc": "2026-11-13T05:55:16Z",
+        "search_database": "aging_isoforms_human.xml",
+        "search_database_sha256": "6fdf086563aa7d4e54a3b094a5c94cc3d03bf5e376493702a0adcc62dd4e5b9d",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD011314",
+          "PXD013240",
+          "PXD013640",
+          "PXD015079",
+          "PXD021069",
+          "PXD023381",
+          "PXD024216",
+          "PXD024478",
+          "PXD024803",
+          "PXD025280",
+          "PXD029116",
+          "PXD041139",
+          "PXD067622",
+          "PXD075372"
+        ],
+        "rows": 116,
+        "entries": 104,
+        "outcome_by_entry": {
+          "not_in_source": 12,
+          "resolved": 92
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "mouse-aging_isoforms_mouse_agingPTM-v6",
+      "species": "mus_musculus",
+      "reference": "7471a3ceee8aa722.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 72,
+      "reference_rows": 72,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "6709e22a3c05adf885ea40b5c5bc1fd8e7034e638c9e66ac225c8aadcf2f1373"
+      ],
+      "reference_database": [
+        "6709e22a3c05adf885ea40b5c5bc1fd8e7034e638c9e66ac225c8aadcf2f1373"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 51,
+        "null": 17,
+        "silent": 4
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 35,
+        "not_in_source|null": 17,
+        "not_in_source|agrees": 16,
+        "resolved|silent": 4
+      },
+      "provenance": {
+        "artefact": "7471a3ceee8aa722",
+        "written_utc": "2026-11-13T05:54:31Z",
+        "search_database": "aging_isoforms_mouse_agingPTM-v6.xml",
+        "search_database_sha256": "6709e22a3c05adf885ea40b5c5bc1fd8e7034e638c9e66ac225c8aadcf2f1373",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD024633",
+          "PXD031223",
+          "PXD038718",
+          "PXD041766",
+          "PXD048877",
+          "PXD061654"
+        ],
+        "rows": 72,
+        "entries": 56,
+        "outcome_by_entry": {
+          "not_in_source": 17,
+          "resolved": 39
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "mouse-uniprotkb_proteome_UP000000589_AND_revi_2026-09-22_agingPTM-v1",
+      "species": "mus_musculus",
+      "reference": "77b8ed07a1336c35.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 17556,
+      "reference_rows": 17556,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "26ea83c286fa8801e552846e57a19813a2a62dc4ac1760c0bf572faf45ef501a"
+      ],
+      "reference_database": [
+        "26ea83c286fa8801e552846e57a19813a2a62dc4ac1760c0bf572faf45ef501a"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 15855,
+        "null": 1679,
+        "silent": 20,
+        "disagrees": 2
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 15454,
+        "not_in_source|null": 1679,
+        "not_in_source|agrees": 39,
+        "multi_gene|agrees": 362,
+        "resolved|silent": 20,
+        "multi_gene|disagrees": 2
+      },
+      "provenance": {
+        "artefact": "77b8ed07a1336c35",
+        "written_utc": "2026-11-13T05:54:24Z",
+        "search_database": "uniprotkb_proteome_UP000000589_AND_revi_2026-09-22_agingPTM-v1.xml",
+        "search_database_sha256": "26ea83c286fa8801e552846e57a19813a2a62dc4ac1760c0bf572faf45ef501a",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD007999",
+          "PXD042301",
+          "PXD052189",
+          "PXD058775"
+        ],
+        "rows": 17556,
+        "entries": 17277,
+        "outcome_by_entry": {
+          "multi_gene": 124,
+          "not_in_source": 1679,
+          "resolved": 15474
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "mouse-UP000000589_all_genecentric_2026_03_agingPTM-v5",
+      "species": "mus_musculus",
+      "reference": "7d0c3a9acf0c857e.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 22383,
+      "reference_rows": 22383,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "e4e510a553a216943b238a0692c6fefdb111529d817607df0fff63c7db68b363"
+      ],
+      "reference_database": [
+        "e4e510a553a216943b238a0692c6fefdb111529d817607df0fff63c7db68b363"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 19553,
+        "null": 1645,
+        "silent": 1183,
+        "disagrees": 2
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 18857,
+        "not_in_source|null": 1645,
+        "not_in_source|agrees": 39,
+        "multi_gene|agrees": 657,
+        "resolved|silent": 1087,
+        "multi_gene|disagrees": 2,
+        "multi_gene|silent": 96
+      },
+      "provenance": {
+        "artefact": "7d0c3a9acf0c857e",
+        "written_utc": "2026-11-13T05:54:51Z",
+        "search_database": "UP000000589_all_genecentric_2026_03_agingPTM-v5.xml",
+        "search_database_sha256": "e4e510a553a216943b238a0692c6fefdb111529d817607df0fff63c7db68b363",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD034590"
+        ],
+        "rows": 22383,
+        "entries": 21860,
+        "outcome_by_entry": {
+          "multi_gene": 273,
+          "not_in_source": 1645,
+          "resolved": 19942
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "mouse-UP000000589_all_genecentric_2026_03_agingPTM-v3",
+      "species": "mus_musculus",
+      "reference": "8a080b380401f5cc.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 22383,
+      "reference_rows": 22383,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "3c4ac3fb481e8ff1430d3f7a7aab4c2c83d44ae1de117ea942c8aefd5ffb4cc6"
+      ],
+      "reference_database": [
+        "3c4ac3fb481e8ff1430d3f7a7aab4c2c83d44ae1de117ea942c8aefd5ffb4cc6"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 19553,
+        "null": 1645,
+        "silent": 1183,
+        "disagrees": 2
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 18857,
+        "not_in_source|null": 1645,
+        "not_in_source|agrees": 39,
+        "multi_gene|agrees": 657,
+        "resolved|silent": 1087,
+        "multi_gene|disagrees": 2,
+        "multi_gene|silent": 96
+      },
+      "provenance": {
+        "artefact": "8a080b380401f5cc",
+        "written_utc": "2026-11-13T05:54:30Z",
+        "search_database": "UP000000589_all_genecentric_2026_03_agingPTM-v3.xml",
+        "search_database_sha256": "3c4ac3fb481e8ff1430d3f7a7aab4c2c83d44ae1de117ea942c8aefd5ffb4cc6",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD004916",
+          "PXD007035",
+          "PXD012307",
+          "PXD014274",
+          "PXD014416",
+          "PXD015170",
+          "PXD016430",
+          "PXD017505",
+          "PXD018399",
+          "PXD018545",
+          "PXD022196",
+          "PXD024685",
+          "PXD026335",
+          "PXD028865",
+          "PXD031223",
+          "PXD033430",
+          "PXD034465",
+          "PXD037230",
+          "PXD038328",
+          "PXD038718",
+          "PXD039172",
+          "PXD041376",
+          "PXD041660",
+          "PXD043001",
+          "PXD043644",
+          "PXD044453",
+          "PXD044996",
+          "PXD045821",
+          "PXD048393",
+          "PXD052631",
+          "PXD056276",
+          "PXD057407",
+          "PXD057502",
+          "PXD057544",
+          "PXD057554",
+          "PXD058611",
+          "PXD058971",
+          "PXD060832",
+          "PXD067102",
+          "PXD071171"
+        ],
+        "rows": 22383,
+        "entries": 21860,
+        "outcome_by_entry": {
+          "multi_gene": 273,
+          "not_in_source": 1645,
+          "resolved": 19942
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "mouse-aging_isoforms_mouse_agingPTM-v5",
+      "species": "mus_musculus",
+      "reference": "911838b0acf587e5.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 72,
+      "reference_rows": 72,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "1de3b3f912472f650c7345ca46ee87bfa42cd271842739cbc53a083cb5a46d88"
+      ],
+      "reference_database": [
+        "1de3b3f912472f650c7345ca46ee87bfa42cd271842739cbc53a083cb5a46d88"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 51,
+        "null": 17,
+        "silent": 4
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 35,
+        "not_in_source|null": 17,
+        "not_in_source|agrees": 16,
+        "resolved|silent": 4
+      },
+      "provenance": {
+        "artefact": "911838b0acf587e5",
+        "written_utc": "2026-11-13T05:54:17Z",
+        "search_database": "aging_isoforms_mouse_agingPTM-v5.xml",
+        "search_database_sha256": "1de3b3f912472f650c7345ca46ee87bfa42cd271842739cbc53a083cb5a46d88",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD034590"
+        ],
+        "rows": 72,
+        "entries": 56,
+        "outcome_by_entry": {
+          "not_in_source": 17,
+          "resolved": 39
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "human-UP000005640_all_genecentric_2026_03_agingPTM-v4",
+      "species": "homo_sapiens",
+      "reference": "91758cc68ef966ea.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 21139,
+      "reference_rows": 21139,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "c11a9bc3d6c5ab8e60b109243956cd4d8d1fef3de05a447600dd3f6780475646"
+      ],
+      "reference_database": [
+        "c11a9bc3d6c5ab8e60b109243956cd4d8d1fef3de05a447600dd3f6780475646"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "null": 1126,
+        "agrees": 19627,
+        "silent": 27,
+        "disagrees": 359
+      },
+      "agreement_by_outcome": {
+        "not_in_source|null": 964,
+        "resolved|agrees": 19147,
+        "off_primary_only|null": 162,
+        "resolved|silent": 27,
+        "multi_gene|agrees": 474,
+        "multi_gene|disagrees": 359,
+        "not_in_source|agrees": 4,
+        "off_primary_only|agrees": 2
+      },
+      "provenance": {
+        "artefact": "91758cc68ef966ea",
+        "written_utc": "2026-11-13T05:55:38Z",
+        "search_database": "UP000005640_all_genecentric_2026_03_agingPTM-v4.xml",
+        "search_database_sha256": "c11a9bc3d6c5ab8e60b109243956cd4d8d1fef3de05a447600dd3f6780475646",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD007049",
+          "PXD008050",
+          "PXD011314",
+          "PXD013240",
+          "PXD013640",
+          "PXD015079",
+          "PXD023381",
+          "PXD024478",
+          "PXD024803",
+          "PXD025280",
+          "PXD029116",
+          "PXD041139",
+          "PXD067622",
+          "PXD075372"
+        ],
+        "rows": 21139,
+        "entries": 20652,
+        "outcome_by_entry": {
+          "multi_gene": 352,
+          "not_in_source": 964,
+          "off_primary_only": 162,
+          "resolved": 19174
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "human-aging_isoforms_human_agingPTM-v7",
+      "species": "homo_sapiens",
+      "reference": "921cea527c7512b9.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 116,
+      "reference_rows": 116,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "934ab32f6fbc210b61b5ccb391ebdd9d897ebaac9f700e094da0c0130658c88b"
+      ],
+      "reference_database": [
+        "934ab32f6fbc210b61b5ccb391ebdd9d897ebaac9f700e094da0c0130658c88b"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 102,
+        "null": 12,
+        "disagrees": 1,
+        "silent": 1
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 90,
+        "not_in_source|null": 12,
+        "not_in_source|agrees": 12,
+        "resolved|disagrees": 1,
+        "resolved|silent": 1
+      },
+      "provenance": {
+        "artefact": "921cea527c7512b9",
+        "written_utc": "2026-11-13T05:55:27Z",
+        "search_database": "aging_isoforms_human_agingPTM-v7.xml",
+        "search_database_sha256": "934ab32f6fbc210b61b5ccb391ebdd9d897ebaac9f700e094da0c0130658c88b",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD003111"
+        ],
+        "rows": 116,
+        "entries": 104,
+        "outcome_by_entry": {
+          "not_in_source": 12,
+          "resolved": 92
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "mouse-UP000000589_all_genecentric_2026_03_agingPTM-v6",
+      "species": "mus_musculus",
+      "reference": "a2f92189a6122b88.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 22383,
+      "reference_rows": 22383,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "db47863bb689dcd50341bf257da93637ad25d5051b4b26096541408abb731fef"
+      ],
+      "reference_database": [
+        "db47863bb689dcd50341bf257da93637ad25d5051b4b26096541408abb731fef"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 19553,
+        "null": 1645,
+        "silent": 1183,
+        "disagrees": 2
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 18857,
+        "not_in_source|null": 1645,
+        "not_in_source|agrees": 39,
+        "multi_gene|agrees": 657,
+        "resolved|silent": 1087,
+        "multi_gene|disagrees": 2,
+        "multi_gene|silent": 96
+      },
+      "provenance": {
+        "artefact": "a2f92189a6122b88",
+        "written_utc": "2026-11-13T05:54:44Z",
+        "search_database": "UP000000589_all_genecentric_2026_03_agingPTM-v6.xml",
+        "search_database_sha256": "db47863bb689dcd50341bf257da93637ad25d5051b4b26096541408abb731fef",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD024633",
+          "PXD041766",
+          "PXD048877",
+          "PXD061654"
+        ],
+        "rows": 22383,
+        "entries": 21860,
+        "outcome_by_entry": {
+          "multi_gene": 273,
+          "not_in_source": 1645,
+          "resolved": 19942
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "human-uniprotkb_proteome_UP000005640_AND_revi_2026_09_18",
+      "species": "homo_sapiens",
+      "reference": "b310d4b6da85561c.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 20899,
+      "reference_rows": 20899,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "760984e8d402ade6b1105b811532bdd4041e33e66bb5dc204402d4d6a7be8838"
+      ],
+      "reference_database": [
+        "760984e8d402ade6b1105b811532bdd4041e33e66bb5dc204402d4d6a7be8838"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "null": 1078,
+        "agrees": 19446,
+        "silent": 16,
+        "disagrees": 359
+      },
+      "agreement_by_outcome": {
+        "not_in_source|null": 1016,
+        "resolved|agrees": 18972,
+        "off_primary_only|null": 62,
+        "resolved|silent": 16,
+        "multi_gene|agrees": 470,
+        "multi_gene|disagrees": 359,
+        "not_in_source|agrees": 4
+      },
+      "provenance": {
+        "artefact": "b310d4b6da85561c",
+        "written_utc": "2026-11-13T05:55:27Z",
+        "search_database": "uniprotkb_proteome_UP000005640_AND_revi_2026_09_18.xml",
+        "search_database_sha256": "760984e8d402ade6b1105b811532bdd4041e33e66bb5dc204402d4d6a7be8838",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD027318",
+          "PXD032202",
+          "PXD036557"
+        ],
+        "rows": 20899,
+        "entries": 20416,
+        "outcome_by_entry": {
+          "multi_gene": 350,
+          "not_in_source": 1016,
+          "off_primary_only": 62,
+          "resolved": 18988
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "mouse-aging_isoforms_tier3_compartment_mouse_agingPTM-v4",
+      "species": "mus_musculus",
+      "reference": "c1a1a3cbb277339b.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 17,
+      "reference_rows": 17,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "013802ee85a6dde64ed91c416d113757d1be64a29179c0197caca7fd0f467908"
+      ],
+      "reference_database": [
+        "013802ee85a6dde64ed91c416d113757d1be64a29179c0197caca7fd0f467908"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 11,
+        "null": 6
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 5,
+        "not_in_source|null": 6,
+        "not_in_source|agrees": 6
+      },
+      "provenance": {
+        "artefact": "c1a1a3cbb277339b",
+        "written_utc": "2026-11-13T05:54:17Z",
+        "search_database": "aging_isoforms_tier3_compartment_mouse_agingPTM-v4.xml",
+        "search_database_sha256": "013802ee85a6dde64ed91c416d113757d1be64a29179c0197caca7fd0f467908",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD007035",
+          "PXD041660",
+          "PXD045821",
+          "PXD052631",
+          "PXD054290",
+          "PXD056276",
+          "PXD057407",
+          "PXD057545",
+          "PXD060832"
+        ],
+        "rows": 17,
+        "entries": 11,
+        "outcome_by_entry": {
+          "not_in_source": 6,
+          "resolved": 5
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "rat-UP000002494_all_genecentric_2026_03_agingPTM-v3",
+      "species": "rattus_norvegicus",
+      "reference": "d0dbb1a8f7d7d42f.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 22464,
+      "reference_rows": 22464,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "7f08fd3c9eac4efe0e0402b305aa5af43f155644094b6df93643afa3baeafe93"
+      ],
+      "reference_database": [
+        "7f08fd3c9eac4efe0e0402b305aa5af43f155644094b6df93643afa3baeafe93"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 14819,
+        "null": 3997,
+        "silent": 3581,
+        "disagrees": 67
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 13924,
+        "off_primary_only|null": 955,
+        "off_primary_only|agrees": 527,
+        "not_in_source|null": 3042,
+        "resolved|silent": 3422,
+        "not_in_source|agrees": 202,
+        "multi_gene|agrees": 166,
+        "multi_gene|disagrees": 45,
+        "resolved|disagrees": 22,
+        "multi_gene|silent": 159
+      },
+      "provenance": {
+        "artefact": "d0dbb1a8f7d7d42f",
+        "written_utc": "2026-11-13T05:55:09Z",
+        "search_database": "UP000002494_all_genecentric_2026_03_agingPTM-v3.xml",
+        "search_database_sha256": "7f08fd3c9eac4efe0e0402b305aa5af43f155644094b6df93643afa3baeafe93",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD002467",
+          "PXD008990",
+          "PXD009212",
+          "PXD026608",
+          "PXD027754",
+          "PXD027971",
+          "PXD048720",
+          "PXD051203",
+          "PXD057490",
+          "PXD057499",
+          "PXD058248",
+          "PXD059520",
+          "PXD068498"
+        ],
+        "rows": 22464,
+        "entries": 21471,
+        "outcome_by_entry": {
+          "multi_gene": 153,
+          "not_in_source": 3042,
+          "off_primary_only": 955,
+          "resolved": 17321
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "mouse-aging_isoforms_tier1-2_mouse_agingPTM-v3",
+      "species": "mus_musculus",
+      "reference": "dd663145147cc5f4.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 22,
+      "reference_rows": 22,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "25e3737826aff117fbd45fdbbf767fafb8dafcee87c2a9228f9291bfc1ad7676"
+      ],
+      "reference_database": [
+        "25e3737826aff117fbd45fdbbf767fafb8dafcee87c2a9228f9291bfc1ad7676"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 17,
+        "null": 5
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 13,
+        "not_in_source|null": 5,
+        "not_in_source|agrees": 4
+      },
+      "provenance": {
+        "artefact": "dd663145147cc5f4",
+        "written_utc": "2026-11-13T05:54:18Z",
+        "search_database": "aging_isoforms_tier1-2_mouse_agingPTM-v3.xml",
+        "search_database_sha256": "25e3737826aff117fbd45fdbbf767fafb8dafcee87c2a9228f9291bfc1ad7676",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD004916",
+          "PXD012307",
+          "PXD014274",
+          "PXD014416",
+          "PXD015170",
+          "PXD016430",
+          "PXD018399",
+          "PXD018545",
+          "PXD022196",
+          "PXD024685",
+          "PXD026335",
+          "PXD028865",
+          "PXD033430",
+          "PXD034465",
+          "PXD037230",
+          "PXD038328",
+          "PXD039172",
+          "PXD041376",
+          "PXD043001",
+          "PXD043644",
+          "PXD044453",
+          "PXD044996",
+          "PXD048393",
+          "PXD057502",
+          "PXD057544",
+          "PXD057554",
+          "PXD058611",
+          "PXD058971",
+          "PXD067102",
+          "PXD071171"
+        ],
+        "rows": 22,
+        "entries": 18,
+        "outcome_by_entry": {
+          "not_in_source": 5,
+          "resolved": 13
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "human-aging_isoforms_tier1-2_human_agingPTM-v3",
+      "species": "homo_sapiens",
+      "reference": "dfb8069801112a5c.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 53,
+      "reference_rows": 53,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "e887b4d5fa27828bad3754071f189495e199ecbc5134b98e3a48229876cff565"
+      ],
+      "reference_database": [
+        "e887b4d5fa27828bad3754071f189495e199ecbc5134b98e3a48229876cff565"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 49,
+        "null": 4
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 45,
+        "not_in_source|null": 4,
+        "not_in_source|agrees": 4
+      },
+      "provenance": {
+        "artefact": "dfb8069801112a5c",
+        "written_utc": "2026-11-13T05:55:49Z",
+        "search_database": "aging_isoforms_tier1-2_human_agingPTM-v3.xml",
+        "search_database_sha256": "e887b4d5fa27828bad3754071f189495e199ecbc5134b98e3a48229876cff565",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD008344",
+          "PXD008934",
+          "PXD011740",
+          "PXD012213",
+          "PXD015239",
+          "PXD017475",
+          "PXD019279",
+          "PXD026219",
+          "PXD032757",
+          "PXD035299",
+          "PXD045887",
+          "PXD058855"
+        ],
+        "rows": 53,
+        "entries": 49,
+        "outcome_by_entry": {
+          "not_in_source": 4,
+          "resolved": 45
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "mouse-aging_isoforms_tier1-2_mouse_agingPTM-v4",
+      "species": "mus_musculus",
+      "reference": "e82b35a62c763309.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 22,
+      "reference_rows": 22,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "e617fa376f74721378266e51a36d2d3d7cc22bd612e76857e5ec269ae0862ef9"
+      ],
+      "reference_database": [
+        "e617fa376f74721378266e51a36d2d3d7cc22bd612e76857e5ec269ae0862ef9"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 17,
+        "null": 5
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 13,
+        "not_in_source|null": 5,
+        "not_in_source|agrees": 4
+      },
+      "provenance": {
+        "artefact": "e82b35a62c763309",
+        "written_utc": "2026-11-13T05:54:51Z",
+        "search_database": "aging_isoforms_tier1-2_mouse_agingPTM-v4.xml",
+        "search_database_sha256": "e617fa376f74721378266e51a36d2d3d7cc22bd612e76857e5ec269ae0862ef9",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD007035",
+          "PXD041660",
+          "PXD045821",
+          "PXD052631",
+          "PXD054290",
+          "PXD056276",
+          "PXD057407",
+          "PXD057545",
+          "PXD060832"
+        ],
+        "rows": 22,
+        "entries": 18,
+        "outcome_by_entry": {
+          "not_in_source": 5,
+          "resolved": 13
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "human-aging_isoforms_tier3_compartment_human",
+      "species": "homo_sapiens",
+      "reference": "eb3208d8c2c35269.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 35,
+      "reference_rows": 35,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "4d3d1c9bba003d0fb75ba722188f4bcda2908eb7088fe62e2cde91d5f82931a3"
+      ],
+      "reference_database": [
+        "4d3d1c9bba003d0fb75ba722188f4bcda2908eb7088fe62e2cde91d5f82931a3"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 27,
+        "null": 7,
+        "disagrees": 1
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 20,
+        "not_in_source|null": 7,
+        "not_in_source|agrees": 7,
+        "resolved|disagrees": 1
+      },
+      "provenance": {
+        "artefact": "eb3208d8c2c35269",
+        "written_utc": "2026-11-13T05:55:16Z",
+        "search_database": "aging_isoforms_tier3_compartment_human.xml",
+        "search_database_sha256": "4d3d1c9bba003d0fb75ba722188f4bcda2908eb7088fe62e2cde91d5f82931a3",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD008344",
+          "PXD008934",
+          "PXD011740",
+          "PXD012213",
+          "PXD015239",
+          "PXD017475",
+          "PXD018969",
+          "PXD019279",
+          "PXD026219",
+          "PXD032757",
+          "PXD035299",
+          "PXD045887",
+          "PXD058855"
+        ],
+        "rows": 35,
+        "entries": 28,
+        "outcome_by_entry": {
+          "not_in_source": 7,
+          "resolved": 21
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "rat-aging_isoforms_tier1-2_rat_agingPTM-v4",
+      "species": "rattus_norvegicus",
+      "reference": "f0dafaa7b77172c8.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 17,
+      "reference_rows": 17,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "5e204e6770ca74ef35187497d62564c0c4fca1e4047ce969f4319827c2de17fe"
+      ],
+      "reference_database": [
+        "5e204e6770ca74ef35187497d62564c0c4fca1e4047ce969f4319827c2de17fe"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "null": 12,
+        "agrees": 5
+      },
+      "agreement_by_outcome": {
+        "not_in_source|null": 12,
+        "not_in_source|agrees": 2,
+        "resolved|agrees": 3
+      },
+      "provenance": {
+        "artefact": "f0dafaa7b77172c8",
+        "written_utc": "2026-11-13T05:55:04Z",
+        "search_database": "aging_isoforms_tier1-2_rat_agingPTM-v4.xml",
+        "search_database_sha256": "5e204e6770ca74ef35187497d62564c0c4fca1e4047ce969f4319827c2de17fe",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD028157",
+          "PXD047289",
+          "PXD047292",
+          "PXD047293",
+          "PXD051644",
+          "PXD056458"
+        ],
+        "rows": 17,
+        "entries": 15,
+        "outcome_by_entry": {
+          "not_in_source": 12,
+          "resolved": 3
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "rat-aging_isoforms_rat",
+      "species": "rattus_norvegicus",
+      "reference": "f54e13e66ecb9e06.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 43,
+      "reference_rows": 43,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "ea4a2360e6519aaa4a04e773e7ea34c8c2872e7916f41385ab415d6b1925ecb6"
+      ],
+      "reference_database": [
+        "ea4a2360e6519aaa4a04e773e7ea34c8c2872e7916f41385ab415d6b1925ecb6"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "null": 22,
+        "agrees": 20,
+        "silent": 1
+      },
+      "agreement_by_outcome": {
+        "not_in_source|null": 22,
+        "not_in_source|agrees": 9,
+        "resolved|agrees": 11,
+        "resolved|silent": 1
+      },
+      "provenance": {
+        "artefact": "f54e13e66ecb9e06",
+        "written_utc": "2026-11-13T05:55:14Z",
+        "search_database": "aging_isoforms_rat.xml",
+        "search_database_sha256": "ea4a2360e6519aaa4a04e773e7ea34c8c2872e7916f41385ab415d6b1925ecb6",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD022737",
+          "PXD027754",
+          "PXD032044",
+          "PXD034432",
+          "PXD047288",
+          "PXD056433",
+          "PXD058253",
+          "PXD059520"
+        ],
+        "rows": 43,
+        "entries": 34,
+        "outcome_by_entry": {
+          "not_in_source": 22,
+          "resolved": 12
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "rat-aging_isoforms_tier1-2_rat_agingPTM-v3",
+      "species": "rattus_norvegicus",
+      "reference": "f70a1ced5dabb901.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 17,
+      "reference_rows": 17,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "57be2589cd3e013e6f85d5a3390372a335141297f2bd1069e59f668ebab64527"
+      ],
+      "reference_database": [
+        "57be2589cd3e013e6f85d5a3390372a335141297f2bd1069e59f668ebab64527"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "null": 12,
+        "agrees": 5
+      },
+      "agreement_by_outcome": {
+        "not_in_source|null": 12,
+        "not_in_source|agrees": 2,
+        "resolved|agrees": 3
+      },
+      "provenance": {
+        "artefact": "f70a1ced5dabb901",
+        "written_utc": "2026-11-13T05:55:04Z",
+        "search_database": "aging_isoforms_tier1-2_rat_agingPTM-v3.xml",
+        "search_database_sha256": "57be2589cd3e013e6f85d5a3390372a335141297f2bd1069e59f668ebab64527",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD002467",
+          "PXD008990",
+          "PXD009212",
+          "PXD026608",
+          "PXD027971",
+          "PXD048720",
+          "PXD051203",
+          "PXD057490",
+          "PXD057499",
+          "PXD058248",
+          "PXD068498"
+        ],
+        "rows": 17,
+        "entries": 15,
+        "outcome_by_entry": {
+          "not_in_source": 12,
+          "resolved": 3
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    },
+    {
+      "label": "human-aging_isoforms_peroxisome_human",
+      "species": "homo_sapiens",
+      "reference": "fabfc60811774908.tsv",
+      "reference_kind": "logs table (entry rows)",
+      "compared_on": [
+        "accession",
+        "entry_accession",
+        "isoform",
+        "namespace",
+        "outcome",
+        "n_genes",
+        "gene_id",
+        "versioned_gene_id",
+        "gene_symbol",
+        "gene_biotype",
+        "off_primary_genes",
+        "uniprot_gene_name",
+        "source",
+        "gene_set_release",
+        "gene_set_sha256",
+        "ensembl_xref_agrees",
+        "ensembl_xref_info_type",
+        "ensembl_xref_sha256",
+        "ensembl_xref_agreement"
+      ],
+      "only_in_store_columns": [
+        "definition_id"
+      ],
+      "only_in_reference_columns": [],
+      "store_rows": 1,
+      "reference_rows": 1,
+      "only_store": 0,
+      "only_reference": 0,
+      "store_database": [
+        "31804be05b1a41720edd567c1d2966787e1382ee313b5ffbf33d198a4bb9699f"
+      ],
+      "reference_database": [
+        "31804be05b1a41720edd567c1d2966787e1382ee313b5ffbf33d198a4bb9699f"
+      ],
+      "same_database": true,
+      "identical": true,
+      "ignored_columns": [],
+      "agreement_counts": {
+        "agrees": 1
+      },
+      "agreement_by_outcome": {
+        "resolved|agrees": 1
+      },
+      "provenance": {
+        "artefact": "fabfc60811774908",
+        "written_utc": "2026-11-13T05:55:15Z",
+        "search_database": "aging_isoforms_peroxisome_human.xml",
+        "search_database_sha256": "31804be05b1a41720edd567c1d2966787e1382ee313b5ffbf33d198a4bb9699f",
+        "mzlib": "1.0.598",
+        "datarepo": "1.5.0-scratch.aa9ad4b",
+        "requested_for": [
+          "PXD007049",
+          "PXD008050",
+          "PXD011740",
+          "PXD015239"
+        ],
+        "rows": 1,
+        "entries": 1,
+        "outcome_by_entry": {
+          "resolved": 1
+        },
+        "checks": {
+          "definition_id": true,
+          "agreement_pairs_with_agrees": true,
+          "row_values_match_manifest": true,
+          "rows_database_equals_run_json": true,
+          "database_file_hashes_to_it": true,
+          "one_outcome_per_entry": true,
+          "engine_summary_matches_rows": true,
+          "checked_against_current_manifest": true
+        }
+      }
+    }
+  ]
+}
