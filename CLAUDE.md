@@ -133,7 +133,8 @@ This folder is a `/project`-managed research project. **You are de facto working
 36. **Never rewrite a repo file through PowerShell 5.1's `Get-Content | Set-Content`.** It turned
     `tests/test_reported_claims.py`'s non-ASCII characters into cp1252 mojibake and added a BOM. Use Edit/Write, or
     Python with `encoding="utf-8"`. Piping PowerShell output into Python adds a BOM too (`json.load` fails), so run
-    such pipes in Bash.
+    such pipes in Bash. And a here-string with a `"` in it, passed to `git commit -m`, is split into pathspecs:
+    write the message to a file and use `git commit -F <file>`.
 37. **Open a peer's catalog in an in-memory DuckDB with `ATTACH '<catalog>' AS cat (READ_ONLY)`.** The snapshot's
     `views.sql` macros need a writable database. Record the catalog by file name only: it sits under the user profile,
     and this repo is public. To check a served table, recompute it independently and compare both ways with
