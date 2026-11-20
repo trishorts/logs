@@ -583,3 +583,61 @@ residues differ, 50,617 -> 56,937). `db_equivalence` gained `--pair` and `--out`
 
 Claims: 33/33. logs pushed. The peer copies are committed in dataRepo, PXReprise and ptmQtl, none pushed: each
 was already ahead of its origin with its own work.
+
+## 2026-11-19 - v2 shipped and checked at dataRepo; orthology reached the catalog; PXReprise #26 reviewed twice
+
+**Between sessions (11-11 to 11-18).** MSL 001 reported that the 02:45 reboot on 11-11 closed our session while it
+was idle; nothing was lost. dataRepo 035 said yes to both halves of LOGS-D5 (their schema takes
+`ensembl_xref_agreement`, and such runs record `logs:DEF-GENE-RESOLUTION v2`), and corrected us: **since datarepo
+1.0.0 they call mzLib's resolver directly, not pyMzLib**, so the release that reaches them is mzLib's. **mzLib #1578
+merged on 2026-11-12** (`7e42db89`) and is in 1.0.598; its board #19 card is Shipped. dataRepo 036 (11-13) built
+LOGS-D5: every datarepo 1.5.0 gene resolution is v2.
+
+**This session (11-19), started from "resume"; every other message came from peer sessions.**
+
+- **PXReprise 018/019 (PXR-O12, PXR-O13), answered in 020.** Catalog `4e486c3dcf0aa01c` already holds our
+  orthology as the registered artefact `0fe30fe8d4edc728`, read in place through `views.sql`. The real join
+  (accession -> gene -> orthologs -> partner accessions) takes milliseconds warm. A gene symbol gives the same partners
+  as Compara for 80.6% (mouse) and 67.7% (rat) of 16,306 human accessions
+  (`logs_orthology.catalog_orthologs`, `results/catalog_orthologs_4e486c3dcf0aa01c.md`). 020 also owned that v2
+  shipped without the advance warning 017 promised. The PXR-O12 comments for PXReprise #24 and #25 were posted on
+  GitHub at 17:00.
+- **aging 025:** v2 shipped and reaches them with datarepo 1.5.0; the gene-name pairing measured. **Its title is
+  wrong, found at close:** it says gene-name pairing "misses Compara's partners for about 1 human protein in 5 (mouse)
+  and 1 in 3 (rat)". Those fractions are every disagreement. The misses (orthology partners the name does not find)
+  are 874 (5.4%) and 1,057 (6.5%), as its own body says; most of the rest is the name finding rodent accessions that
+  resolve to no gene. A correction (026) waits on the user.
+- **dataRepo 037:** we diffed their 41 v2 artefacts against v1 and against our own mzLib 1.0.598 run
+  (`logs_orthology.store_diff`, now with `--definition`, `--ignore` and an agreement check; `4094ef5`). Every row
+  equals ours on every column, the agreement included, and their outcome-by-agreement table is reproduced cell for
+  cell. `tools/ResolveSearchDb` now builds against a released mzLib with `-p:MzLibVersion=1.0.598` (default: the old
+  pin). DEFINITIONS.md now says v2 shipped.
+- **ptmQtl 013 answered LOGS-P8:** no date; build the residue builder after v2, in our order. Their reading of the
+  key and the window matches ours. Nothing owed.
+- **PXReprise 021 relays a decision of the user's** (made in PXReprise's session): no merge of logs into PXReprise;
+  library code stays in mzLib; code that runs in the pipeline or catalog goes to smith-chem-wisc/PXReprise by PR (board
+  #29); logs keeps the definitions. **Not yet confirmed here**, so it is a gap, not a decision.
+- **PXReprise #26 reviewed twice (PXR-O14).** 023: re-running its `protein_orthologs` SQL on catalog
+  `4e486c3dcf0aa01c` showed a per-row `no_gene` that contradicted the `ensembl_xref` gene rows: 1,622 (accession,
+  target species) pairs from 811 accessions were answered both "no gene" and through a gene. We asked for `no_gene`
+  per (accession, species), the source and agreement columns for both links, `not_in_gene_set` as a check, both
+  definition ids, and a manifest check. PXReprise applied every point in `ca61ffb`. 024: on their v2 catalog
+  `36759593b29db341` our independent recomputation equals their served table row for row (180,930 rows, EXCEPT ALL
+  both ways empty), 0 pairs answered both ways, 15/15 orthology checks pass. Two doc notes, not blocking: under v2's
+  default view P60484-2 (a PTEN isoform whose own xref rows link only to an off-primary gene) loses its only gene, and
+  138 (accession, ortholog) pairs lose every partner. **#26 is a draft on smith-chem-wisc**, against the user's
+  2026-10-16 rule; flagged to the user, and the peer passed it to its own user. Its head moved to `339c4de` after 024.
+- **PTEN has no mouse or rat ortholog in our snapshot.** Surprising, so the measurement was suspected first: the
+  snapshot takes human-mouse from the mouse dump (23,764 rows) and human-rat from the human dump (22,105), and a scan
+  of the three raw Compara 116 dumps finds no human PTEN row with a rodent partner. It is Compara's answer.
+- **An executive summary for aging** was written for the user as a PDF
+  (`results/executive_summary_aging_2026-11-19.pdf`, not committed). Writing it is what exposed 025's title.
+
+**Learned the hard way.** A PowerShell 5.1 `Get-Content -Raw | Set-Content -Encoding utf8` round trip turned
+`tests/test_reported_claims.py`'s non-ASCII characters into cp1252 mojibake and added a BOM; restored from git and
+re-applied with Edit before any commit. The same shell adds a BOM when piping into Python (`gh ... | python -c
+json.load` fails), so pipes go through Bash. And a message title is a claim like any other: 025's body was right and
+its headline was not.
+
+Claims 38/38, contracts 10/10. The peer copies are pushed in PXReprise and aging; dataRepo and ptmQtl are ahead of
+their origins with other projects' commits, so they were left unpushed.

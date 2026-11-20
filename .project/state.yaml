@@ -453,6 +453,12 @@ decisions:
       stays out of the default. Their conditions: name the three states apart in the rows (agrees / silent /
       disagrees), so "agrees only" stays queryable, and version the definition so a v1 number is never read as
       v2. v1 stays the delivered definition until v2 is built.
+  - date: 2026-11-10
+    text: >-
+      DEF-GENE-RESOLUTION v2's SHAPE (user, 2026-11-10): an enum `EnsemblXrefAgreement` (Agrees / Silent /
+      Disagrees), appended as the last positional parameter and written as the last column
+      `ensembl_xref_agreement`; every v1 column keeps its values. Built as mzLib #1578, MERGED 2026-11-12
+      (7e42db89), in mzLib 1.0.598. dataRepo's 41 first v2 artefacts equal our rows on every column (037).
 
 gaps:
   - >-
@@ -469,7 +475,9 @@ gaps:
     normalize() 78,774 accessions, 0 differ. MERGED 2026-10-12 as 866d9d88 (Alexander-Sol 10-08 and pcruzparri
     10-12 approved); it is in mzLib 1.0.595 (2026-10-15); board #19 Shipped 2026-10-16.
     Still: pyMzLib projection (/bridge-oracle pyMzLib; pyMzLib #79 bumps to 1.0.595), then tell dataRepo (022
-    promised) and PXReprise (merge notice, user rule 2026-10-07).
+    promised) and PXReprise (merge notice, user rule 2026-10-07). [2026-11-19: done - parse_accessions() in pyMzLib
+    0.6.0, dataRepo told in 033. CORRECTION from dataRepo 035: since datarepo 1.0.0 they call mzLib's resolver
+    directly, not pyMzLib, so the release that reaches them is mzLib's.]
     LOGS-D3 CLOSED 2026-09-27 (dataRepo 023: 4,886 of 8,180
     stored rat accessions, 59.7%, by the agrees view; 024-logs explained the 44 it drops: absent from
     Ensembl's xref, 42 genes xref'd to TrEMBL only, 2 with no xref; pinned).
@@ -511,6 +519,10 @@ gaps:
     in a scratch store. No catalog cites it until aging registers it during its switch to 1.3.0; whether it has
     is UNVERIFIED. Under PXReprise D41 its hosting is PXR-O9.
     aging (operator) gets it through dataRepo's runner; PXReprise only via dataRepo's catalog (FYI-level).
+    VERIFIED 2026-11-19 (PXReprise 020): catalog 4e486c3dcf0aa01c registers it as artefact 0fe30fe8d4edc728, read
+    in place through views.sql. PXReprise #26 (draft on smith-chem-wisc) adds catalog tables over it
+    (orthology_species, orthology_genes, gene_orthologs, gene_ortholog_status, protein_orthologs); reviewed in 023,
+    fixes checked in 024 (PXR-O14 closed; our recomputation equals theirs, 180,930 rows).
   - >-
     Rat resolves poorly by any source: by Ensembl's xref only 59.6% of reviewed rat entries resolve,
     against 94.7% of human (008 to aging). Reference-data coverage, not a search problem - but any
@@ -523,7 +535,12 @@ gaps:
     canonical v3 every dropped TrEMBL row is the second kind. aging said YES (022, REQ-AGING-9; see decisions):
     name the three states, version the definition. NEXT: /oracle mzLib for a marker in EnsemblGeneResolver
     (additive column vs a third value), then a DEF-GENE-RESOLUTION v2, pyMzLib and dataRepo. search_db.py
-    already counts it (agree_or_silent_covered).
+    already counts it (agree_or_silent_covered). SHIPPED: mzLib #1578 merged 2026-11-12, in 1.0.598 (see
+    decisions); dataRepo built it (036; every datarepo 1.5.0 resolution is v2) and its 41 artefacts equal ours (037).
+    STILL OPEN: the pyMzLib bridge (columns in pkg/bridge/Proteins.cs, ProteinsTests.cs, docs/specs/genes.resolve.yaml;
+    /bridge-oracle pyMzLib first), after pyMzLib #111 (bump to 1.0.598, open 2026-11-19). Only pyMzLib users need
+    it: dataRepo calls mzLib directly (035). Under v2's default view, P60484-2 loses its only gene and 138
+    (accession, ortholog) pairs lose every partner (DEFINITIONS.md; PXReprise 024).
   - >-
     RELEASE TAR CARRIES NO LICENCE FILE (found 2026-10-11). The licences (data CC-BY-4.0, views.sql
     LGPL-3.0) are in the repo's LICENSING.md, not in compara-116.tar or its manifest. A copy hosted
@@ -549,6 +566,17 @@ gaps:
     corpus. Stated openly to dataRepo in 005-logs §2.3, no ask attached. Either find a second
     unrelated consumer or say plainly that generic is aspirational. aging's answer may change the
     picture; a second consumer would settle it.
+  - >-
+    CONFIRM THE CODE-HOME RULE (PXReprise 021, 2026-11-19; the user's decision, made in PXReprise's session and
+    relayed, NOT yet confirmed here): no merge of logs into PXReprise; library code stays in mzLib; code that runs in
+    the pipeline or the catalog (snapshot and gene-set builders, catalog views and checks) goes to
+    smith-chem-wisc/PXReprise by PR on board #29; logs keeps the definitions. Once confirmed, record it as a
+    decision and a CLAUDE.md rule.
+  - >-
+    025-logs (to aging) HEADLINE IS WRONG (found 2026-11-19 at close). Its title says gene-name pairing "misses
+    Compara's partners for about 1 human protein in 5 (mouse) and 1 in 3 (rat)"; those are all disagreements. The
+    misses are 874 (5.4%) and 1,057 (6.5%), as its body says (results/catalog_orthologs_4e486c3dcf0aa01c.md:
+    only_orthology + symbol_subset_of_orthologs). Send a correction as 026 to aging once the user says yes.
 
 skip_log:
   - date: 2026-09-22
@@ -605,7 +633,13 @@ repos:
     branch: feat/compara-gene-tree-alignment
     base_clone: 'E:\GitClones\mzLib'
     pinned: c96fafee03bf2e0e76347c22e38a6908ea8f1409
-    pr: "https://github.com/smith-chem-wisc/mzLib/pull/1465 (opened 2026-10-11 after rebasing onto smith/master; board #19 In review; six referees; was fork draft trishorts/mzLib#8, closed; ComparaGeneTreeAlignment)"
+    pr: "https://github.com/smith-chem-wisc/mzLib/pull/1465 (MERGED 2026-10-24 as 1b7d4986, in mzLib 1.0.596; board #19 Shipped; was fork draft trishorts/mzLib#8; ComparaGeneTreeAlignment)"
+  - name: mzLib
+    worktree: code/mzLib-xref-agreement
+    branch: feat/ensembl-xref-agreement
+    base_clone: 'E:\GitClones\mzLib'
+    pinned: 049dd76a9524c89f45fff185606370f6bdeb2a94
+    pr: "https://github.com/smith-chem-wisc/mzLib/pull/1578 (MERGED 2026-11-12 as 7e42db89, in mzLib 1.0.598; board #19 Shipped; EnsemblXrefAgreement, DEF-GENE-RESOLUTION v2)"
 
 github:
   remote: "https://github.com/trishorts/logs"

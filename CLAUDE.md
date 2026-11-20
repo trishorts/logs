@@ -8,47 +8,9 @@ This folder is a `/project`-managed research project. **You are de facto working
 - **Goal:** A generic, versioned, gene-centric cross-species orthology layer that lets any
   multi-organism proteomics project join protein identifications across species without collapsing
   one-to-many orthology.
-- **Pick up at (2026-11-10, evening):** run the thread inbox. Nothing is owed by us. We wait on **ptmQtl
-  LOGS-P8** (012: when do they need the first residue rows, and should they wait for v2?) and **dataRepo LOGS-D5**
-  (034), and on the reviews of **mzLib #1578**. No logs PR is open
-  (board #19: all six Shipped). mzLib is at **1.0.597** and pyMzLib at **0.8.0**.
-  - **`DEF-GENE-RESOLUTION v2` is in review as mzLib [#1578](https://github.com/smith-chem-wisc/mzLib/pull/1578)**
-    (opened 2026-11-10, board #19 In review). Check it with `gh pr view 1578 --repo smith-chem-wisc/mzLib --json
-    state,reviewDecision,latestReviews`. Its `integration` job may be red for a reason that is not ours: the
-    1.0.597 release notes say that job stays red until MetaMorpheus takes 1.0.597. It is drafted in DEFINITIONS.md,
-    and the oracle ran.
-    The code is mzLib branch `feat/ensembl-xref-agreement` (`code/mzLib-xref-agreement`, `049dd76a9`):
-    `EnsemblXrefAgreement` (Agrees / Silent / Disagrees), appended as the last positional parameter and written
-    as the last column `ensembl_xref_agreement`. The user chose the shape and the name on 2026-11-10. Its 7 new
-    tests and the existing 80 pass, and the test-name check is clean.
-    - Measured with mzLib (`tools/XrefAgreementCounts`): it reproduces 010's numbers, with 0 rows inconsistent
-      with the v1 boolean.
-    - Still to do: the pyMzLib bridge PR, after the mzLib release: its column list in `pkg/bridge/Proteins.cs:62-68`, the test `ProteinsTests.cs:316`, and
-      the spec `docs/specs/genes.resolve.yaml`. Run `/bridge-oracle pyMzLib` first.
-    - dataRepo got its advance warning in 034 (2026-11-10), with LOGS-D5 open: will their schema take the column,
-      and will such runs record `logs:DEF-GENE-RESOLUTION v2`? We promised to tell them when #1578 merges, when
-      it is released, and when pyMzLib carries it. Tell PXReprise and aging when it ships.
-  - **After that, the residue-correspondence builder.** LOGS-P8 may change the order. aging 024 calls it
-    medium-low priority. It needs the isoform and variant legs and a typed refusal for each gap. **Its key is
-    now `(accession, sequence_sha256, position)`, with a 15-residue `window` and a membership table** (DEFINITIONS.md,
-    amended 2026-11-10 before build, as ptmQtl 011 asked).
-
-  Done on 2026-11-10:
-  - PXR-O10 closed (PXReprise 017): all 21 canonical store artefacts equal our rows.
-  - dataRepo told about every merge (033): pyMzLib 0.8.0 (mzLib 1.0.597, whose #1501 changes dbReference reading)
-    resolves identically on all 19 columns, and the snapshot release is final.
-  - LOGS-P7 accepted in full (ptmQtl 012). Mouse agingPTM-v2 `7eee5e64` holds the same proteins as `fb52debf`.
-  - Earlier: #1465 merged on 2026-10-24 (1.0.596), and the 10-28 stock-take (PXReprise 013, aging 023) told
-    PXReprise and aging.
-
-  **Stacked PRs stay drafts in the fork until their base merges** (user, 2026-10-06).
-  **Next build: the residue-correspondence builder** (`DEF-RESIDUE-CORRESPONDENCE v1`, 13 outcomes), on
-  smith/master: #1428's `PairwiseAligner` (merged) for legs 1 and 3, and #1465 for leg 2. Also the
-  residue-level `not_on_ensembl_protein` rate that 009 promised. The oracle verdict is in
-  `design/ORACLE_residue_correspondence.md`; the MSA facts are in `results/alignment_check_e116.md`.
-
-  #1381 (store) merged on 2026-10-06, #1428 on 2026-10-10, and #1382 on 2026-10-12. The release `orthology-compara-116-b63a3331`
-  is final, not a pre-release. The canonical v3 databases resolve on v1 unchanged (2026-10-11). See `RESUME.md`.
+- **Pick up at:** `RESUME.md`, "Where it stands".
+- **Stacked PRs stay drafts in the fork until their base merges** (user, 2026-10-06). Drafts never go on
+  smith-chem-wisc (user, 2026-10-16).
 
 ## Things that will bite you here
 
@@ -164,6 +126,21 @@ This folder is a `/project`-managed research project. **You are de facto working
     `not_in_source` (3,042) beside our 3,445, and our 013 repeated the pairing. The 3,042 are Swiss-Prot entries
     with no Ensembl dbReference. The 3,445 are TrEMBL entries the XML resolves but Ensembl's xref has never seen.
     The two sets are disjoint (017).
+35. **A message's title is a claim too, and it must count the same set as its body.** 025's title said gene-name
+    pairing "misses" Compara's partners for 1 human protein in 5 (mouse) and 1 in 3 (rat). Those fractions were every
+    disagreement; the misses were 5.4% and 6.5%, as its body said. "Differs" is not "misses". Check a headline number
+    against the pinned table before posting.
+36. **Never rewrite a repo file through PowerShell 5.1's `Get-Content | Set-Content`.** It turned
+    `tests/test_reported_claims.py`'s non-ASCII characters into cp1252 mojibake and added a BOM. Use Edit/Write, or
+    Python with `encoding="utf-8"`. Piping PowerShell output into Python adds a BOM too (`json.load` fails), so run
+    such pipes in Bash.
+37. **Open a peer's catalog in an in-memory DuckDB with `ATTACH '<catalog>' AS cat (READ_ONLY)`.** The snapshot's
+    `views.sql` macros need a writable database. Record the catalog by file name only: it sits under the user profile,
+    and this repo is public. To check a served table, recompute it independently and compare both ways with
+    `EXCEPT ALL`; re-reading their SQL only repeats their reasoning.
+38. **dataRepo calls mzLib's resolver directly** (since datarepo 1.0.0, dataRepo 035), not pyMzLib. A change reaches
+    it with the mzLib release; the pyMzLib bridge serves Python users only. `tools/ResolveSearchDb
+    -p:MzLibVersion=<x.y.z>` builds against a released mzLib (default: the old pin, trap 32), each into its own `-o`.
 
 ## Running things
 
@@ -176,7 +153,7 @@ python -m logs_orthology.resolve --reference          # -> results/resolution_hu
 python -m logs_orthology.resolve --accessions ids.tsv # accession[<TAB>contaminant] per line
 python tests/test_contracts.py         # 10 contract tests
 python tests/test_resolve.py           # 21 resolver contracts (last one reconciles on real data)
-python tests/test_reported_claims.py   # 32 claims already sent to a partner
+python tests/test_reported_claims.py   # 38 claims already sent to a partner
 python -m logs_orthology.manifest       # -> results/resolver_inputs_e116.{json,md}
 dotnet run --project tools/BuildGeneSet -c Release -- <gtf.gz> results/gene_sets/<Species>.116.genes.tsv.gz
 dotnet run --project tools/BuildOrthologySnapshot -c Release -- 116 data/compara results/gene_sets snapshots/compara-116 homo_sapiens mus_musculus rattus_norvegicus   # out dir "-" = check only
@@ -185,6 +162,8 @@ python -m logs_orthology.search_db <out.tsv> [--species mus_musculus --out resul
 python -m logs_orthology.engine_parity --out results/engine_parity_canonical-v3 <sp>=<xml>:<table> ...   # pyMzLib vs the C# rows
 python -m logs_orthology.alignment_check --databases canonical-v3   # leg 1 on the canonical v3 databases
 python -m logs_orthology.store_diff --out results/store_diff_canonical <sp>-<label>=<store artefact dir>:<our table | artefact dir> ...   # the store's rows vs ours (PXR-O10)
+python -m logs_orthology.catalog_orthologs <catalog.duckdb> [--accession P14136]   # every ortholog of one accession on a dataRepo catalog; symbol vs orthology
+python -m logs_orthology.catalog_bridge_review <catalog.duckdb>   # PXReprise #26's protein_orthologs, re-run and recomputed independently
 ```
 
 Inputs live in `data/compara/` (gitignored, 673 MB, recorded in `data/PROVENANCE.md`).
